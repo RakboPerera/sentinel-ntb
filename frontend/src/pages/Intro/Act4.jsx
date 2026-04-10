@@ -50,7 +50,9 @@ export default function Act4({ onEnter }) {
 
       <div className="act4-grid">
         {scenarios.map((sc, i) => (
-          <div key={sc.id} className="act4-card animate-fade-in" style={{ animationDelay: `${i * 0.12}s`, borderTop: `3px solid ${sc.color}` }}>
+          <div key={sc.id} onClick={() => goToScenario(sc.id)} className="act4-card animate-fade-in" style={{ animationDelay: `${i * 0.12}s`, borderTop: `3px solid ${sc.color}`, cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s' }}
+            onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow=`0 8px 32px ${sc.color}33`; }}
+            onMouseLeave={e => { e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='none'; }}>
             <div className="act4-card-pills">
               {sc.pills.map(p => (
                 <span key={p} className="act4-pill" style={{ background: `${sc.color}18`, color: sc.color, borderColor: `${sc.color}33` }}>{p}</span>

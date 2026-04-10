@@ -70,6 +70,14 @@ export default function Sidebar() {
           <FileText size={15} className="sidebar-item-icon" />
           Risk Register
         </NavLink>
+        <NavLink to="/cases" className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}
+          style={({ isActive }) => ({ fontWeight: 600 })}>
+          <FolderKanban size={15} className="sidebar-item-icon" />
+          Case Manager
+          <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, background: 'var(--color-red-light)', color: 'var(--color-red)', borderRadius: 10, padding: '1px 6px' }}>
+            8
+          </span>
+        </NavLink>
       </div>
 
       <div className="sidebar-divider" />
@@ -102,15 +110,7 @@ export default function Sidebar() {
           <FlaskConical size={15} className="sidebar-item-icon" />
           Scenario Lab
         </NavLink>
-        <NavLink to="/cases" className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}>
-          <FolderKanban size={15} className="sidebar-item-icon" />
-          Case Manager
-          {state.cases.length > 0 && (
-            <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, background: 'var(--color-red-light)', color: 'var(--color-red)', borderRadius: 10, padding: '1px 6px' }}>
-              {state.cases.filter(c => c.status === 'open').length}
-            </span>
-          )}
-        </NavLink>
+
         <NavLink to="/reports" className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}>
           <FileText size={15} className="sidebar-item-icon" />
           Reports

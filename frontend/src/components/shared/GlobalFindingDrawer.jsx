@@ -127,6 +127,19 @@ export default function GlobalFindingDrawer() {
 
   const { finding, agentId, agentName, agentColor, agentData } = active;
   const meta = AGENT_META[agentId] || { name: agentName || 'Agent', color: agentColor || '#185FA5', icon: '◎', path: '/agents', methodology: '' };
+
+  // Compute linked cases at drawer scope so both context tab AND footer can use it
+  const linkedCases = React.useMemo(() => {
+    if (!finding) return [];
+    const searchText = [
+      finding.finding, finding.description, finding.entity,
+      finding.account_id, finding.loan_id, finding.staff_id,
+      finding.branch_code, finding.transaction_id, finding.document_id,
+    ].filter(Boolean).join(' ');
+    const matches = searchText.match(/\b(BR-\d+|STF-\d+|SUS-[A-Z0-9-]+|NTB-CORP-\d+|MJE-\d{4}-\d+|NTB-\d{4}-[A-Z]|NTB-0841-X|NTB-3312-B)/g) || [];
+    const all = matches.flatMap(e => getCasesForEntity(e));
+    return all.filter((cas, i, arr) => arr.findIndex(x => x.id === cas.id) === i);
+  }, [finding]);
   const sev = finding.severity || 'medium';
   const pal = SEV_PALETTE[sev] || SEV_PALETTE.medium;
   const exposure = finding.affected_exposure_lkr || finding.affected_balance_lkr || 0;

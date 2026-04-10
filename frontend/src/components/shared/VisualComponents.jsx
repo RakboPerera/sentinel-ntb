@@ -109,6 +109,97 @@ function SeverityMeter({ severity, agentColor }) {
 // ─── VISUAL FINDING CARD ──────────────────────────────────────────────────────
 // Rich finding card — expands to full evidence view with detection context
 
+// ─── CREATE CASE MODAL ────────────────────────────────────────────────────────
+const DOMAIN_COLORS_MAP = {
+  credit:'#185FA5', transaction:'#534AB7', suspense:'#993C1D',
+  kyc:'#0F6E56', controls:'#854F0B', digital:'#993556',
+  trade:'#3B6D11', insider:'#7C3AED', mje:'#0891B2'
+};
+
+export function CreateCaseModal({ finding, agentId, agentColor, onClose }) {
+  const [title, setTitle] = useState(finding?.finding?.slice(0,80) || '');
+  const [severity, setSeverity] = useState(finding?.severity || 'high');
+  const [owner, setOwner] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const newCaseId = 'CASE-' + String(Math.floor(Math.random()*900)+100);
+
+  function submit() {
+    if (!title.trim() || !owner.trim()) return;
+    setSubmitted(true);
+    // Navigate to case manager after brief delay
+    setTimeout(() => {
+      if (window._sentinelNavigate) {
+        window._sentinelNavigate('/cases');
+      }
+      onClose();
+    }, 1800);
+  }
+
+  if (submitted) return (
+    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999 }}>
+      <div style={{ background:'var(--color-surface)', borderRadius:16, padding:'40px 48px', textAlign:'center', maxWidth:360 }}>
+        <div style={{ fontSize:48, marginBottom:12 }}>✓</div>
+        <div style={{ fontSize:18, fontWeight:700, color:'#16A34A', marginBottom:6 }}>{newCaseId} Created</div>
+        <div style={{ fontSize:13, color:'var(--color-text-2)' }}>Opening Case Manager…</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.55)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9999 }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:'var(--color-surface)', borderRadius:16, padding:28, width:480, maxWidth:'95vw', boxShadow:'0 24px 64px rgba(0,0,0,0.3)' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20 }}>
+          <div style={{ width:10, height:10, borderRadius:'50%', background:agentColor||'#185FA5' }}/>
+          <span style={{ fontSize:14, fontWeight:700 }}>Open New Investigation Case</span>
+          <button onClick={onClose} style={{ marginLeft:'auto', background:'none', border:'none', cursor:'pointer', color:'var(--color-text-3)', fontSize:18 }}>×</button>
+        </div>
+
+        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+          <div>
+            <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-3)', marginBottom:5 }}>Case title</div>
+            <input value={title} onChange={e=>setTitle(e.target.value)} style={{ width:'100%', padding:'8px 12px', borderRadius:8, border:'1px solid var(--color-border)', fontSize:13, fontFamily:'inherit', background:'var(--color-surface)', boxSizing:'border-box' }}/>
+          </div>
+
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+            <div>
+              <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-3)', marginBottom:5 }}>Severity</div>
+              <select value={severity} onChange={e=>setSeverity(e.target.value)} style={{ width:'100%', padding:'8px 12px', borderRadius:8, border:'1px solid var(--color-border)', fontSize:13, fontFamily:'inherit', background:'var(--color-surface)' }}>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+              </select>
+            </div>
+            <div>
+              <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-3)', marginBottom:5 }}>Agent domain</div>
+              <input value={agentId||''} readOnly style={{ width:'100%', padding:'8px 12px', borderRadius:8, border:'1px solid var(--color-border)', fontSize:13, fontFamily:'inherit', background:'var(--color-surface-2)', boxSizing:'border-box', color:'var(--color-text-2)' }}/>
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-3)', marginBottom:5 }}>Assign to</div>
+            <input value={owner} onChange={e=>setOwner(e.target.value)} placeholder="e.g. Chief Internal Auditor" style={{ width:'100%', padding:'8px 12px', borderRadius:8, border:'1px solid var(--color-border)', fontSize:13, fontFamily:'inherit', background:'var(--color-surface)', boxSizing:'border-box' }}/>
+          </div>
+
+          {finding?.finding && (
+            <div style={{ padding:'10px 12px', background:'var(--color-surface-2)', borderRadius:8, fontSize:11, color:'var(--color-text-2)', lineHeight:1.6, borderLeft:`3px solid ${agentColor||'#185FA5'}` }}>
+              <strong>Finding:</strong> {finding.finding}
+            </div>
+          )}
+
+          <div style={{ display:'flex', gap:8, marginTop:4 }}>
+            <button onClick={submit} disabled={!title.trim()||!owner.trim()} style={{ flex:1, padding:'10px 16px', background:(!title.trim()||!owner.trim())?'var(--color-surface-2)':agentColor||'#185FA5', color:(!title.trim()||!owner.trim())?'var(--color-text-3)':'white', border:'none', borderRadius:8, fontSize:13, fontWeight:700, cursor:(!title.trim()||!owner.trim())?'not-allowed':'pointer' }}>
+              Create Case {newCaseId}
+            </button>
+            <button onClick={onClose} style={{ padding:'10px 16px', background:'var(--color-surface-2)', color:'var(--color-text-2)', border:'1px solid var(--color-border)', borderRadius:8, fontSize:13, cursor:'pointer' }}>Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 export function VisualFindingCard({ finding, agentColor = '#185FA5', index, features, agentId, agentData, openFinding }) {
   const [expanded, setExpanded] = useState(index === 0);
   const sev = finding.severity || 'medium';
@@ -220,9 +311,10 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
         <div style={{ padding: '8px 16px', borderTop: `1px solid ${p.border}22`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: `${p.border}04`, gap: 8, flexWrap: 'wrap' }}>
           {/* Case link */}
           {(() => {
-            const searchText = [finding.finding, finding.entity, finding.account_id, finding.loan_id, finding.staff_id, finding.branch_code].filter(Boolean).join(' ');
-            const match = searchText.match(/\b(BR-\d+|STF-\d+|SUS-[A-Z0-9-]+|NTB-CORP-\d+|MJE-\d{4}-\d+|NTB-\d{4}-[A-Z])/);
-            const linkedCases = match ? getCasesForEntity(match[1]) : [];
+            const searchText = Object.values(finding).filter(v => typeof v === 'string').join(' ');
+            const ENTITY_RE = /\b(BR-\d+|STF-\d+|SUS-[A-Z0-9-]+|NTB-CORP-\d+|NTB-0841-X|MJE-\d{4}-\d+|NTB-\d{4}-[A-Z])/g;
+            const matches = [...new Set((searchText.match(ENTITY_RE) || []))];
+            const linkedCases = matches.flatMap(e => getCasesForEntity(e)).filter((x,i,a)=>a.findIndex(y=>y.id===x.id)===i);
             if (linkedCases.length === 0) return null;
             const cas = linkedCases[0];
             return (
@@ -239,12 +331,16 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
               </span>
             )}
           </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11, fontWeight: 600, color: agentColor, flexShrink: 0 }}>
-            Full analysis + connected alerts
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 11, fontWeight: 600, color: agentColor, flexShrink: 0 }}>
+            <button onClick={e => { e.stopPropagation(); setShowCreateCase(true); }} style={{ padding:'3px 9px', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:6, fontSize:11, fontWeight:600, color:'var(--color-text-2)', cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
+              + New Case
+            </button>
+            Full analysis
             <ArrowRight size={13} />
           </div>
         </div>
       )}
+      {showCreateCase && <CreateCaseModal finding={finding} agentId={agentId} agentColor={agentColor} onClose={() => setShowCreateCase(false)} />}
     </div>
   );
 }

@@ -495,13 +495,28 @@ export default function ScenarioPlayer() {
               )}
 
               {/* Nav controls */}
+              {step >= steps.length - 1 && (() => {
+                const caseMap = { growth: 'CASE-001', ceft: 'CASE-002', insider: 'CASE-001' };
+                const caseId = caseMap[scenarioId];
+                return (
+                  <div style={{ padding:'12px 14px', background:'linear-gradient(135deg,#1a1917,#252420)', border:'1px solid rgba(239,159,39,0.4)', borderRadius:10, marginBottom:8 }}>
+                    <div style={{ fontSize:11, fontWeight:700, color:'#EF9F27', marginBottom:4 }}>This investigation is live in Sentinel</div>
+                    <div style={{ fontSize:11, color:'rgba(244,242,236,0.65)', lineHeight:1.6 }}>
+                      {caseId}: {caseId==='CASE-001' ? 'BR-14 insider fraud — STF-1847 suspended, field audit deployed, LKR 387M frozen.' : 'SUS-017 CEFT phantom — account frozen, STR filed with FIU-STR-2025-1847.'}<br/>
+                      Evidence, remediation steps and regulatory status are tracked in the Case Manager.
+                    </div>
+                  </div>
+                );
+              })()}
               <div style={{ display: 'flex', gap: 10 }}>
                 <button className="btn btn-secondary" onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step <= 0}>← Previous</button>
                 {step < steps.length - 1
                   ? <button onClick={() => setStep(s => s + 1)} style={{ flex: 1, padding: '8px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', background: color, color: 'white', border: 'none' }}>Next step →</button>
-                  : <button onClick={() => navigate('/cases')} style={{ flex: 1, padding: '8px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', background: 'var(--color-green)', color: 'white', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
-                      <CheckCircle size={15} /> Open Case Manager →
-                    </button>
+                  : <>
+                      <button onClick={() => { const m={'growth':'CASE-001','ceft':'CASE-002','insider':'CASE-001'}; navigate('/cases', { state: { caseId: m[scenarioId] } }); }} style={{ flex: 1, padding: '8px', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer', background: color, color: 'white', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
+                        <CheckCircle size={15} /> View Live Case →
+                      </button>
+                    </>
                 }
               </div>
             </div>

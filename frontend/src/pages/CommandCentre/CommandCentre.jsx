@@ -11,7 +11,7 @@ import { SignalBar, DetectionPipeline, InsightBox } from '../../components/share
 
 const liveAlerts = [
   {
-    id: 'alert-001', agent: 'Credit Agent', agentId: 'credit', agentColor: '#185FA5',
+    id: 'alert-001', caseId: 'CASE-001', agent: 'Credit Agent', agentId: 'credit', agentColor: '#185FA5',
     text: '3 Construction sector loans reclassified — Stage 2 → Stage 3 predicted. LKR 287 Mn exposure.',
     severity: 'critical', time: '2m ago',
     title: 'SLFRS 9 Staging Anomaly — Construction Sector',
@@ -45,7 +45,7 @@ const liveAlerts = [
     accountStatus: 'Active',
   },
   {
-    id: 'alert-002', agent: 'Suspense Agent', agentId: 'suspense', agentColor: '#993C1D',
+    id: 'alert-002', caseId: 'CASE-002', agent: 'Suspense Agent', agentId: 'suspense', agentColor: '#993C1D',
     text: 'Account SUS-017 (Pettah Main St.) unreconciled 94 days. Balance LKR 1.24 Bn. Growth 312% in 30 days.',
     severity: 'critical', time: '4m ago',
     title: 'Phantom Receivable Confirmed — SUS-017 Pettah Main Street',
@@ -80,7 +80,7 @@ const liveAlerts = [
     accountStatus: 'Frozen',
   },
   {
-    id: 'alert-003', agent: 'Transaction Agent', agentId: 'transaction', agentColor: '#534AB7',
+    id: 'alert-003', caseId: 'CASE-004', agent: 'Transaction Agent', agentId: 'transaction', agentColor: '#534AB7',
     text: 'Account NTB-0841-X scored 0.94. 15 CEFT transfers in 22 minutes, all below LKR 5M threshold.',
     severity: 'critical', time: '7m ago',
     title: 'Structuring Detected — NTB-0841-X CEFT Cluster',
@@ -114,7 +114,7 @@ const liveAlerts = [
     accountStatus: 'Blocked',
   },
   {
-    id: 'alert-004', agent: 'Controls Agent', agentId: 'controls', agentColor: '#854F0B',
+    id: 'alert-004', caseId: 'CASE-003', agent: 'Controls Agent', agentId: 'controls', agentColor: '#854F0B',
     text: 'STF-1847 (BR-14 Ratnapura) — 4 SoD violations, 87% override concentration. Insider fraud pattern.',
     severity: 'critical', time: '11m ago',
     title: 'Insider Fraud Pattern — STF-1847, Branch BR-14',
@@ -149,7 +149,7 @@ const liveAlerts = [
     accountStatus: 'Active',
   },
   {
-    id: 'alert-005', agent: 'KYC Agent', agentId: 'kyc', agentColor: '#0F6E56',
+    id: 'alert-005', caseId: 'CASE-001', agent: 'KYC Agent', agentId: 'kyc', agentColor: '#0F6E56',
     text: 'Introducer INT-BR14-007 — 34% gap rate across 41 introduced accounts. Systemic onboarding failure.',
     severity: 'high', time: '18m ago',
     title: 'Introducer Concentration — INT-BR14-007, Branch BR-14',
@@ -405,6 +405,9 @@ function AlertDrawer({ alert, onClose }) {
               {tab.label}
             </button>
           ))}
+          <button onClick={() => navigate('/risk-register')} style={{ background: 'var(--color-surface)', color: 'var(--color-text-2)', border: '1px solid var(--color-border)', padding: '5px 14px', borderRadius: 8, fontSize: 12, fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5, marginLeft: 6, opacity: 0.7 }}>
+            ⊟ Risk Register
+          </button>
         </div>
 
         {/* Tab content */}
@@ -909,7 +912,7 @@ function RegulatoryView({ navigate }) {
                 </div>
               </div>
               {str.status !== 'Filed' && (
-                <button onClick={() => navigate('/cases', { state: { caseId: alert?.caseId || null } })} style={{ padding:'6px 14px', background:'#DC2626', color:'white', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer', flexShrink:0, whiteSpace:'nowrap' }}>
+                <button onClick={() => navigate('/cases', { state: { caseId: str.case } })} style={{ padding:'6px 14px', background:'#DC2626', color:'white', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer', flexShrink:0, whiteSpace:'nowrap' }}>
                   File STR →
                 </button>
               )}
@@ -1028,14 +1031,14 @@ const branchData = [
 export default function CommandCentre() {
   const navigate = useNavigate();
   const orchData = demoData.orchestrator;
-  const [alertCount, setAlertCount] = useState(8);
+  const [alertCount, setAlertCount] = useState(5); // 5 live alerts
   const [selectedAlert, setSelectedAlert] = useState(null);
   const [ccView, setCcView] = useState('overview'); // 'overview' | 'executive'
   const [execTab, setExecTab] = useState('regulatory'); // 'regulatory' | 'roi' | 'appetite'
 
   useEffect(() => {
-    const t = setInterval(() => setAlertCount(c => c + Math.floor(Math.random() * 3)), 8000);
-    return () => clearInterval(t);
+    // Alert count is static — derived from actual liveAlerts
+    setAlertCount(liveAlerts.length);
   }, []);
 
   return (
@@ -1044,12 +1047,16 @@ export default function CommandCentre() {
 
       {/* View switcher */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, alignItems: 'center' }}>
-        {[['overview','Overview'], ['findings','Findings Register'], ['regulatory','Regulatory'], ['executive','Executive Dashboard']].map(([v, l]) => (
+        {[['overview','Overview'], ['regulatory','Regulatory'], ['executive','Executive Dashboard']].map(([v, l]) => (
           <button key={v} onClick={() => setCcView(v)} className="btn btn-sm"
             style={{ background: ccView === v ? 'var(--color-text)' : 'var(--color-surface)', color: ccView === v ? 'white' : 'var(--color-text-2)', border: '1px solid var(--color-border)', fontWeight: ccView === v ? 600 : 400 }}>
             {l}
           </button>
         ))}
+        <button onClick={() => navigate('/risk-register')}
+          style={{ marginLeft: 'auto', fontSize: 11, padding: '4px 12px', borderRadius: 6, border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-text-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}>
+          ⊟ Risk Register
+        </button>
         {ccView === 'executive' && (
           <div style={{ display: 'flex', gap: 6, marginLeft: 16 }}>
             {[['regulatory','Regulatory Ratios'],['roi','AI ROI'],['appetite','Risk Appetite'],['narrative','Connected Narrative']].map(([v,l]) => (
@@ -1250,7 +1257,7 @@ export default function CommandCentre() {
       {/* KRI Tiles */}
       <div className="cc-grid">
         {Object.values(kpiData).map((kri, i) => (
-          <KRITile key={i} data={kri} tooltipText={KRI_TOOLTIPS[kri.label]} onClick={() => navigate(KRI_ROUTES[kri.label] || '/command-centre')} />
+          <KRITile key={i} data={kri} tooltipText={KRI_TOOLTIPS[kri.label]} onClick={() => { const fn = KRI_ROUTE_FN(navigate)[kri.label]; fn ? fn() : navigate('/command-centre'); }} />
         ))}
       </div>
 
@@ -1266,15 +1273,18 @@ export default function CommandCentre() {
         <div style={{ padding: '12px 16px', overflowX: 'auto' }}>
           <div style={{ display: 'flex', gap: 0, alignItems: 'stretch', minWidth: 900 }}>
             {[
-              { step: '50% loan growth', detail: 'LKR 143 Bn new origination — highest in NTB history', color: '#185FA5', icon: '📈', agent: 'Credit Agent' },
-              { step: 'Branch approval pressure', detail: 'Override rate: 3.1% → 4.8% network-wide. BR-14 at 14.3%', color: '#854F0B', icon: '⚠', agent: 'Controls Agent' },
-              { step: 'Control environment failure', detail: '4 SoD violations. STF-1847: 87% override concentration at BR-14', color: '#854F0B', icon: '⚙', agent: 'Insider Risk Agent' },
-              { step: 'Insider fraud confirmed', detail: 'STF-1847 score 94/100. 11 anomalous loans LKR 387M fabricated or inflated', color: '#7C3AED', icon: '👤', agent: 'Credit + MJE Agent' },
-              { step: 'ECL understatement', detail: 'Stage 3 ratio understated. LKR 1.1 Bn ECL provisioning gap', color: '#DC2626', icon: '📋', agent: 'MJE Agent' },
-              { step: 'LCR deterioration', detail: 'Loan book inflation + rapid growth depletes HQLA. 320.6% → 203.4%', color: '#D97706', icon: '💧', agent: 'Trade Agent' },
+              { step: '50% loan growth', detail: 'LKR 143 Bn new origination — highest in NTB history', color: '#185FA5', icon: '📈', agent: 'Credit Agent', path: '/agents/credit' },
+              { step: 'Branch approval pressure', detail: 'Override rate: 3.1% → 4.8% network-wide. BR-14 at 14.3%', color: '#854F0B', icon: '⚠', agent: 'Controls Agent', path: '/agents/controls' },
+              { step: 'Control environment failure', detail: '4 SoD violations. STF-1847: 87% override concentration at BR-14', color: '#854F0B', icon: '⚙', agent: 'Insider Risk Agent', path: '/agents/insider-risk' },
+              { step: 'Insider fraud confirmed', detail: 'STF-1847 score 94/100. 11 anomalous loans LKR 387M fabricated or inflated', color: '#7C3AED', icon: '👤', agent: 'Credit + MJE Agent', path: '/cases', caseId: 'CASE-001' },
+              { step: 'ECL understatement', detail: 'Stage 3 ratio understated. LKR 1.1 Bn ECL provisioning gap', color: '#DC2626', icon: '📋', agent: 'MJE Agent', path: '/agents/mje' },
+              { step: 'LCR deterioration', detail: 'Loan book inflation + rapid growth depletes HQLA. 320.6% → 203.4%', color: '#D97706', icon: '💧', agent: 'Trade Agent', path: '/agents/trade' },
             ].map((node, i, arr) => (
               <div key={i} style={{ display: 'flex', alignItems: 'stretch', flexShrink: 0 }}>
-                <div style={{ padding: '12px 14px', background: `${node.color}08`, border: `1px solid ${node.color}22`, borderRadius: 10, minWidth: 148, maxWidth: 160 }}>
+                <div onClick={() => node.caseId ? navigate(node.path, { state: { caseId: node.caseId } }) : navigate(node.path)}
+                  style={{ padding: '12px 14px', background: `${node.color}08`, border: `1px solid ${node.color}22`, borderRadius: 10, minWidth: 148, maxWidth: 160, cursor: 'pointer', transition: 'background 0.15s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = `${node.color}18`}
+                  onMouseLeave={e => e.currentTarget.style.background = `${node.color}08`}>
                   <div style={{ fontSize: 16, marginBottom: 5 }}>{node.icon}</div>
                   <div style={{ fontSize: 12, fontWeight: 700, color: node.color, marginBottom: 3, lineHeight: 1.3 }}>{node.step}</div>
                   <div style={{ fontSize: 11, color: 'var(--color-text-2)', lineHeight: 1.5, marginBottom: 5 }}>{node.detail}</div>
@@ -1466,7 +1476,6 @@ export default function CommandCentre() {
     }
 
       {/* ── FINDINGS REGISTER VIEW ── */}
-      {ccView === 'findings' && <FindingsRegisterView navigate={navigate} />}
 
       {/* ── REGULATORY VIEW ── */}
       {ccView === 'regulatory' && <RegulatoryView navigate={navigate} />}

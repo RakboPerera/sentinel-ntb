@@ -617,7 +617,7 @@ export default function RiskHeatmap() {
       {/* Summary strip */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginBottom:20 }}>
         {[
-          { label:'Branches Monitored', value:branchRiskData.length, sub:'Of 90 total NTB branches', color:'#185FA5' },
+          { label:'Branches Monitored', value:branchRiskData.length, sub:'Highest-risk of 90 branches — sorted by composite score', color:'#185FA5', tooltip:'The heatmap displays the 10 branches with the highest composite risk scores across all 9 audit domains. Remaining 80 branches are in normal monitoring. Filter controls are in development for full 90-branch view.' },
           { label:'Elevated or Critical', value:criticalBranches.length, sub:`${Math.round(criticalBranches.length/branchRiskData.length*100)}% of monitored branches`, color:'#EF9F27' },
           { label:'AML / CBSL Flags', value:branchRiskData.filter(b=>b.aml_flag||b.cbsl_flag).length, sub:'Active regulatory escalations', color:'#A32D2D' },
           { label:'Highest Composite', value:`${Math.max(...branchRiskData.map(compositeScore))}/100`, sub:'BR-14 Ratnapura — critical', color:'#A32D2D' },
