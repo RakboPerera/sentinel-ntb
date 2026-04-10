@@ -1,0 +1,11 @@
+entry_id,gl_account,gl_name,amount_lkr,maker_id,checker_id,timestamp,day_of_week,department,description,document_ref,reversal_flag
+MJE-TEST-001,SUS-001,CEFT Receivables Suspense,18700000,STF-1847,STF-1847,2026-03-14T22:45:00Z,Friday,Operations,Manual debit to suspense,,false
+MJE-TEST-002,SUS-044,Fee Suspense BR-14,9450000,STF-1847,STF-1847,2026-03-21T23:10:00Z,Friday,Operations,Fee suspense adjustment,,false
+MJE-TEST-003,3200,Provision for Loan Losses,45000000,STF-2341,STF-3102,2026-02-10T23:58:00Z,Monday,Finance,Monthly provision charge,PROV-2026-002,false
+MJE-TEST-004,1200,Loans Receivable,120000000,STF-4401,STF-4401,2026-02-28T00:15:00Z,Wednesday,Finance,Month-end loan balance adjustment,,true
+MJE-TEST-005,4200,Fee Income,850000,STF-1109,STF-3201,2026-03-05T09:15:00Z,Thursday,Operations,Fee recognition from SUS-017,FEE-2026-0305,false
+MJE-TEST-006,1100,Cash and Equivalents,2800000,STF-3891,STF-4120,2026-03-08T10:45:00Z,Saturday,Treasury,FX settlement cash entry,FX-2026-0308,false
+MJE-TEST-007,2400,Accrued Expenses,89450,STF-2201,STF-3310,2026-03-10T14:30:00Z,Monday,Finance,March staff cost accrual,ACR-2026-0310,false
+MJE-TEST-008,5200,IT Infrastructure Expense,3200000,STF-2801,STF-3410,2026-03-12T16:00:00Z,Wednesday,IT,Data centre hosting fee Q1,INV-DC-2026-001,false
+MJE-TEST-009,3100,Interest Income Accrual,7800000,STF-2101,STF-2102,2026-03-31T17:45:00Z,Monday,Finance,March interest income accrual,INT-ACC-2026-03,false
+MJE-TEST-010,SUS-001,CEFT Receivables Suspense,24100000,STF-1109,STF-3201,2026-03-15T00:15:00Z,Sunday,Operations,Overnight CEFT batch credit,CEFT-BATCH-0315,false
