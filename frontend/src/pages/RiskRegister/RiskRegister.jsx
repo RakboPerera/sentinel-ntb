@@ -243,7 +243,7 @@ export default function RiskRegister() {
                         View Agent <ChevronRight size={11} />
                       </button>
                       {r.caseRef && (
-                        <button onClick={() => navigate('/cases')} style={{ padding: '6px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: 'var(--color-surface-2)', color: 'var(--color-text-2)', border: '1px solid var(--color-border)', cursor: 'pointer' }}>
+                        <button onClick={() => navigate('/cases', { state: { caseId: r.caseRef } })} style={{ padding: '6px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: 'var(--color-surface-2)', color: 'var(--color-text-2)', border: '1px solid var(--color-border)', cursor: 'pointer' }}>
                           Case
                         </button>
                       )}

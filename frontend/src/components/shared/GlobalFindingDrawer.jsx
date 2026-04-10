@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getCasesForEntity, CASE_SEV_COLOR, CASE_STATUS_COLOR } from '../../data/caseRegistry.js';
 import { X, ChevronRight, AlertTriangle, GitMerge, Zap, Info, Clock, BookOpen, CheckCircle, ArrowRight, Microscope, Shield } from 'lucide-react';
 import { useApp } from '../../context/AppContext.jsx';
 import { demoData } from '../../data/demoData.js';
@@ -476,7 +477,7 @@ export default function GlobalFindingDrawer() {
           <button onClick={() => { navigate(meta.path); close(); }} className="btn btn-primary" style={{ background: meta.color, flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
             Open {meta.name} <ChevronRight size={15} />
           </button>
-          <button onClick={() => { navigate('/cases'); close(); }} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <button onClick={() => { navigate('/cases', { state: { caseId: linkedCases[0]?.id } }); close(); }} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             Cases
           </button>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getCasesForEntity, CASE_SEV_COLOR } from '../../data/caseRegistry.js';
 import { ChevronDown, ChevronUp, AlertTriangle, Info, BookOpen, Microscope, CheckCircle, Zap, ArrowRight, GitMerge, ExternalLink } from 'lucide-react';
 import InfoTooltip from './InfoTooltip.jsx';
 
@@ -216,10 +217,24 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
 
       {/* ── Click-through hint when openFinding is wired ── */}
       {hasOpenFinding && (
-        <div style={{ padding: '8px 16px', borderTop: `1px solid ${p.border}22`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: `${p.border}04` }}>
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 11, color: 'var(--color-text-3)' }}>
+        <div style={{ padding: '8px 16px', borderTop: `1px solid ${p.border}22`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: `${p.border}04`, gap: 8, flexWrap: 'wrap' }}>
+          {/* Case link */}
+          {(() => {
+            const searchText = [finding.finding, finding.entity, finding.account_id, finding.loan_id, finding.staff_id, finding.branch_code].filter(Boolean).join(' ');
+            const match = searchText.match(/\b(BR-\d+|STF-\d+|SUS-[A-Z0-9-]+|NTB-CORP-\d+|MJE-\d{4}-\d+|NTB-\d{4}-[A-Z])/);
+            const linkedCases = match ? getCasesForEntity(match[1]) : [];
+            if (linkedCases.length === 0) return null;
+            const cas = linkedCases[0];
+            return (
+              <button onClick={e => { e.stopPropagation(); if(window._sentinelNavigate) window._sentinelNavigate('/cases', { state: { caseId: cas.id } }); }}
+                style={{ display:'flex', alignItems:'center', gap:5, padding:'4px 10px', background:`${CASE_SEV_COLOR[cas.severity]}12`, border:`1px solid ${CASE_SEV_COLOR[cas.severity]}30`, borderRadius:6, cursor:'pointer', fontSize:11, color:CASE_SEV_COLOR[cas.severity], fontWeight:600, flexShrink:0 }}>
+                🗂 {cas.id} →
+              </button>
+            );
+          })()}
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 11, color: 'var(--color-text-3)', flex: 1 }}>
             {finding.recommended_action && (
-              <span style={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span style={{ maxWidth: 280, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 → {finding.recommended_action}
               </span>
             )}

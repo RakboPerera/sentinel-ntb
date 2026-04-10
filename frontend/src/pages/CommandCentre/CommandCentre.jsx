@@ -637,7 +637,7 @@ function AlertDrawer({ alert, onClose }) {
           <button onClick={() => navigate(alert.agentPath)} className="btn btn-primary" style={{ background: alert.agentColor, flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
             Open {alert.agent} Module <ChevronRight size={15} />
           </button>
-          <button onClick={() => navigate('/cases')} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <button onClick={() => navigate('/cases', { state: { caseId: alert?.caseId || null } })} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             Case Manager
           </button>
         </div>
@@ -909,7 +909,7 @@ function RegulatoryView({ navigate }) {
                 </div>
               </div>
               {str.status !== 'Filed' && (
-                <button onClick={() => navigate('/cases')} style={{ padding:'6px 14px', background:'#DC2626', color:'white', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer', flexShrink:0, whiteSpace:'nowrap' }}>
+                <button onClick={() => navigate('/cases', { state: { caseId: alert?.caseId || null } })} style={{ padding:'6px 14px', background:'#DC2626', color:'white', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer', flexShrink:0, whiteSpace:'nowrap' }}>
                   File STR →
                 </button>
               )}

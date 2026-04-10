@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar.jsx';
 import Header from './components/layout/Header.jsx';
 import ApiKeySettings from './components/shared/ApiKeySettings.jsx';
@@ -48,7 +48,14 @@ function PlatformLayout({ children, title }) {
 
 export default function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isIntro = location.pathname === '/';
+
+  // Register navigate globally so nested components can use it for case drill-through
+  React.useEffect(() => {
+    window._sentinelNavigate = navigate;
+    return () => { window._sentinelNavigate = null; };
+  }, [navigate]);
 
   useEffect(() => {
     if (isIntro) {

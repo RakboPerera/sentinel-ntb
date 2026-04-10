@@ -4,6 +4,7 @@ import { branchRiskData, demoData } from '../../data/demoData.js';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import { InsightBox } from '../../components/shared/VisualComponents.jsx';
 import { ChevronRight, X, AlertTriangle, Upload, Database, FileText, Zap } from 'lucide-react';
+import { getCasesForCell, getCasesForBranch, CASE_SEV_COLOR, CASE_STATUS_COLOR } from '../../data/caseRegistry.js';
 
 // ─── COLUMNS ─────────────────────────────────────────────────────────────────
 
@@ -561,7 +562,7 @@ function CellDetailDrawer({ branch, col, onClose }) {
             <Upload size={13}/> Data Hub
           </button>
           {branch.open_cases > 0 && (
-            <button onClick={() => { navigate('/cases'); onClose(); }} className="btn btn-secondary" style={{ fontSize:12 }}>
+            <button onClick={() => { navigate('/cases', { state: { branchCode: branch.code, branchName: branch.name, domain: col.agentId } }); onClose(); }} className="btn btn-secondary" style={{ fontSize:12 }}>
               Cases
             </button>
           )}
