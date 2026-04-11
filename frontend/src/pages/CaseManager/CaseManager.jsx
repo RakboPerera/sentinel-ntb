@@ -230,9 +230,9 @@ const DOMAIN_LABELS = {
   insider: 'Insider Risk', mje: 'MJE'
 };
 const DOMAIN_COLORS = {
-  credit: '#185FA5', transaction: '#534AB7', suspense: '#993C1D',
-  kyc: '#0F6E56', controls: '#854F0B', digital: '#993556',
-  trade: '#3B6D11', insider: '#7C3AED', mje: '#0891B2'
+  credit: '#185FA5', transaction: '#3D3C38', suspense: '#993C1D',
+  kyc: '#0F6E56', controls: '#3A5A3A', digital: '#993556',
+  trade: '#3B6D11', insider: '#2D2D2B', mje: '#0BBF7A'
 };
 
 function fmt(iso) { return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
@@ -516,7 +516,7 @@ function CaseDetail({ c, status, onStatusChange, onClose }) {
                 <div style={{ background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:10, padding:'16px 18px', fontFamily:'monospace', fontSize:11, lineHeight:1.85, color:'var(--color-text)', whiteSpace:'pre-wrap', maxHeight:480, overflowY:'auto' }}>
                   {strDraft}
                 </div>
-                <div style={{ marginTop:10, padding:'8px 12px', background:'#FFFBEB', border:'1px solid rgba(133,79,11,0.25)', borderRadius:8, fontSize:11, color:'#854F0B', lineHeight:1.55 }}>
+                <div style={{ marginTop:10, padding:'8px 12px', background:'#FFFBEB', border:'1px solid rgba(133,79,11,0.25)', borderRadius:8, fontSize:11, color:'#3A5A3A', lineHeight:1.55 }}>
                   ⚠ <strong>Review required:</strong> Complete all bracketed fields. Compliance Officer and MLCO must sign before submission to CBSL FIU. FIU reference number will be issued upon acknowledgement. Retain copy in case file.
                 </div>
               </div>

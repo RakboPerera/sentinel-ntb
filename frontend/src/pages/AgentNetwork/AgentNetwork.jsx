@@ -22,7 +22,7 @@ const AGENTS = [
     keySignal: 'BR-14: 11 override-approved anomalous loans',
   },
   {
-    id: 'transaction', path: '/agents/transaction', color: '#534AB7', bg: '#EEEDFE',
+    id: 'transaction', path: '/agents/transaction', color: '#4A6070', bg: '#F0F0EE',
     icon: '⟳', name: 'Transaction Surveillance',
     tagline: 'Structuring, velocity anomalies & AML pattern detection',
     what: 'Analyses every transaction in the population for patterns consistent with money laundering, structuring below the CBSL FIU STR threshold (LKR 5 million), and unusual flow routing.',
@@ -55,13 +55,13 @@ const AGENTS = [
     how: 'Applies a 47-rule compliance framework derived from CBSL Direction on KYC/AML and Sri Lanka\'s Financial Transactions Reporting Act (FTRA). Prioritises gaps by risk rating. Detects introducer concentration — where a single introducer has a disproportionate rate of KYC gaps across the accounts they introduced.',
     methods: ['47-Rule Compliance Engine', 'PEP/Sanctions Screening', 'Introducer Concentration Analysis', 'FATF Country Risk Mapping', 'Document Expiry Tracking'],
     ntbContext: 'The HSBC acquisition brings 200,000+ accounts into NTB\'s portfolio in Q2 2026. Each of these accounts must be KYC-verified to NTB standards before integration. Currently, 847 of the 39,290 KYC gaps are from the HSBC migration batch.',
-    metric: '39,290 KYC gaps', metricSub: '4.7% gap rate across 835,944 accounts', metricColor: '#854F0B',
+    metric: '39,290 KYC gaps', metricSub: '4.7% gap rate across 835,944 accounts', metricColor: '#3A5A3A',
     tier: 3, tierLabel: 'Entity / Behavioural',
     critical: 7, findings: 39290,
     keySignal: 'INT-BR14-007: 34% gap rate on 41 introduced accounts',
   },
   {
-    id: 'controls', path: '/agents/controls', color: '#854F0B', bg: '#FAEEDA',
+    id: 'controls', path: '/agents/controls', color: '#3A5A3A', bg: '#E8FDF4',
     icon: '⚙', name: 'Internal Controls',
     tagline: 'SoD violations, override abuse & 6-dimension branch scoring',
     what: 'Monitors branch operations across NTB\'s 90-branch network for Segregation of Duties violations, override concentration, approval turnaround anomalies, and off-hours activity — the early indicators of insider fraud.',
@@ -87,7 +87,7 @@ const AGENTS = [
     keySignal: 'DEV-A4F7-9921 shared across 4 accounts in SUS-017 network',
   },
   {
-    id: 'insider', path: '/agents/insider-risk', color: '#7C3AED', bg: '#F3F1FF',
+    id: 'insider', path: '/agents/insider-risk', color: '#1F2937', bg: '#F3F1FF',
     icon: '◉', name: 'Insider Risk',
     tagline: '6-dimension staff scoring, SoD violations & behavioural change detection',
     what: 'Scores every staff member with system access across 6 insider fraud dimensions simultaneously — SoD violations, override concentration, same-cluster approvals, off-hours activity, approval turnaround anomaly, and session deviation. No single dimension alone flags an insider; the combination does.',
@@ -100,7 +100,7 @@ const AGENTS = [
     keySignal: 'STF-1847 matches all 6 insider fraud dimensions — immediate suspension required',
   },
   {
-    id: 'mje', path: '/agents/mje', color: '#0891B2', bg: '#ECFEFF',
+    id: 'mje', path: '/agents/mje', color: '#0BBF7A', bg: '#ECFEFF',
     icon: '⊞', name: 'MJE Testing',
     tagline: 'Full-population MJE audit, Benford analysis & GL reconciliation',
     what: 'Tests 100% of manual journal entries — not a sample — against five risk dimensions: timing (after-hours, weekend, midnight), amount anomalies (round numbers, Benford\'s Law first-digit test), GL account sensitivity (suspense, capital, intercompany), maker-checker integrity, and supporting document completeness. Finds the accounting manipulation that traditional audit misses.',
@@ -140,7 +140,7 @@ function NetworkView() {
   const tier3 = AGENTS.filter(a => a.tier === 3);
 
   const nodes = [
-    { id: 'orchestrator', label: 'Orchestrator', sublabel: 'Synthesis', color: '#534AB7', r: 40, tier: 0 },
+    { id: 'orchestrator', label: 'Orchestrator', sublabel: 'Synthesis', color: '#4A6070', r: 40, tier: 0 },
     ...tier3.map((a, i) => ({ id: a.id, label: a.name.split(' ')[0], sublabel: 'L3', color: a.color, r: 28, path: a.path, critical: a.critical, findings: a.findings, tier: 3, idx: i, total: tier3.length })),
     ...tier2.map((a, i) => ({ id: a.id, label: a.name.split(' ')[0], sublabel: 'L2', color: a.color, r: 28, path: a.path, critical: a.critical, findings: a.findings, tier: 2, idx: i, total: tier2.length })),
     ...tier1.map((a, i) => ({ id: a.id, label: a.name.split(' ')[0], sublabel: 'L1', color: a.color, r: 28, path: a.path, critical: a.critical, findings: a.findings, tier: 1, idx: i, total: tier1.length })),
@@ -311,12 +311,12 @@ export default function AgentNetwork() {
 
       {/* Orchestrator Banner */}
       <div style={{ padding: '16px 24px', background: 'linear-gradient(135deg, var(--color-purple-light) 0%, var(--color-blue-light) 100%)', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 12, marginBottom: 24, display: 'flex', gap: 20, alignItems: 'center' }}>
-        <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(83,74,183,0.15)', border: '1px solid rgba(83,74,183,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0, color: 'var(--color-purple)' }}>◎</div>
+        <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(83,74,183,0.15)', border: '1px solid rgba(83,74,183,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0, color: '#4A6070' }}>◎</div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 4 }}>
-            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-purple)' }}>Executive Orchestrator</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: '#4A6070' }}>Executive Orchestrator</span>
             <InfoTooltip text="The Orchestrator doesn't analyse data directly — it receives signals from all 9 domain agents across 3 analytical layers and identifies entities that appear in multiple agents simultaneously. When 2+ agents flag the same branch, account, or staff member, the Orchestrator generates a cross-domain correlation with a combined severity score up to 1.0." width={320} position="right" />
-            <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 8px', background: 'rgba(83,74,183,0.15)', color: 'var(--color-purple)', borderRadius: 10 }}>5 active correlations</span>
+            <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 8px', background: 'rgba(83,74,183,0.15)', color: '#4A6070', borderRadius: 10 }}>5 active correlations</span>
           </div>
           <div style={{ fontSize: 13, color: 'var(--color-text-2)', lineHeight: 1.6 }}>
             Receives signals from all 9 domain agents across 3 analytical layers. Detects cross-domain correlations — patterns only visible when Transaction, Account, and Entity signals converge on the same entity. Current highest severity: <strong style={{ color: 'var(--color-red)' }}>SUS-017 network — 0.99/1.00</strong>
@@ -336,9 +336,9 @@ export default function AgentNetwork() {
           {/* Tier structure explainer */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
             {[
-              { tier: 1, label: 'Transaction / Event Layer', desc: 'Analyses every individual transaction, session, or journal entry at point of processing. Finest granularity.', color: '#534AB7', agents: AGENTS.filter(a=>a.tier===1) },
+              { tier: 1, label: 'Transaction / Event Layer', desc: 'Analyses every individual transaction, session, or journal entry at point of processing. Finest granularity.', color: '#4A6070', agents: AGENTS.filter(a=>a.tier===1) },
               { tier: 2, label: 'Account / Position Layer',  desc: 'Detects patterns across account balances, portfolios, and positions over time. Mid-level granularity.', color: '#185FA5', agents: AGENTS.filter(a=>a.tier===2) },
-              { tier: 3, label: 'Entity / Behavioural Layer', desc: 'Builds risk profiles for people and entities across all their activity. Highest-level synthesis before Orchestrator.', color: '#854F0B', agents: AGENTS.filter(a=>a.tier===3) },
+              { tier: 3, label: 'Entity / Behavioural Layer', desc: 'Builds risk profiles for people and entities across all their activity. Highest-level synthesis before Orchestrator.', color: '#3A5A3A', agents: AGENTS.filter(a=>a.tier===3) },
             ].map(t => (
               <div key={t.tier} style={{ padding: '14px 16px', background: `${t.color}08`, border: `1px solid ${t.color}25`, borderRadius: 10, borderTop: `3px solid ${t.color}` }}>
                 <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: t.color, marginBottom: 5 }}>Layer {t.tier}</div>
@@ -353,9 +353,9 @@ export default function AgentNetwork() {
 
           {/* Cards grouped by tier */}
           {[
-            { tier: 1, label: 'Layer 1 — Transaction / Event', color: '#534AB7', desc: 'Each agent in this layer scores every individual event at point of processing' },
+            { tier: 1, label: 'Layer 1 — Transaction / Event', color: '#4A6070', desc: 'Each agent in this layer scores every individual event at point of processing' },
             { tier: 2, label: 'Layer 2 — Account / Position', color: '#185FA5', desc: 'These agents detect patterns across account histories and portfolio compositions' },
-            { tier: 3, label: 'Layer 3 — Entity / Behavioural', color: '#854F0B', desc: 'These agents build comprehensive risk profiles for people and entities across all their activity' },
+            { tier: 3, label: 'Layer 3 — Entity / Behavioural', color: '#3A5A3A', desc: 'These agents build comprehensive risk profiles for people and entities across all their activity' },
           ].map(tier => (
             <div key={tier.tier}>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, paddingBottom: 10, borderBottom: `2px solid ${tier.color}30` }}>
@@ -457,7 +457,7 @@ export default function AgentNetwork() {
                       </div>
 
                       {/* Key signal */}
-                      <div style={{ padding: '10px 14px', background: hasCritical ? 'var(--color-red-light)' : 'var(--color-amber-light)', borderRadius: 8, fontSize: 12, color: hasCritical ? 'var(--color-red)' : 'var(--color-amber)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ padding: '10px 14px', background: hasCritical ? 'var(--color-red-light)' : '#E8FDF4', borderRadius: 8, fontSize: 12, color: hasCritical ? 'var(--color-red)' : '#3A5A3A', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
                         <AlertTriangle size={13} />
                         <strong>Key signal:</strong>&nbsp;{agent.keySignal}
                       </div>

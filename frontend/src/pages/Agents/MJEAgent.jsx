@@ -8,7 +8,7 @@ import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
 import { ChevronDown, ChevronUp, AlertTriangle, CheckCircle, Clock, FileX, Zap } from 'lucide-react';
 
-const COLOR = '#0891B2';
+const COLOR = '#0BBF7A';
 const SCHEMA = {
   agentName: 'MJE Testing',
   required: ['entry_id', 'gl_account', 'amount_lkr', 'maker_id', 'checker_id', 'timestamp'],
@@ -61,18 +61,18 @@ function MJEExpandedRow({ entry }) {
             {/* Audit Opinion Banner */}
             <div style={{ background:'#0891B206', border:`1px solid #0891B222`, borderRadius:10, overflow:'hidden' }}>
               <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
-                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#0891B2', color:'white', flexShrink:0, marginTop:2 }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#0BBF7A', color:'white', flexShrink:0, marginTop:2 }}>
                   ADVERSE
                 </div>
-                <div style={{ fontSize:12, color:'#0891B2', lineHeight:1.7 }}>
+                <div style={{ fontSize:12, color:'#0BBF7A', lineHeight:1.7 }}>
                   In our opinion, the manual journal entry control environment is ADVERSE. MJE-2026-4205 scores 97/100 — the highest risk entry in the full population. Benford first-digit analysis confirms deliberate sub-threshold GL structuring.
                 </div>
               </div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #0891B218` }}>
                 {[['Population tested','847 manual journal entries (100% — full population)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','All entries &gt;LKR 1M; all SoD violations regardless of amount'],['Model limitations','Automated system journals excluded; Benford&#39;s Law less effective for accounts with &lt;50 entries in period']].map(([k,v],i)=>(
                   <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #0891B212`:'none', borderBottom:i<2?`1px solid #0891B212`:'none' }}>
-                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#0891B2', opacity:0.65, marginBottom:2 }}>{k}</div>
-                    <div style={{ fontSize:11, color:'#0891B2', lineHeight:1.5 }}>{v}</div>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#0BBF7A', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#0BBF7A', lineHeight:1.5 }}>{v}</div>
                   </div>
                 ))}
               </div>
@@ -140,11 +140,11 @@ function MJEExpandedRow({ entry }) {
           {/* Reversal chain */}
           {entry.reversal_chain && (
             <div style={{ marginTop: 10, padding: '8px 12px', background: '#FFFBEB', border: '1px solid rgba(215,151,6,0.3)', borderRadius: 8 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#854F0B', marginBottom: 3, display: 'flex', alignItems: 'center', gap: 5 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#3A5A3A', marginBottom: 3, display: 'flex', alignItems: 'center', gap: 5 }}>
                 Reversal chain detected
                 <InfoTooltip text="A reversal chain occurs when an entry is reversed then reposted — often used to reset aging counters or manipulate period-end reporting." position="right" width={240} />
               </div>
-              <div style={{ fontSize: 11, color: '#854F0B' }}>{entry.reversal_chain}</div>
+              <div style={{ fontSize: 11, color: '#3A5A3A' }}>{entry.reversal_chain}</div>
             </div>
           )}
         </div>
@@ -162,8 +162,8 @@ function MJEExpandedRow({ entry }) {
           <div style={{ padding: '8px 12px', background: `${COLOR}08`, border: `1px solid ${COLOR}20`, borderRadius: 8, fontSize: 12, color: COLOR, marginBottom: 10 }}>
             {entry.fs_impact}
           </div>
-          <div style={{ padding: '10px 14px', background: entry.status === 'Escalated' ? 'var(--color-red-light)' : 'var(--color-amber-light)', borderRadius: 8, borderLeft: `3px solid ${entry.status === 'Escalated' ? 'var(--color-red)' : 'var(--color-amber)'}` }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: entry.status === 'Escalated' ? 'var(--color-red)' : 'var(--color-amber)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+          <div style={{ padding: '10px 14px', background: entry.status === 'Escalated' ? 'var(--color-red-light)' : '#E8FDF4', borderRadius: 8, borderLeft: `3px solid ${entry.status === 'Escalated' ? 'var(--color-red)' : '#3A5A3A'}` }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: entry.status === 'Escalated' ? 'var(--color-red)' : '#3A5A3A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
               <Zap size={10} style={{ display: 'inline', marginRight: 4 }} />Recommended action
             </div>
             <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.6 }}>{entry.recommended_action}
@@ -267,7 +267,7 @@ export default function MJEAgent() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
               <StatCard label="Entries Tested" value={(data.mje_summary.total_entries_tested || 0).toLocaleString()} sub="Full population — no sampling" color={COLOR} tooltip="Every manual journal entry in the period is tested — not a sample. This is 100% coverage, which is the key difference from traditional MJE auditing." />
               <StatCard label="Flagged" value={data.mje_summary.flagged_count} sub={`${data.mje_summary.escalated_count} escalated`} color="#D97706" tooltip="Entries with risk score above 40. Escalated = above 80 with critical flags. Both require immediate human review." alert={`${data.mje_summary.sod_violations} SoD violations`} />
-              <StatCard label="Benford Failures" value={data.mje_summary.benford_failures} sub="First digit deviates from expected" color="#7C3AED" tooltip="Journal entries where the first digit of the amount falls outside Benford's Law expected frequency range. In MJE populations, digit anomalies often indicate deliberate amount selection to stay below internal review thresholds." />
+              <StatCard label="Benford Failures" value={data.mje_summary.benford_failures} sub="First digit deviates from expected" color="#2D2D2B" tooltip="Journal entries where the first digit of the amount falls outside Benford's Law expected frequency range. In MJE populations, digit anomalies often indicate deliberate amount selection to stay below internal review thresholds." />
               <StatCard label="After-hours Entries" value={data.mje_summary.after_hours_entries} sub="Before 08:00 or after 18:00" color="#A32D2D" tooltip="Manual journal entries posted outside business hours. Legitimate after-hours postings should have documented emergency justification. Systematic after-hours activity by the same staff member is a strong fraud indicator." />
             </div>
 
@@ -276,7 +276,7 @@ export default function MJEAgent() {
             <div style={{ padding:'12px 16px', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:10, display:'flex', gap:12, alignItems:'flex-start' }}>
               <div style={{ width:28, height:28, borderRadius:8, background:'#0891B212', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:14 }}>📊</div>
               <div>
-                <div style={{ fontSize:11, fontWeight:700, color:'#0891B2', marginBottom:3 }}>Coverage & Assurance Statement</div>
+                <div style={{ fontSize:11, fontWeight:700, color:'#0BBF7A', marginBottom:3 }}>Coverage & Assurance Statement</div>
                 <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.6 }}>
                   <strong>Full population — no sampling.</strong> All 847 manual journal entries in the period were tested. This is 100% coverage. The assurance level is higher than sampling-based MJE audit: we can state with certainty that no entry was missed. This is not a statistical projection — it is complete testing.
                 </div>
@@ -440,7 +440,7 @@ export default function MJEAgent() {
                               {gl.break_lkr > 0 ? `LKR ${(gl.break_lkr / 1e6).toFixed(1)}M` : '—'}
                             </td>
                             <td style={{ color: parseInt(gl.aging) > 30 ? '#DC2626' : 'var(--color-text-2)', fontWeight: parseInt(gl.aging) > 30 ? 700 : 400, fontSize: 12 }}>{gl.aging}</td>
-                            <td><span style={{ fontSize: 10, padding: '2px 7px', background: gl.status === 'Matched' ? '#F0FDF4' : '#FFFBEB', color: gl.status === 'Matched' ? '#16A34A' : '#854F0B', borderRadius: 4, fontWeight: 700 }}>{gl.status}</span></td>
+                            <td><span style={{ fontSize: 10, padding: '2px 7px', background: gl.status === 'Matched' ? '#F0FDF4' : '#FFFBEB', color: gl.status === 'Matched' ? '#16A34A' : '#3A5A3A', borderRadius: 4, fontWeight: 700 }}>{gl.status}</span></td>
                             <td><span style={{ fontSize: 10, padding: '2px 7px', background: sc.bg, color: sc.text, borderRadius: 4, fontWeight: 700 }}>{gl.priority}</span></td>
                           </tr>
                         );
@@ -519,7 +519,7 @@ export default function MJEAgent() {
                           <span style={{ fontSize:11, color:'var(--color-text-3)' }}>DR: <strong>{entry.debit_account}</strong></span>
                           <span style={{ fontSize:11 }}>→</span>
                           <span style={{ fontSize:11, color:'var(--color-text-3)' }}>CR: <strong>{entry.credit_account}</strong></span>
-                          <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#854F0B' }}>LKR {(entry.amount_lkr/1e6).toFixed(0)}M</span>
+                          <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#3A5A3A' }}>LKR {(entry.amount_lkr/1e6).toFixed(0)}M</span>
                         </div>
                         <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>
                           {entry.finding}

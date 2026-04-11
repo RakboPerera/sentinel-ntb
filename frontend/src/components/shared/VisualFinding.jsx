@@ -4,7 +4,7 @@ import InfoTooltip from './InfoTooltip.jsx';
 
 const SEV_STYLES = {
   critical: { bg: 'var(--color-red-light)', border: 'rgba(163,45,45,0.25)', color: 'var(--color-red)', label: 'Critical', dot: '#A32D2D' },
-  high:     { bg: '#FFF8F0', border: 'rgba(133,79,11,0.2)', color: 'var(--color-amber)', label: 'High', dot: '#EF9F27' },
+  high:     { bg: '#FFF8F0', border: 'rgba(133,79,11,0.2)', color: '#3A5A3A', label: 'High', dot: '#EF9F27' },
   medium:   { bg: 'var(--color-blue-light)', border: 'rgba(24,95,165,0.2)', color: 'var(--color-blue)', label: 'Medium', dot: '#185FA5' },
   low:      { bg: 'var(--color-gray-light)', border: 'rgba(95,94,90,0.15)', color: 'var(--color-gray)', label: 'Low', dot: '#6b6963' },
 };
@@ -56,7 +56,7 @@ export function ChartAnnotation({ x, y, text, color = '#A32D2D', position = 'top
 export function InfoBox({ title, children, variant = 'info', tooltip }) {
   const variants = {
     info:    { bg: 'var(--color-blue-light)', border: 'rgba(24,95,165,0.2)', icon: '#185FA5' },
-    warning: { bg: 'var(--color-amber-light)', border: 'rgba(133,79,11,0.2)', icon: '#854F0B' },
+    warning: { bg: '#E8FDF4', border: 'rgba(133,79,11,0.2)', icon: '#3A5A3A' },
     danger:  { bg: 'var(--color-red-light)', border: 'rgba(163,45,45,0.2)', icon: '#A32D2D' },
     success: { bg: 'var(--color-green-light)', border: 'rgba(59,109,17,0.2)', icon: '#3B6D11' },
     subtle:  { bg: 'var(--color-surface-2)', border: 'var(--color-border)', icon: 'var(--color-text-3)' },

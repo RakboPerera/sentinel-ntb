@@ -36,8 +36,8 @@ export default function ChartExplainer({ title, what, howToRead, lookFor, color 
           )}
           {lookFor && (
             <div style={{ padding: '8px 12px', background: 'rgba(239,159,39,0.1)', borderRadius: 6, borderLeft: '3px solid #EF9F27' }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#854F0B', marginBottom: 3 }}>⚠ What to look for</div>
-              <div style={{ fontSize: 12, color: '#854F0B', lineHeight: 1.6 }}>{lookFor}</div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#3A5A3A', marginBottom: 3 }}>⚠ What to look for</div>
+              <div style={{ fontSize: 12, color: '#3A5A3A', lineHeight: 1.6 }}>{lookFor}</div>
             </div>
           )}
         </div>

@@ -38,7 +38,7 @@ const scenarios = [
     exposure: 'LKR 187 Mn',
     severity: 0.96,
     duration: '11 weeks compressed',
-    color: '#854F0B',
+    color: '#3A5A3A',
     description: 'Over 11 weeks, six agents independently flag different anomalies at Branch BR-14, Ratnapura — Controls, Credit, KYC, Insider Risk, Digital Fraud, and the Orchestrator. Each signal alone is insufficient. The Insider Risk Agent confirms the primary actor: STF-1847 at 94/100. The Orchestrator correlates all six into a definitive insider-enabled loan fraud case.',
     outcome: 'STF-1847 suspended. Field audit deployed to BR-14. Case NTB-2025-FR-0847 opened. Regulatory notification prepared.',
   },
@@ -75,7 +75,7 @@ export default function ScenarioLab() {
                 <div style={{ fontSize: 11, color: 'var(--color-text-3)' }}>exposure under investigation</div>
               </div>
               <div>
-                <div style={{ fontSize: 18, fontWeight: 700, color: sc.severity >= 0.95 ? 'var(--color-red)' : 'var(--color-amber)' }}>{(sc.severity * 100).toFixed(0)}%</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: sc.severity >= 0.95 ? 'var(--color-red)' : '#3A5A3A' }}>{(sc.severity * 100).toFixed(0)}%</div>
                 <div style={{ fontSize: 11, color: 'var(--color-text-3)' }}>combined severity</div>
               </div>
               <div>

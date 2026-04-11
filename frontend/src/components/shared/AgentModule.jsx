@@ -53,7 +53,7 @@ export function AgentStat({ label, value, sub, color }) {
 export function SeverityBadge({ severity }) {
   const map = {
     critical: { bg: 'var(--color-red-light)', color: 'var(--color-red)', label: 'Critical' },
-    high: { bg: 'var(--color-amber-light)', color: 'var(--color-amber)', label: 'High' },
+    high: { bg: '#E8FDF4', color: '#3A5A3A', label: 'High' },
     medium: { bg: 'var(--color-blue-light)', color: 'var(--color-blue)', label: 'Medium' },
     low: { bg: 'var(--color-gray-light)', color: 'var(--color-gray)', label: 'Low' },
   };

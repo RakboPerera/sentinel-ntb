@@ -80,7 +80,7 @@ const liveAlerts = [
     accountStatus: 'Frozen',
   },
   {
-    id: 'alert-003', caseId: 'CASE-004', agent: 'Transaction Agent', agentId: 'transaction', agentColor: '#534AB7',
+    id: 'alert-003', caseId: 'CASE-004', agent: 'Transaction Agent', agentId: 'transaction', agentColor: '#3D3C38',
     text: 'Account NTB-0841-X scored 0.94. 15 CEFT transfers in 22 minutes, all below LKR 5M threshold.',
     severity: 'critical', time: '7m ago',
     title: 'Structuring Detected — NTB-0841-X CEFT Cluster',
@@ -114,7 +114,7 @@ const liveAlerts = [
     accountStatus: 'Blocked',
   },
   {
-    id: 'alert-004', caseId: 'CASE-003', agent: 'Controls Agent', agentId: 'controls', agentColor: '#854F0B',
+    id: 'alert-004', caseId: 'CASE-003', agent: 'Controls Agent', agentId: 'controls', agentColor: '#3A5A3A',
     text: 'STF-1847 (BR-14 Ratnapura) — 4 SoD violations, 87% override concentration. Insider fraud pattern.',
     severity: 'critical', time: '11m ago',
     title: 'Insider Fraud Pattern — STF-1847, Branch BR-14',
@@ -251,7 +251,7 @@ const liveAlerts = [
     accountStatus: 'Suspended',
   },
   {
-    id: 'alert-008', caseId: 'CASE-010', agent: 'Orchestrator', agentId: 'orchestrator', agentColor: '#534AB7',
+    id: 'alert-008', caseId: 'CASE-010', agent: 'Orchestrator', agentId: 'orchestrator', agentColor: '#3D3C38',
     text: 'CORRELATION: BR-14 flagged by 4 agents simultaneously. Combined severity 0.98. Case opened.',
     severity: 'critical', time: '35m ago',
     title: 'Cross-Agent Correlation — BR-14 Insider Fraud (Severity 0.98)',
@@ -292,7 +292,7 @@ const liveAlerts = [
 const SCORE_ZONES = [
   { from: 0, to: 0.5,  label: 'Normal',   color: '#3B6D11' },
   { from: 0.5, to: 0.65, label: 'Watch',  color: '#26EA9F' },
-  { from: 0.65, to: 0.85, label: 'High',  color: '#854F0B' },
+  { from: 0.65, to: 0.85, label: 'High',  color: '#3A5A3A' },
   { from: 0.85, to: 1.0,  label: 'Critical', color: '#A32D2D' },
 ];
 
@@ -510,10 +510,10 @@ function AlertDrawer({ alert, onClose }) {
 
               {/* Correlation group */}
               {alert.correlationId && (
-                <div style={{ padding: '12px 14px', background: 'var(--color-purple-light)', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 10 }}>
+                <div style={{ padding: '12px 14px', background: '#F0F0EE', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}>
-                    <GitBranch size={13} style={{ color: 'var(--color-purple)' }} />
-                    <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--color-purple)' }}>Correlation group: {alert.correlationId}</span>
+                    <GitBranch size={13} style={{ color: '#3D3C38' }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#3D3C38' }}>Correlation group: {alert.correlationId}</span>
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--color-text-2)', lineHeight: 1.6 }}>
                     This alert is part of a multi-agent correlation. {liveAlerts.filter(a => a.correlationId === alert.correlationId && a.id !== alert.id).length} other alert{liveAlerts.filter(a => a.correlationId === alert.correlationId && a.id !== alert.id).length !== 1 ? 's' : ''} share this correlation ID.
@@ -540,12 +540,12 @@ function AlertDrawer({ alert, onClose }) {
               {/* Status flags */}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {alert.accountStatus && alert.accountStatus !== 'Active' && (
-                  <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', background: alert.accountStatus === 'Frozen' ? 'var(--color-red-light)' : '#FFFBEB', color: alert.accountStatus === 'Frozen' ? 'var(--color-red)' : '#854F0B', borderRadius: 6, border: `1px solid ${alert.accountStatus === 'Frozen' ? 'rgba(163,45,45,0.3)' : 'rgba(133,79,11,0.3)'}` }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', background: alert.accountStatus === 'Frozen' ? 'var(--color-red-light)' : '#FFFBEB', color: alert.accountStatus === 'Frozen' ? 'var(--color-red)' : '#3A5A3A', borderRadius: 6, border: `1px solid ${alert.accountStatus === 'Frozen' ? 'rgba(163,45,45,0.3)' : 'rgba(133,79,11,0.3)'}` }}>
                     Account {alert.accountStatus}
                   </span>
                 )}
                 {alert.strStatus && (
-                  <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', background: '#FFFBEB', color: '#854F0B', borderRadius: 6, border: '1px solid rgba(133,79,11,0.3)' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', background: '#FFFBEB', color: '#3A5A3A', borderRadius: 6, border: '1px solid rgba(133,79,11,0.3)' }}>
                     STR: {alert.strStatus}
                   </span>
                 )}
@@ -653,23 +653,23 @@ function AlertDrawer({ alert, onClose }) {
 // ─── FINDINGS REGISTER VIEW ──────────────────────────────────────────────────
 
 const ALL_FINDINGS = [
-  { id:'F-001', agent:'Insider Risk', agentColor:'#7C3AED', finding:'STF-1847 — All 6 insider dimensions breached simultaneously. Risk score 94/100.', severity:'critical', exposure:'LKR 387M', branch:'BR-14', daysOpen:22, status:'Under Investigation', owner:'R. Wijeratne', type:'Insider Fraud', path:'/agents/insider-risk' },
+  { id:'F-001', agent:'Insider Risk', agentColor:'#2D2D2B', finding:'STF-1847 — All 6 insider dimensions breached simultaneously. Risk score 94/100.', severity:'critical', exposure:'LKR 387M', branch:'BR-14', daysOpen:22, status:'Under Investigation', owner:'R. Wijeratne', type:'Insider Fraud', path:'/agents/insider-risk' },
   { id:'F-002', agent:'Suspense & Reconciliation', agentColor:'#993C1D', finding:'SUS-017 — Phantom receivable. +312% in 30d, clearing ratio 0.08, 94 days aged.', severity:'critical', exposure:'LKR 1.24Bn', branch:'BR-72', daysOpen:22, status:'STR Filed', owner:'MLCO', type:'Fraud', path:'/agents/suspense' },
   { id:'F-003', agent:'Trade Finance & Treasury', agentColor:'#3B6D11', finding:'NTB-CORP-0887 — Over-invoicing 91% above HS 6203 benchmark. Duplicate LC confirmed.', severity:'critical', exposure:'LKR 421M', branch:'BR-16', daysOpen:23, status:'Under Investigation', owner:'D. Rajapaksa', type:'TBML', path:'/agents/trade' },
-  { id:'F-004', agent:'MJE Testing', agentColor:'#0891B2', finding:'MJE-2026-4205 — Midnight month-end entry, LKR 120M, zero documents, SoD violation. Score 97/100.', severity:'critical', exposure:'LKR 120M', branch:'All', daysOpen:18, status:'Escalated', owner:'Unassigned', type:'Control Failure', path:'/agents/mje' },
-  { id:'F-005', agent:'Internal Controls', agentColor:'#854F0B', finding:'STF-1847 — 4 SoD violations. Same person as maker and approver on 4 disbursements.', severity:'critical', exposure:'LKR 387M', branch:'BR-14', daysOpen:22, status:'Under Investigation', owner:'R. Wijeratne', type:'Control Failure', path:'/agents/controls' },
+  { id:'F-004', agent:'MJE Testing', agentColor:'#0BBF7A', finding:'MJE-2026-4205 — Midnight month-end entry, LKR 120M, zero documents, SoD violation. Score 97/100.', severity:'critical', exposure:'LKR 120M', branch:'All', daysOpen:18, status:'Escalated', owner:'Unassigned', type:'Control Failure', path:'/agents/mje' },
+  { id:'F-005', agent:'Internal Controls', agentColor:'#3A5A3A', finding:'STF-1847 — 4 SoD violations. Same person as maker and approver on 4 disbursements.', severity:'critical', exposure:'LKR 387M', branch:'BR-14', daysOpen:22, status:'Under Investigation', owner:'R. Wijeratne', type:'Control Failure', path:'/agents/controls' },
   { id:'F-006', agent:'Credit Intelligence', agentColor:'#185FA5', finding:'11 override-approved anomalous loans at BR-14. Anomaly scores 0.82–0.94. LKR 387M.', severity:'critical', exposure:'LKR 387M', branch:'BR-14', daysOpen:22, status:'Under Investigation', owner:'R. Wijeratne', type:'Credit Risk', path:'/agents/credit' },
-  { id:'F-007', agent:'Transaction Surveillance', agentColor:'#534AB7', finding:'NTB-0841-X — 15 CEFT transfers in 22 min, LKR 4.6M–4.95M each. Structuring score 0.94.', severity:'high', exposure:'LKR 71M', branch:'BR-72', daysOpen:22, status:'STR Pending', owner:'MLCO', type:'AML', path:'/agents/transaction' },
+  { id:'F-007', agent:'Transaction Surveillance', agentColor:'#3D3C38', finding:'NTB-0841-X — 15 CEFT transfers in 22 min, LKR 4.6M–4.95M each. Structuring score 0.94.', severity:'high', exposure:'LKR 71M', branch:'BR-72', daysOpen:22, status:'STR Pending', owner:'MLCO', type:'AML', path:'/agents/transaction' },
   { id:'F-008', agent:'Digital Fraud & Identity', agentColor:'#993556', finding:'DEV-A4F7-9921 shared across 4 accounts in SUS-017 counterparty network.', severity:'high', exposure:'—', branch:'BR-72', daysOpen:22, status:'Open', owner:'Unassigned', type:'Digital Fraud', path:'/agents/digital' },
   { id:'F-009', agent:'Identity & KYC / AML', agentColor:'#0F6E56', finding:'INT-BR14-007 — 14 of 41 introduced accounts have KYC gaps (34% gap rate).', severity:'high', exposure:'—', branch:'BR-14', daysOpen:34, status:'Open', owner:'Head of KYC', type:'Compliance', path:'/agents/kyc' },
-  { id:'F-010', agent:'Internal Controls', agentColor:'#854F0B', finding:'4 branches below 65/100 composite threshold: BR-14 (41), BR-23 (54), BR-11 (58), BR-56 (61).', severity:'high', exposure:'Network-wide', branch:'Multi', daysOpen:22, status:'Open', owner:'Field Audit Team', type:'Control Failure', path:'/agents/controls' },
+  { id:'F-010', agent:'Internal Controls', agentColor:'#3A5A3A', finding:'4 branches below 65/100 composite threshold: BR-14 (41), BR-23 (54), BR-11 (58), BR-56 (61).', severity:'high', exposure:'Network-wide', branch:'Multi', daysOpen:22, status:'Open', owner:'Field Audit Team', type:'Control Failure', path:'/agents/controls' },
   { id:'F-011', agent:'Credit Intelligence', agentColor:'#185FA5', finding:'34 loans predicted misstaged. ECL impact if corrected: ~LKR 600M additional provision.', severity:'high', exposure:'LKR 1.10Bn', branch:'Multi', daysOpen:22, status:'Open', owner:'Head of Credit Risk', type:'Credit Risk', path:'/agents/credit' },
-  { id:'F-012', agent:'MJE Testing', agentColor:'#0891B2', finding:'Benford first-digit failure: digits 4 & 5 over-represented vs expected. Sub-threshold GL structuring.', severity:'high', exposure:'—', branch:'All', daysOpen:18, status:'Open', owner:'Unassigned', type:'Fraud Pattern', path:'/agents/mje' },
+  { id:'F-012', agent:'MJE Testing', agentColor:'#0BBF7A', finding:'Benford first-digit failure: digits 4 & 5 over-represented vs expected. Sub-threshold GL structuring.', severity:'high', exposure:'—', branch:'All', daysOpen:18, status:'Open', owner:'Unassigned', type:'Fraud Pattern', path:'/agents/mje' },
   { id:'F-013', agent:'Identity & KYC / AML', agentColor:'#0F6E56', finding:'KYC gap rate 4.7% (39,290 accounts) — exceeds CBSL 2% threshold. 847 HSBC migration gaps.', severity:'high', exposure:'—', branch:'Network', daysOpen:44, status:'Remediation In Progress', owner:'Head of KYC', type:'Compliance', path:'/agents/kyc' },
   { id:'F-014', agent:'Trade Finance & Treasury', agentColor:'#3B6D11', finding:'LCR declined 37% in FY2025 (320.6% → 203.4%). Trajectory reaches CBSL amber by Q2 2026.', severity:'medium', exposure:'Systemic', branch:'—', daysOpen:37, status:'Resolved — ALCO Action Approved', owner:'CFO', type:'Liquidity Risk', path:'/agents/trade' },
-  { id:'F-015', agent:'Insider Risk', agentColor:'#7C3AED', finding:'STF-2341 (BR-23) — score 71/100. Override concentration 52%, off-hours approvals 18%.', severity:'medium', exposure:'—', branch:'BR-23', daysOpen:22, status:'Open', owner:'Unassigned', type:'Insider Risk', path:'/agents/insider-risk' },
+  { id:'F-015', agent:'Insider Risk', agentColor:'#2D2D2B', finding:'STF-2341 (BR-23) — score 71/100. Override concentration 52%, off-hours approvals 18%.', severity:'medium', exposure:'—', branch:'BR-23', daysOpen:22, status:'Open', owner:'Unassigned', type:'Insider Risk', path:'/agents/insider-risk' },
   { id:'F-016', agent:'Suspense & Reconciliation', agentColor:'#993C1D', finding:'SUS-031 (BR-16) — LKR 340M, clearing ratio 0.41, 86 days aged. Approaching 90-day CBSL threshold.', severity:'medium', exposure:'LKR 340M', branch:'BR-16', daysOpen:18, status:'Open', owner:'Treasury Ops', type:'Reconciliation', path:'/agents/suspense' },
-  { id:'F-017', agent:'Transaction Surveillance', agentColor:'#534AB7', finding:'NTB-2209-F velocity anomaly — 34 txns vs baseline 4 (8.5× above normal). LKR 18.4M.', severity:'medium', exposure:'LKR 18M', branch:'BR-72', daysOpen:22, status:'Open', owner:'AML Analyst', type:'AML', path:'/agents/transaction' },
+  { id:'F-017', agent:'Transaction Surveillance', agentColor:'#3D3C38', finding:'NTB-2209-F velocity anomaly — 34 txns vs baseline 4 (8.5× above normal). LKR 18.4M.', severity:'medium', exposure:'LKR 18M', branch:'BR-72', daysOpen:22, status:'Open', owner:'AML Analyst', type:'AML', path:'/agents/transaction' },
 ];
 
 function FindingsRegisterView({ navigate }) {
@@ -1014,14 +1014,14 @@ function KRITile({ data, onClick, tooltipText }) {
 
 const agentStatuses = [
   { name: 'Credit Intelligence', findings: 89, critical: 12, color: '#185FA5', path: '/agents/credit' },
-  { name: 'Transaction Surveillance', findings: 847, critical: 4, color: '#534AB7', path: '/agents/transaction' },
+  { name: 'Transaction Surveillance', findings: 847, critical: 4, color: '#3D3C38', path: '/agents/transaction' },
   { name: 'Suspense & Reconciliation', findings: 46, critical: 3, color: '#993C1D', path: '/agents/suspense' },
   { name: 'Identity & KYC / AML', findings: 39290, critical: 7, color: '#0F6E56', path: '/agents/kyc' },
-  { name: 'Internal Controls', findings: 7, critical: 2, color: '#854F0B', path: '/agents/controls' },
+  { name: 'Internal Controls', findings: 7, critical: 2, color: '#3A5A3A', path: '/agents/controls' },
   { name: 'Digital Fraud & Identity', findings: 312, critical: 23, color: '#993556', path: '/agents/digital' },
   { name: 'Trade Finance & Treasury', findings: 6, critical: 1, color: '#3B6D11', path: '/agents/trade' },
-  { name: 'Insider Risk', findings: 12, critical: 2, color: '#7C3AED', path: '/agents/insider-risk' },
-  { name: 'MJE Testing', findings: 847, critical: 5, color: '#0891B2', path: '/agents/mje' },
+  { name: 'Insider Risk', findings: 12, critical: 2, color: '#2D2D2B', path: '/agents/insider-risk' },
+  { name: 'MJE Testing', findings: 847, critical: 5, color: '#0BBF7A', path: '/agents/mje' },
 ];
 
 const branchData = [
@@ -1098,7 +1098,7 @@ export default function CommandCentre() {
                   <span style={{ fontSize: 11, color: 'var(--color-text-3)' }}>Q1 2024 → Q4 2025</span>
                 </div>
                 <div style={{ padding: '16px' }}>
-                  <div style={{ padding: '10px 14px', background: 'var(--color-amber-light)', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8, fontSize: 12, color: 'var(--color-amber)', marginBottom: 16 }}>
+                  <div style={{ padding: '10px 14px', background: '#E8FDF4', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8, fontSize: 12, color: '#3A5A3A', marginBottom: 16 }}>
                     ⚠ LCR has declined 37% over FY2025 (320.6% → 203.4%) driven by 50% loan growth outpacing the stable deposit base. At current trajectory, LCR approaches the 150% amber threshold in Q2 2026. ALCO action required.
                   </div>
                   <ResponsiveContainer width="100%" height={280}>
@@ -1130,7 +1130,7 @@ export default function CommandCentre() {
                   { label: 'Alerts Auto-Resolved', value: executiveData.ai_roi.alerts_auto_resolved.toLocaleString(), sub: 'No analyst intervention needed', color: '#3B6D11' },
                   { label: 'Analyst Hours Saved', value: executiveData.ai_roi.analyst_hours_saved.toLocaleString(), sub: 'vs manual review baseline', color: '#185FA5' },
                   { label: 'Fraud Detected', value: `LKR ${(executiveData.ai_roi.fraud_detected_lkr/1e9).toFixed(1)} Bn`, sub: 'Total value of confirmed fraud cases', color: '#A32D2D' },
-                  { label: 'Avg Detection Time', value: `${executiveData.ai_roi.avg_detection_time_minutes} min`, sub: `vs ${executiveData.ai_roi.manual_baseline_minutes} min manual baseline`, color: '#854F0B' },
+                  { label: 'Avg Detection Time', value: `${executiveData.ai_roi.avg_detection_time_minutes} min`, sub: `vs ${executiveData.ai_roi.manual_baseline_minutes} min manual baseline`, color: '#3A5A3A' },
                 ].map((s,i) => (
                   <div key={i} style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 10, padding: '14px 16px', borderTop: `3px solid ${s.color}` }}>
                     <div style={{ fontSize: 11, color: 'var(--color-text-3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>{s.label}</div>
@@ -1226,9 +1226,9 @@ export default function CommandCentre() {
               <div style={{ display:'flex', gap:0, alignItems:'stretch', overflowX:'auto' }}>
                 {[
                   { step:'50% loan growth', detail:'LKR 143 Bn new origination in FY2025 — highest in NTB history', color:'#185FA5', icon:'📈' },
-                  { step:'Branch approval pressure', detail:'Volume pressure led to override rate rising from 3.1% to 4.8% across the network', color:'#854F0B', icon:'⚠' },
-                  { step:'Control environment failure', detail:'BR-14 override rate reaches 14.3%. STF-1847 accounts for 87% of branch overrides', color:'#854F0B', icon:'⚙' },
-                  { step:'Insider fraud enabled', detail:'STF-1847 approves 11 anomalous loans LKR 387M. 4 SoD violations. Risk score 94/100', color:'#7C3AED', icon:'👤' },
+                  { step:'Branch approval pressure', detail:'Volume pressure led to override rate rising from 3.1% to 4.8% across the network', color:'#3A5A3A', icon:'⚠' },
+                  { step:'Control environment failure', detail:'BR-14 override rate reaches 14.3%. STF-1847 accounts for 87% of branch overrides', color:'#3A5A3A', icon:'⚙' },
+                  { step:'Insider fraud enabled', detail:'STF-1847 approves 11 anomalous loans LKR 387M. 4 SoD violations. Risk score 94/100', color:'#2D2D2B', icon:'👤' },
                   { step:'Book inflation + ECL gap', detail:'Fictitious/inflated loans inflate loan book. Stage 3 ratio understated. LKR 1.1 Bn ECL gap', color:'#DC2626', icon:'📋' },
                   { step:'LCR deterioration', detail:'Inflated loan book + rapid growth depletes liquid assets. LCR: 320.6% → 203.4% (-37%)', color:'#D97706', icon:'💧' },
                 ].map((node, i, arr) => (
@@ -1246,7 +1246,7 @@ export default function CommandCentre() {
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop:14, padding:'10px 14px', background:'var(--color-amber-light)', border:'1px solid rgba(133,79,11,0.2)', borderRadius:8, fontSize:12, color:'var(--color-amber)', lineHeight:1.7 }}>
+              <div style={{ marginTop:14, padding:'10px 14px', background:'#E8FDF4', border:'1px solid rgba(133,79,11,0.2)', borderRadius:8, fontSize:12, color:'#3A5A3A', lineHeight:1.7 }}>
                 <strong>Audit opinion:</strong> All six risk signals in this dashboard — LCR decline, loan growth, override rate, insider fraud, ECL understatement, and CEFT structuring — are manifestations of the same underlying dynamic: aggressive growth without proportionate control investment. The Board should treat these as a single systemic risk, not six separate findings.
               </div>
             </div>
@@ -1271,15 +1271,15 @@ export default function CommandCentre() {
             <span className="agent-panel-title">Connected Risk Narrative</span>
             <InfoTooltip text="These six risk signals are not independent events. They are causally linked — a single dynamic driving multiple indicator failures simultaneously. Understanding the connection is essential for the Board response." position="bottom" width={320} />
           </div>
-          <span style={{ fontSize: 11, color: 'var(--color-amber)', fontWeight: 600 }}>All six connected</span>
+          <span style={{ fontSize: 11, color: '#3A5A3A', fontWeight: 600 }}>All six connected</span>
         </div>
         <div style={{ padding: '12px 16px', overflowX: 'auto' }}>
           <div style={{ display: 'flex', gap: 0, alignItems: 'stretch', minWidth: 900 }}>
             {[
               { step: '50% loan growth', detail: 'LKR 143 Bn new origination — highest in NTB history', color: '#185FA5', icon: '📈', agent: 'Credit Agent', path: '/agents/credit' },
-              { step: 'Branch approval pressure', detail: 'Override rate: 3.1% → 4.8% network-wide. BR-14 at 14.3%', color: '#854F0B', icon: '⚠', agent: 'Controls Agent', path: '/agents/controls' },
-              { step: 'Control environment failure', detail: '4 SoD violations. STF-1847: 87% override concentration at BR-14', color: '#854F0B', icon: '⚙', agent: 'Insider Risk Agent', path: '/agents/insider-risk' },
-              { step: 'Insider fraud confirmed', detail: 'STF-1847 score 94/100. 11 anomalous loans LKR 387M fabricated or inflated', color: '#7C3AED', icon: '👤', agent: 'Credit + MJE Agent', path: '/cases', caseId: 'CASE-001' },
+              { step: 'Branch approval pressure', detail: 'Override rate: 3.1% → 4.8% network-wide. BR-14 at 14.3%', color: '#3A5A3A', icon: '⚠', agent: 'Controls Agent', path: '/agents/controls' },
+              { step: 'Control environment failure', detail: '4 SoD violations. STF-1847: 87% override concentration at BR-14', color: '#3A5A3A', icon: '⚙', agent: 'Insider Risk Agent', path: '/agents/insider-risk' },
+              { step: 'Insider fraud confirmed', detail: 'STF-1847 score 94/100. 11 anomalous loans LKR 387M fabricated or inflated', color: '#2D2D2B', icon: '👤', agent: 'Credit + MJE Agent', path: '/cases', caseId: 'CASE-001' },
               { step: 'ECL understatement', detail: 'Stage 3 ratio understated. LKR 1.1 Bn ECL provisioning gap', color: '#DC2626', icon: '📋', agent: 'MJE Agent', path: '/agents/mje' },
               { step: 'LCR deterioration', detail: 'Loan book inflation + rapid growth depletes HQLA. 320.6% → 203.4%', color: '#D97706', icon: '💧', agent: 'Trade Agent', path: '/agents/trade' },
             ].map((node, i, arr) => (
@@ -1299,7 +1299,7 @@ export default function CommandCentre() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 10, fontSize: 12, color: 'var(--color-amber)', padding: '8px 12px', background: 'var(--color-amber-light)', borderRadius: 8, lineHeight: 1.6 }}>
+          <div style={{ marginTop: 10, fontSize: 12, color: '#3A5A3A', padding: '8px 12px', background: '#E8FDF4', borderRadius: 8, lineHeight: 1.6 }}>
             <strong>Audit opinion:</strong> All six KRI movements are manifestations of the same underlying dynamic — aggressive growth without proportionate control investment. The Board should treat this as a single systemic risk requiring a unified response, not six separate findings.
           </div>
         </div>
@@ -1309,13 +1309,13 @@ export default function CommandCentre() {
         <div className="cc-left">
           {/* Cross-agent correlations */}
           <div className="agent-panel">
-            <div className="agent-panel-header" style={{ background: 'var(--color-purple-light)' }}>
+            <div className="agent-panel-header" style={{ background: '#F0F0EE' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <GitMerge size={15} style={{ color: 'var(--color-purple)' }} />
-                <span className="agent-panel-title" style={{ color: 'var(--color-purple)' }}>Cross-Agent Correlations</span>
+                <GitMerge size={15} style={{ color: '#3D3C38' }} />
+                <span className="agent-panel-title" style={{ color: '#3D3C38' }}>Cross-Agent Correlations</span>
                 <InfoTooltip text="When 2+ agents independently flag the same entity (branch, account, staff member), the Orchestrator generates a cross-domain correlation. The combined severity score is higher than any individual agent finding because multi-agent confirmation is statistically powerful." position="bottom" width={300} />
               </div>
-              <span style={{ fontSize: 11, fontWeight: 700, background: 'var(--color-purple)', color: 'white', padding: '2px 8px', borderRadius: 10 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, background: '#3D3C38', color: 'white', padding: '2px 8px', borderRadius: 10 }}>
                 {orchData.correlations.length} active
               </span>
             </div>
@@ -1330,7 +1330,7 @@ export default function CommandCentre() {
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
                   <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}>
-                    <div style={{ padding: '4px 8px', borderRadius: 6, fontSize: 13, fontWeight: 800, color: corr.combined_severity >= 0.95 ? 'var(--color-red)' : 'var(--color-amber)', background: corr.combined_severity >= 0.95 ? 'var(--color-red-light)' : 'var(--color-amber-light)', flexShrink: 0 }}>
+                    <div style={{ padding: '4px 8px', borderRadius: 6, fontSize: 13, fontWeight: 800, color: corr.combined_severity >= 0.95 ? 'var(--color-red)' : '#3A5A3A', background: corr.combined_severity >= 0.95 ? 'var(--color-red-light)' : '#E8FDF4', flexShrink: 0 }}>
                       {(corr.combined_severity * 100).toFixed(0)}%
                     </div>
                     <span style={{ fontSize: 10, color: 'var(--color-text-3)', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 3 }}>
@@ -1340,7 +1340,7 @@ export default function CommandCentre() {
                       <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{corr.fraud_type_suspected}</div>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                         {corr.agents_involved.map(a => (
-                          <span key={a} style={{ fontSize: 10, padding: '1px 6px', background: 'var(--color-purple-light)', color: 'var(--color-purple)', borderRadius: 4 }}>{a}</span>
+                          <span key={a} style={{ fontSize: 10, padding: '1px 6px', background: '#F0F0EE', color: '#3D3C38', borderRadius: 4 }}>{a}</span>
                         ))}
                       </div>
                     </div>
@@ -1395,7 +1395,7 @@ export default function CommandCentre() {
             <div>
               {orchData.priority_actions.map((action, i) => (
                 <div key={i} style={{ display: 'flex', gap: 12, padding: '12px 16px', borderBottom: '1px solid var(--color-border)', alignItems: 'flex-start' }}>
-                  <div style={{ width: 26, height: 26, borderRadius: 6, background: i === 0 ? 'var(--color-red-light)' : 'var(--color-amber-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: i === 0 ? 'var(--color-red)' : 'var(--color-amber)', flexShrink: 0 }}>
+                  <div style={{ width: 26, height: 26, borderRadius: 6, background: i === 0 ? 'var(--color-red-light)' : '#E8FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: i === 0 ? 'var(--color-red)' : '#3A5A3A', flexShrink: 0 }}>
                     {action.rank}
                   </div>
                   <div style={{ flex: 1 }}>
@@ -1441,7 +1441,7 @@ export default function CommandCentre() {
                       <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'var(--color-surface-2)', overflow: 'hidden' }}>
                         <div style={{ width: `${alert.anomalyScore * 100}%`, height: '100%', background: alert.anomalyScore >= 0.85 ? '#A32D2D' : '#26EA9F', borderRadius: 2 }} />
                       </div>
-                      <span style={{ fontSize: 10, fontWeight: 700, color: alert.anomalyScore >= 0.85 ? 'var(--color-red)' : 'var(--color-amber)', fontVariantNumeric: 'tabular-nums', minWidth: 28 }}>{alert.anomalyScore.toFixed(2)}</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: alert.anomalyScore >= 0.85 ? 'var(--color-red)' : '#3A5A3A', fontVariantNumeric: 'tabular-nums', minWidth: 28 }}>{alert.anomalyScore.toFixed(2)}</span>
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'flex-end', flexShrink: 0 }}>

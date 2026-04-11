@@ -7,7 +7,7 @@ import { demoData, peerBenchmarks } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 
-const COLOR = '#854F0B';
+const COLOR = '#3A5A3A';
 const SCHEMA = {
   agentName: 'Internal Controls',
   required: ['transaction_id','branch_code','initiator_id','approver_id','amount_lkr','transaction_type','timestamp'],
@@ -72,18 +72,18 @@ export default function InternalControlsAgent() {
             {/* Audit Opinion Banner */}
             <div style={{ background:'#854F0B06', border:`1px solid #854F0B22`, borderRadius:10, overflow:'hidden' }}>
               <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
-                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#854F0B', color:'white', flexShrink:0, marginTop:2 }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#3A5A3A', color:'white', flexShrink:0, marginTop:2 }}>
                   ADVERSE
                 </div>
-                <div style={{ fontSize:12, color:'#854F0B', lineHeight:1.7 }}>
+                <div style={{ fontSize:12, color:'#3A5A3A', lineHeight:1.7 }}>
                   In our opinion, the internal controls environment at Branch BR-14 is ADVERSE — composite score 41/100. SoD violations are confirmed. STF-1847 override concentration of 87% is statistically impossible under legitimate operations.
                 </div>
               </div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #854F0B18` }}>
                 {[['Population tested','18,743 approval transactions across 90 branches'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','All SoD violations; branches with override rate &gt;5% or composite &lt;65'],['Model limitations','Manual overrides outside system not captured; delegated authority limits from HR records Q3 2025']].map(([k,v],i)=>(
                   <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #854F0B12`:'none', borderBottom:i<2?`1px solid #854F0B12`:'none' }}>
-                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#854F0B', opacity:0.65, marginBottom:2 }}>{k}</div>
-                    <div style={{ fontSize:11, color:'#854F0B', lineHeight:1.5 }}>{v}</div>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#3A5A3A', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#3A5A3A', lineHeight:1.5 }}>{v}</div>
                   </div>
                 ))}
               </div>
@@ -190,7 +190,7 @@ export default function InternalControlsAgent() {
                       <div style={{ marginLeft:'auto', display:'flex', gap:6, flexWrap:'wrap' }}>
                         {[
                           [`${approver.sod_violations} SoD violations`, 'var(--color-red)','var(--color-red-light)'],
-                          [`${approver.override_concentration_pct}% override concentration`, '#854F0B','#FAEEDA'],
+                          [`${approver.override_concentration_pct}% override concentration`, '#3A5A3A','#E8FDF4'],
                           [`${approver.off_hours_approvals} off-hours approvals`, COLOR, '#E6F1FB'],
                         ].map(([label, color, bg]) => (
                           <span key={label} style={{ fontSize:11, fontWeight:600, padding:'3px 9px', background:bg, color, borderRadius:5 }}>{label}</span>

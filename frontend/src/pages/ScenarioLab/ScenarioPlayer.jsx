@@ -48,7 +48,7 @@ const SCENARIOS = {
         signal: null,
       },
       {
-        id: 4, agent: 'Internal Controls', agentColor: '#854F0B', agentIcon: '⚙',
+        id: 4, agent: 'Internal Controls', agentColor: '#3A5A3A', agentIcon: '⚙',
         title: 'Override concentration analysis — STF-1847 identified',
         narrative: 'Responding to the orchestrator signal, the Internal Controls Agent analyses override patterns at BR-14. It finds that 87% of all branch overrides are approved by a single staff member — STF-1847. The agent then checks all transactions involving this individual against the Segregation of Duties framework.',
         finding: 'STF-1847: 4 SoD violations, 87% override concentration, 3 loans to borrowers with shared guarantor addresses, 12 off-hours approvals. Branch BR-14 composite score: 41/100. The lowest in the NTB network.',
@@ -59,7 +59,7 @@ const SCENARIOS = {
         signal: 'Orchestrator signal → KYC Agent: Verify introducer codes for BR-14 loans. Cross-check borrower addresses and guarantor relationships.',
       },
       {
-        id: 5, agent: 'MJE Testing', agentColor: '#0891B2', agentIcon: '⊞',
+        id: 5, agent: 'MJE Testing', agentColor: '#0BBF7A', agentIcon: '⊞',
         title: 'MJE scan — 2 journal entries flagged at BR-14',
         narrative: 'The MJE Testing Agent runs its full-population test across all 847 manual journal entries. Two entries at BR-14 match a critical pattern: posted after midnight, round amounts, to sensitive GL accounts (Loans Receivable and CEFT Suspense), with STF-1847 as both maker and checker, and no supporting documents attached.',
         finding: 'MJE-2026-4201 (LKR 185M to SUS-001 at 23:47) and MJE-2026-4204 (LKR 120M to Loans Receivable at 00:03) — both approved by STF-1847. SoD violation + midnight posting + round number + sensitive GL + no documentation = risk score 97/100. These entries are consistent with balance sheet manipulation to conceal the fictitious loans.',
@@ -70,7 +70,7 @@ const SCENARIOS = {
         signal: 'Orchestrator: MJE evidence links to Credit + Controls signals on BR-14/STF-1847. Balance sheet manipulation confirmed. Elevating to 5-agent correlation.',
       },
       {
-        id: 6, agent: 'Orchestrator', agentColor: '#534AB7', agentIcon: '◎',
+        id: 6, agent: 'Orchestrator', agentColor: '#3D3C38', agentIcon: '◎',
         title: 'Cross-agent correlation — CORR-001 severity 0.98',
         narrative: 'The Orchestrator receives signals from five independently operating agents — Credit Intelligence, Internal Controls, KYC, Digital Fraud, and MJE Testing — all converging on Branch BR-14 and staff member STF-1847. The MJE evidence is the final piece: it shows not only that STF-1847 approved anomalous loans, but also manipulated the GL entries to conceal them.',
         finding: 'CORR-001: BR-14/STF-1847 flagged by 5 agents. Combined severity 0.98. Fraud type: Insider-enabled loan fraud with GL manipulation. STF-1847 manufactured or inflated loans, approved via SoD violations, concealed via midnight MJE postings. Case NTB-2025-FR-0847 opened.',
@@ -103,7 +103,7 @@ const SCENARIOS = {
         signal: 'Orchestrator signal → Transaction Agent: Analyse all CEFT flows linked to SUS-017 in last 30 days. Flag structuring patterns.',
       },
       {
-        id: 2, agent: 'Transaction Surveillance', agentColor: '#534AB7', agentIcon: '⟳',
+        id: 2, agent: 'Transaction Surveillance', agentColor: '#3D3C38', agentIcon: '⟳',
         title: 'Structuring cluster — 15 CEFT transfers in 22 minutes',
         narrative: 'Responding to the orchestrator signal, the Transaction Agent analyses CEFT flows from accounts linked to SUS-017. It finds a textbook structuring cluster: 15 transfers in 22 minutes, each deliberately below the LKR 5M STR threshold, totalling LKR 71.25M.',
         finding: '15 CEFT transfers from NTB-0841-X in 22 minutes. Amounts: LKR 4.6M–4.95M — all below the LKR 5M threshold. Combined: LKR 71.25M. Structuring score: 0.94. STR eligible. Hub-and-spoke routing: 89% to same 3 external accounts.',
@@ -114,7 +114,7 @@ const SCENARIOS = {
         signal: null,
       },
       {
-        id: 3, agent: 'Transaction Surveillance', agentColor: '#534AB7', agentIcon: '⟳',
+        id: 3, agent: 'Transaction Surveillance', agentColor: '#3D3C38', agentIcon: '⟳',
         title: "Benford's Law deviation — network-wide structuring",
         narrative: "The Transaction Agent runs a Benford's Law first-digit frequency test across all 284,719 transactions in the analysis window. This reveals whether the SUS-017 pattern is an isolated incident or a network-wide phenomenon.",
         finding: "First digit '4' appears at 18.3% vs 9.7% expected under Benford's Law. Chi-squared p-value: 0.003. This is not an isolated account — systematic structuring below LKR 5M is occurring across multiple accounts. STR queue: 4 accounts. Total STR-eligible volume: LKR 1.44 Bn.",
@@ -147,7 +147,7 @@ const SCENARIOS = {
         signal: null,
       },
       {
-        id: 6, agent: 'Orchestrator', agentColor: '#534AB7', agentIcon: '◎',
+        id: 6, agent: 'Orchestrator', agentColor: '#3D3C38', agentIcon: '◎',
         title: 'Correlation CORR-002 — severity 0.99',
         narrative: 'The Orchestrator has received signals from four independent agents — all converging on SUS-017 and its counterparty network. The combined severity of 0.99 is the highest of this audit cycle. Account freeze and STR filing are triggered automatically.',
         finding: 'CORR-002: SUS-017 flagged by 4 agents. Combined severity 0.99. Fraud type: CEFT suspense fraud — coordinated external scheme. SUS-017 frozen. STR filed with CBSL FIU. Forensic evidence package generated. Detection time: 6 minutes 58 seconds.',
@@ -163,13 +163,13 @@ const SCENARIOS = {
   insider: {
     title: 'Branch Insider Fraud',
     subtitle: 'Eleven weeks of signals — six agents — one case',
-    color: '#854F0B',
+    color: '#3A5A3A',
     totalSeverity: 0.96,
     fraudType: 'Insider-Enabled Loan Fraud — STF-1847',
     entities: ['BR-14 Ratnapura', 'STF-1847', 'LKR 187 Mn'],
     steps: [
       {
-        id: 1, agent: 'Internal Controls', agentColor: '#854F0B', agentIcon: '⚙',
+        id: 1, agent: 'Internal Controls', agentColor: '#3A5A3A', agentIcon: '⚙',
         title: 'Week 1 — Override rate anomaly at BR-14',
         narrative: 'The Controls Agent flags BR-14 for an override rate of 12.1% — more than double the network average of 4.8%. This is within the amber threshold. A watch flag is set, enhanced monitoring begins, but no immediate action is triggered.',
         finding: 'BR-14 override rate: 12.1%. Network average: 4.8%. Branch placed on elevated monitoring. Insufficient to trigger investigation alone — below the 14% critical threshold.',
@@ -202,7 +202,7 @@ const SCENARIOS = {
         signal: 'Orchestrator: 3 independent agents now share BR-14. Combined entity correlation forming.',
       },
       {
-        id: 4, agent: 'Internal Controls', agentColor: '#854F0B', agentIcon: '⚙',
+        id: 4, agent: 'Internal Controls', agentColor: '#3A5A3A', agentIcon: '⚙',
         title: 'Week 7 — SoD violations confirmed',
         narrative: 'The Controls Agent detects 4 Segregation of Duties violations — the same staff member, STF-1847, both initiating and approving loan disbursements. This is the hard trigger. Override concentration rises to 87%. Branch score drops to 41/100 — critical.',
         finding: 'STF-1847: 4 SoD violations. 87% of all BR-14 overrides. 3 cluster approvals (shared guarantors). 12 off-hours approvals. Branch score: 41/100. First definitive insider indicator confirmed.',
@@ -213,7 +213,7 @@ const SCENARIOS = {
         signal: 'Orchestrator signal → Digital Agent: Audit STF-1847 system access logs. Look for off-hours activity and document access.',
       },
       {
-        id: 5, agent: 'Insider Risk', agentColor: '#7C3AED', agentIcon: '◉',
+        id: 5, agent: 'Insider Risk', agentColor: '#2D2D2B', agentIcon: '◉',
         title: 'Week 8 — Insider Risk Agent: score 94/100',
         narrative: 'The Insider Risk Agent has been quietly building a 6-dimension risk profile for STF-1847 across the full 14-month access history. By Week 8 it has enough evidence to compute a definitive score. STF-1847 matches all six insider fraud indicators simultaneously — the highest combined score in the NTB network.',
         finding: 'STF-1847 risk score: 94/100 (Critical). All 6 dimensions breached: SoD violations (4), override concentration (87%), same-cluster approvals (3), off-hours approvals (12), approval turnaround 1.4 min (below 2-min threshold), session behavioral deviation. Network average: 18/100.',
@@ -246,7 +246,7 @@ const SCENARIOS = {
         signal: null,
       },
       {
-        id: 8, agent: 'Orchestrator', agentColor: '#534AB7', agentIcon: '◎',
+        id: 8, agent: 'Orchestrator', agentColor: '#3D3C38', agentIcon: '◎',
         title: 'Week 11 — All six signals correlated',
         narrative: 'The Orchestrator has accumulated signals from six independently operating agents over 11 weeks — each insufficient alone, but together definitive. It computes the combined severity and elevates this to a case-worthy correlation.',
         finding: 'CORR-001: BR-14/STF-1847 flagged by 6 agents over 11 weeks. Combined severity: 0.96. Fraud type: insider-enabled loan fraud — fictitious loans, override abuse, document manipulation, fund recycling. Case NTB-2025-FR-0847 opened. Emergency response triggered.',
@@ -282,8 +282,8 @@ function SeverityMeter({ value, color, size = 120 }) {
 
 // ─── EVIDENCE CARD ────────────────────────────────────────────────────────────
 function EvidenceCard({ ev, agentColor, agentIcon, agentName, stepNum }) {
-  const bg = ev.type === 'critical' ? 'var(--color-red-light)' : ev.type === 'warning' ? 'var(--color-amber-light)' : ev.type === 'alert' ? '#E6F1FB' : 'var(--color-surface-2)';
-  const tc = ev.type === 'critical' ? 'var(--color-red)' : ev.type === 'warning' ? 'var(--color-amber)' : ev.type === 'alert' ? 'var(--color-blue)' : 'var(--color-text-2)';
+  const bg = ev.type === 'critical' ? 'var(--color-red-light)' : ev.type === 'warning' ? '#E8FDF4' : ev.type === 'alert' ? '#E6F1FB' : 'var(--color-surface-2)';
+  const tc = ev.type === 'critical' ? 'var(--color-red)' : ev.type === 'warning' ? '#3A5A3A' : ev.type === 'alert' ? 'var(--color-blue)' : 'var(--color-text-2)';
   return (
     <div className="animate-fade-in" style={{ padding: '10px 14px', background: bg, border: `1px solid ${tc}22`, borderRadius: 8, borderLeft: `3px solid ${tc}` }}>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 }}>
@@ -364,7 +364,7 @@ export default function ScenarioPlayer() {
           </button>
           <button
             onClick={running ? pause : start}
-            style={{ padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', color: 'white', background: running ? '#854F0B' : color, display: 'flex', alignItems: 'center', gap: 7, transition: 'all 0.15s', boxShadow: `0 4px 12px ${color}44` }}
+            style={{ padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', color: 'white', background: running ? '#3A5A3A' : color, display: 'flex', alignItems: 'center', gap: 7, transition: 'all 0.15s', boxShadow: `0 4px 12px ${color}44` }}
           >
             {running ? <><Pause size={15} />Pause</> : step >= steps.length - 1 ? <><RotateCcw size={15} />Replay</> : step === -1 ? <><Play size={15} />Start Scenario</> : <><Play size={15} />Continue</>}
           </button>
@@ -467,7 +467,7 @@ export default function ScenarioPlayer() {
 
               {/* Finding box */}
               <div style={{ padding: '16px 20px', background: activeStep.severity >= 0.9 ? 'var(--color-red-light)' : activeStep.severity >= 0.7 ? '#FFF8F0' : 'var(--color-surface)', border: `1px solid ${activeStep.severity >= 0.9 ? 'rgba(163,45,45,0.25)' : 'var(--color-border)'}`, borderRadius: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: activeStep.severity >= 0.9 ? 'var(--color-red)' : activeStep.severity >= 0.7 ? 'var(--color-amber)' : 'var(--color-text-3)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: activeStep.severity >= 0.9 ? 'var(--color-red)' : activeStep.severity >= 0.7 ? '#3A5A3A' : 'var(--color-text-3)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
                   {activeStep.severity >= 0.9 ? <AlertTriangle size={13} /> : <CheckCircle size={13} />}
                   {activeStep.severity >= 0.9 ? 'Critical Finding' : activeStep.severity >= 0.7 ? 'High Severity Finding' : 'Finding'}
                 </div>
@@ -489,7 +489,7 @@ export default function ScenarioPlayer() {
 
               {/* Signal output */}
               {activeStep.signal && (
-                <div style={{ padding: '12px 16px', background: 'var(--color-purple-light)', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 8, fontSize: 12, color: 'var(--color-purple)', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                <div style={{ padding: '12px 16px', background: '#F0F0EE', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 8, fontSize: 12, color: '#3D3C38', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
                   <span style={{ fontSize: 16, flexShrink: 0 }}>◎</span>
                   <span><strong>Orchestrator:</strong> {activeStep.signal}</span>
                 </div>
@@ -535,7 +535,7 @@ export default function ScenarioPlayer() {
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
               <SeverityMeter value={currentSeverity} color={color} size={110} />
             </div>
-            <div style={{ fontSize: 12, color: currentSeverity >= 0.9 ? 'var(--color-red)' : currentSeverity >= 0.7 ? 'var(--color-amber)' : 'var(--color-text-2)', fontWeight: 600, marginBottom: 6 }}>
+            <div style={{ fontSize: 12, color: currentSeverity >= 0.9 ? 'var(--color-red)' : currentSeverity >= 0.7 ? '#3A5A3A' : 'var(--color-text-2)', fontWeight: 600, marginBottom: 6 }}>
               {currentSeverity >= 0.9 ? '🔴 Critical — immediate action' : currentSeverity >= 0.7 ? '🟡 High — escalation required' : currentSeverity > 0 ? '🟢 Monitoring' : 'Not started'}
             </div>
             <div style={{ fontSize: 11, color: 'var(--color-text-3)' }}>

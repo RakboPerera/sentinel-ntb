@@ -189,7 +189,7 @@ export default function TradeTreasuryAgent() {
                     <Tooltip />
                     <ReferenceLine y={100} stroke="#DC2626" strokeDasharray="4 4" label={{ value:'Min 100%', fontSize:9, fill:'#DC2626', position:'insideTopLeft' }} />
                     <ReferenceLine y={150} stroke="#D97706" strokeDasharray="4 4" label={{ value:'Amber 150%', fontSize:9, fill:'#D97706', position:'insideTopLeft' }} />
-                    <ReferenceLine y={200} stroke="#854F0B" strokeDasharray="3 3" label={{ value:'Watch 200%', fontSize:9, fill:'#854F0B', position:'insideTopLeft' }} />
+                    <ReferenceLine y={200} stroke="#854F0B" strokeDasharray="3 3" label={{ value:'Watch 200%', fontSize:9, fill:'#3A5A3A', position:'insideTopLeft' }} />
                     <Line type="monotone" dataKey="lcr" stroke="#185FA5" strokeWidth={2.5} name="LCR %" dot={{ r:3 }} strokeDasharray={(d) => d?.projected ? '4 4' : '0'} />
                     <Line type="monotone" dataKey="nsfr" stroke="#3B6D11" strokeWidth={2.5} name="NSFR %" dot={{ r:3 }} />
                   </LineChart>
@@ -302,7 +302,7 @@ export default function TradeTreasuryAgent() {
                   <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:'4px solid #854F0B', borderRadius:8, marginBottom:10 }}>
                     <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                       <code style={{ fontSize:12, fontWeight:700 }}>{mb.customer_id}</code>
-                      <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#854F0B' }}>Est. double-financing: LKR {(mb.estimated_double_financing_lkr/1e6).toFixed(0)}M</span>
+                      <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#3A5A3A' }}>Est. double-financing: LKR {(mb.estimated_double_financing_lkr/1e6).toFixed(0)}M</span>
                     </div>
                     <div style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>{mb.finding}</div>
                     <div style={{ marginTop:6, fontSize:11, color:'var(--color-text-3)' }}>Evidence: {mb.evidence} · Score: {(mb.risk_score*100).toFixed(0)}/100</div>
@@ -445,7 +445,7 @@ export default function TradeTreasuryAgent() {
                 <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', background:Math.abs(anom.deviation_pct)>60?'var(--color-red-light)':'transparent' }}>
                   <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
                     <code style={{ fontSize:12, fontWeight:700 }}>{anom.customer_id}</code>
-                    <span style={{ fontSize:10, fontWeight:600, padding:'2px 8px', background:anom.anomaly_type==='over_invoicing'?'var(--color-red-light)':'var(--color-amber-light)', color:anom.anomaly_type==='over_invoicing'?'var(--color-red)':'var(--color-amber)', borderRadius:4 }}>
+                    <span style={{ fontSize:10, fontWeight:600, padding:'2px 8px', background:anom.anomaly_type==='over_invoicing'?'var(--color-red-light)':'#E8FDF4', color:anom.anomaly_type==='over_invoicing'?'var(--color-red)':'#3A5A3A', borderRadius:4 }}>
                       {anom.anomaly_type==='over_invoicing'?'↑ Over-invoicing':'↓ Under-invoicing'}
                     </span>
                     <span style={{ fontSize:10, padding:'2px 6px', background:'var(--color-surface-2)', borderRadius:4 }}>HS {anom.hs_code}</span>

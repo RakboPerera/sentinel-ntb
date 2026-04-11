@@ -10,7 +10,7 @@ const SCHEMA = { agentName:'Digital Fraud & Identity', required:['session_id','a
 const COLOR = '#993556';
 
 function BehavioralMeter({ score }) {
-  const color = score < 30 ? '#A32D2D' : score < 50 ? '#854F0B' : score < 70 ? '#EF9F27' : '#3B6D11';
+  const color = score < 30 ? '#A32D2D' : score < 50 ? '#3A5A3A' : score < 70 ? '#EF9F27' : '#3B6D11';
   const label = score < 30 ? 'Critical — likely ATO' : score < 50 ? 'Low — investigate' : score < 70 ? 'Watch' : 'Normal';
   return (
     <div>
@@ -26,7 +26,7 @@ function BehavioralMeter({ score }) {
       </div>
       <div style={{ position:'relative', height:12, borderRadius:6, overflow:'hidden', background:'var(--color-surface-2)', border:'1px solid var(--color-border)' }}>
         {/* Zone coloring */}
-        {[[0,30,'#A32D2D'],[30,50,'#854F0B'],[50,70,'#EF9F27'],[70,100,'#3B6D11']].map(([from,to,c]) => (
+        {[[0,30,'#A32D2D'],[30,50,'#3A5A3A'],[50,70,'#EF9F27'],[70,100,'#3B6D11']].map(([from,to,c]) => (
           <div key={from} style={{ position:'absolute', left:`${from}%`, width:`${to-from}%`, top:0, bottom:0, background:c, opacity:0.15 }} />
         ))}
         <div style={{ position:'absolute', left:0, width:`${score}%`, top:0, bottom:0, background:color, opacity:0.85, borderRadius:6 }} />
@@ -103,7 +103,7 @@ export default function DigitalFraudAgent() {
                   <div style={{ padding:'16px' }}>
                     <div style={{ display:'flex', gap:20, marginBottom:16 }}>
                       {[
-                        { label:'PSI Score', val:data.population_shift.psi_score.toFixed(2), color:data.population_shift.psi_score>=0.2?'var(--color-red)':data.population_shift.psi_score>=0.1?'var(--color-amber)':'var(--color-green)' },
+                        { label:'PSI Score', val:data.population_shift.psi_score.toFixed(2), color:data.population_shift.psi_score>=0.2?'var(--color-red)':data.population_shift.psi_score>=0.1?'#3A5A3A':'var(--color-green)' },
                         { label:'Mean Score', val:data.population_shift.mean_behavioral_score.toFixed(1), color:'var(--color-text)' },
                         { label:'Expected Mean', val:data.population_shift.expected_mean.toFixed(1), color:'var(--color-green)' },
                       ].map((m,i) => (
@@ -114,7 +114,7 @@ export default function DigitalFraudAgent() {
                       ))}
                     </div>
                     <InsightBox type={data.population_shift.detected?'warning':'success'} body={data.population_shift.interpretation} compact />
-                    <div style={{ marginTop:10, padding:'10px 14px', background:'var(--color-amber-light)', borderRadius:8, fontSize:12, color:'var(--color-amber)', lineHeight:1.6 }}>
+                    <div style={{ marginTop:10, padding:'10px 14px', background:'#E8FDF4', borderRadius:8, fontSize:12, color:'#3A5A3A', lineHeight:1.6 }}>
                       ⚠ {data.population_shift.recommendation}
                     </div>
                   </div>
@@ -129,10 +129,10 @@ export default function DigitalFraudAgent() {
                 >
                   <div>
                     {(data.device_sharing_clusters || []).map((cluster,i) => (
-                      <div key={i} style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', background: cluster.risk==='critical'?'var(--color-red-light)':'var(--color-amber-light)' }}>
+                      <div key={i} style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', background: cluster.risk==='critical'?'var(--color-red-light)':'#E8FDF4' }}>
                         <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:6 }}>
                           <code style={{ fontSize:12, fontWeight:700 }}>{cluster.device_id}</code>
-                          <span style={{ fontSize:11, fontWeight:700, padding:'2px 8px', background: cluster.risk==='critical'?'var(--color-red)':'#854F0B', color:'white', borderRadius:4 }}>
+                          <span style={{ fontSize:11, fontWeight:700, padding:'2px 8px', background: cluster.risk==='critical'?'var(--color-red)':'#3A5A3A', color:'white', borderRadius:4 }}>
                             {cluster.account_count} accounts
                           </span>
                         </div>
@@ -190,10 +190,10 @@ export default function DigitalFraudAgent() {
                         onClick={() => setExpandedSession(expandedSession===i ? null : i)}>
                         <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:6, flexWrap:'wrap' }}>
                           <code style={{ fontSize:12, fontWeight:700 }}>{sess.account_id}</code>
-                          <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background: sess.risk_score>=0.9?'var(--color-red)':'#854F0B', color:'white', borderRadius:4 }}>
+                          <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background: sess.risk_score>=0.9?'var(--color-red)':'#3A5A3A', color:'white', borderRadius:4 }}>
                             Risk {sess.risk_score.toFixed(2)}
                           </span>
-                          {!sess.device_registered && <span style={{ fontSize:10, fontWeight:600, padding:'1px 6px', background:'#FAEEDA', color:'#854F0B', borderRadius:4 }}>Unregistered device</span>}
+                          {!sess.device_registered && <span style={{ fontSize:10, fontWeight:600, padding:'1px 6px', background:'#E8FDF4', color:'#3A5A3A', borderRadius:4 }}>Unregistered device</span>}
                           {sess.impossible_travel && <span style={{ fontSize:10, fontWeight:600, padding:'1px 6px', background:'var(--color-red-light)', color:'var(--color-red)', borderRadius:4 }}>Impossible travel</span>}
                         </div>
                         <div style={{ fontSize:11, color:'var(--color-text-2)', marginBottom:6 }}>{sess.anomaly_type}</div>
@@ -216,7 +216,7 @@ export default function DigitalFraudAgent() {
                           <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.6, padding:'10px 14px', background:'white', borderRadius:8, border:'1px solid var(--color-border)', marginBottom:8 }}>
                             {sess.explanation}
                           </div>
-                          <div style={{ padding:'8px 14px', background: sess.risk_score>=0.9?'var(--color-red-light)':'var(--color-amber-light)', borderRadius:8, fontSize:12, color: sess.risk_score>=0.9?'var(--color-red)':'var(--color-amber)', fontWeight:500 }}>
+                          <div style={{ padding:'8px 14px', background: sess.risk_score>=0.9?'var(--color-red-light)':'#E8FDF4', borderRadius:8, fontSize:12, color: sess.risk_score>=0.9?'var(--color-red)':'#3A5A3A', fontWeight:500 }}>
                             → {sess.recommended_action}
                           
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>

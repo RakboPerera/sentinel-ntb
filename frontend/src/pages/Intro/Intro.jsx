@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom';
 
 const AGENTS = [
   { id:'credit',      name:'Credit Intelligence',       color:'#185FA5', icon:'◈', layer:'Account / Position', finding:'34 misstaged loans · LKR 1.1Bn ECL gap' },
-  { id:'transaction', name:'Transaction Surveillance',  color:'#534AB7', icon:'⟳', layer:'Transaction / Event', finding:'7 structuring clusters · 4 STR-eligible' },
+  { id:'transaction', name:'Transaction Surveillance',  color:'#4A6070', icon:'⟳', layer:'Transaction / Event', finding:'7 structuring clusters · 4 STR-eligible' },
   { id:'suspense',    name:'Suspense & Reconciliation', color:'#993C1D', icon:'⊟', layer:'Account / Position', finding:'SUS-017 · LKR 1.24Bn · 94 days aged' },
   { id:'kyc',         name:'Identity & KYC / AML',      color:'#0F6E56', icon:'✦', layer:'Entity / Behavioural', finding:'39,290 gaps · 34 PEP overdue EDD' },
   { id:'controls',    name:'Internal Controls',         color:'#0BBF7A', icon:'⚙', layer:'Entity / Behavioural', finding:'4 SoD violations · BR-14 score 41/100' },
   { id:'digital',     name:'Digital Fraud & Identity',  color:'#993556', icon:'⊕', layer:'Transaction / Event', finding:'4 impossible-travel · device cluster' },
   { id:'trade',       name:'Trade Finance & Treasury',  color:'#3B6D11', icon:'◎', layer:'Account / Position', finding:'HS 6203 over-invoiced 91% · LCR −37%' },
-  { id:'insider',     name:'Insider Risk',              color:'#7C3AED', icon:'◉', layer:'Entity / Behavioural', finding:'STF-1847 · score 94/100 · 6 dimensions' },
-  { id:'mje',         name:'MJE Testing',               color:'#0891B2', icon:'⊞', layer:'Transaction / Event', finding:'MJE-2026-4204 · risk 97/100 · midnight' },
+  { id:'insider',     name:'Insider Risk',              color:'#1F2937', icon:'◉', layer:'Entity / Behavioural', finding:'STF-1847 · score 94/100 · 6 dimensions' },
+  { id:'mje',         name:'MJE Testing',               color:'#0BBF7A', icon:'⊞', layer:'Transaction / Event', finding:'MJE-2026-4204 · risk 97/100 · midnight' },
 ];
 
 const STATS = [
@@ -41,8 +41,8 @@ const WORKFLOW = [
 
 const LIVE_ALERTS = [
   { agent:'Suspense Agent', color:'#993C1D', score:0.99, text:'SUS-017 (Pettah Main St): LKR 1.24Bn unreconciled 94 days. CBSL 90-day guideline breached.' },
-  { agent:'Insider Risk',   color:'#7C3AED', score:0.94, text:'STF-1847 scores 94/100 — all 6 insider fraud dimensions confirmed simultaneously.' },
-  { agent:'Transaction',    color:'#534AB7', score:0.91, text:'NTB-0841-X: 15 CEFT transfers in 22 min, all below LKR 5M STR threshold.' },
+  { agent:'Insider Risk',   color:'#1F2937', score:0.94, text:'STF-1847 scores 94/100 — all 6 insider fraud dimensions confirmed simultaneously.' },
+  { agent:'Transaction',    color:'#4A6070', score:0.91, text:'NTB-0841-X: 15 CEFT transfers in 22 min, all below LKR 5M STR threshold.' },
 ];
 
 // ─── SUB-COMPONENTS ───────────────────────────────────────────────────────────

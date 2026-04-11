@@ -24,8 +24,8 @@ export function ScoreBar({ score, label = '', showValue = true, height = 8 }) {
 // ─── ANOMALY BADGE ────────────────────────────────────────────────────────────
 
 export function AnomalyBadge({ score }) {
-  const color = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#854F0B' : '#185FA5';
-  const bg = score >= 0.85 ? '#FCEBEB' : score >= 0.65 ? '#FAEEDA' : '#E6F1FB';
+  const color = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#3A5A3A' : '#185FA5';
+  const bg = score >= 0.85 ? '#FCEBEB' : score >= 0.65 ? '#E8FDF4' : '#E6F1FB';
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 8px', background: bg, border: `1px solid ${color}22`, borderRadius: 6 }}>
       <div style={{ width: 32, height: 4, borderRadius: 2, background: '#e5e5e5', overflow: 'hidden' }}>
@@ -111,9 +111,9 @@ function SeverityMeter({ severity, agentColor }) {
 
 // ─── CREATE CASE MODAL ────────────────────────────────────────────────────────
 const DOMAIN_COLORS_MAP = {
-  credit:'#185FA5', transaction:'#534AB7', suspense:'#993C1D',
-  kyc:'#0F6E56', controls:'#854F0B', digital:'#993556',
-  trade:'#3B6D11', insider:'#7C3AED', mje:'#0891B2'
+  credit:'#185FA5', transaction:'#3D3C38', suspense:'#993C1D',
+  kyc:'#0F6E56', controls:'#3A5A3A', digital:'#993556',
+  trade:'#3B6D11', insider:'#2D2D2B', mje:'#0BBF7A'
 };
 
 export function CreateCaseModal({ finding, agentId, agentColor, onClose }) {
@@ -206,7 +206,7 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
   const sev = finding.severity || 'medium';
   const palette = {
     critical: { border: '#A32D2D', bg: '#FEF8F8', text: '#991B1B', label: '#FCEBEB', badge: '#DC2626' },
-    high:     { border: '#EF9F27', bg: '#FFFBF0', text: '#854F0B', label: '#FAEEDA', badge: '#D97706' },
+    high:     { border: '#EF9F27', bg: '#FFFBF0', text: '#3A5A3A', label: '#E8FDF4', badge: '#D97706' },
     medium:   { border: '#185FA5', bg: '#F6FAFF', text: '#185FA5', label: '#E6F1FB', badge: '#185FA5' },
     low:      { border: '#3B6D11', bg: '#F6FBF0', text: '#2D5A11', label: '#EAF3DE', badge: '#16A34A' },
   };
@@ -359,10 +359,10 @@ export function InsightBox({ title, body, type = 'info', compact = false, collap
   const [open, setOpen] = useState(true);
   const types = {
     info:        { icon: Info,          bg: '#EBF4FF', border: 'rgba(24,95,165,0.2)',   text: '#185FA5', iconBg: '#DBEAFE' },
-    warning:     { icon: AlertTriangle, bg: '#FFFBEB', border: 'rgba(133,79,11,0.25)',  text: '#854F0B', iconBg: '#FEF3C7' },
+    warning:     { icon: AlertTriangle, bg: '#FFFBEB', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
     critical:    { icon: AlertTriangle, bg: '#FEF8F8', border: 'rgba(163,45,45,0.25)',  text: '#A32D2D', iconBg: '#FCEBEB' },
-    methodology: { icon: Microscope,    bg: '#F3F1FF', border: 'rgba(83,74,183,0.2)',   text: '#534AB7', iconBg: '#E9E7FD' },
-    regulatory:  { icon: BookOpen,      bg: '#FFFBEB', border: 'rgba(133,79,11,0.25)',  text: '#854F0B', iconBg: '#FEF3C7' },
+    methodology: { icon: Microscope,    bg: '#F3F1FF', border: 'rgba(83,74,183,0.2)',   text: '#3D3C38', iconBg: '#E9E7FD' },
+    regulatory:  { icon: BookOpen,      bg: '#FFFBEB', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
     success:     { icon: CheckCircle,   bg: '#F0FDF4', border: 'rgba(59,109,17,0.2)',   text: '#3B6D11', iconBg: '#DCFCE7' },
   };
   const t = types[type] || types.info;
@@ -491,7 +491,7 @@ export function CoverageStatement({ agentId }) {
       population: '94,847 transactions', coverage: '100%', method: "Full population — Benford's Law + Z-score velocity analysis",
       period: '1 October – 31 December 2025 (Q4)', confidence: '95%',
       note: 'All CEFT and RTGS transactions in the period tested. Structuring clusters detected using 22-minute rolling window. Velocity anomalies computed against 90-day rolling baseline.',
-      icon: '⟳', color: '#534AB7',
+      icon: '⟳', color: '#3D3C38',
     },
     suspense: {
       population: '143 suspense accounts', coverage: '100%', method: 'Full population — growth-rate × clearing-ratio daily monitoring',
@@ -509,7 +509,7 @@ export function CoverageStatement({ agentId }) {
       population: '90 branches, 18,743 transactions', coverage: '100%', method: 'Full population — 6-dimension composite scoring',
       period: '1 October – 31 December 2025 (Q4)', confidence: '95%',
       note: 'All 90 branches scored on 6 dimensions: override rate, SoD violation rate, approval turnaround, off-hours %, approver concentration index, temporal clustering. SoD violations detected on 100% of transactions.',
-      icon: '⚙', color: '#854F0B',
+      icon: '⚙', color: '#3A5A3A',
     },
     digital: {
       population: '312 flagged sessions (from 2.1M total)', coverage: '100%', method: 'Full population — behavioral biometrics + impossible travel + device fingerprint',
@@ -527,13 +527,13 @@ export function CoverageStatement({ agentId }) {
       population: '2,462 staff members', coverage: '100%', method: 'Full population — 6-dimension composite scoring with peer comparison',
       period: '14-month behavioral history (November 2024 – December 2025)', confidence: '92%',
       note: 'All staff with system access scored. 14-month baseline required for meaningful peer comparison. Any staff above 40/100 enters watch monitoring. Scores above 85/100 trigger investigation.',
-      icon: '◉', color: '#7C3AED',
+      icon: '◉', color: '#2D2D2B',
     },
     mje: {
       population: '847 manual journal entries', coverage: '100%', method: "Full population — 5-dimension risk scoring + Benford's Law on GL amounts",
       period: 'FY 2025 (January – December 2025)', confidence: '99%',
       note: "No sampling applied. Every manual journal entry in the period tested across all 5 dimensions. This is the definitive difference from traditional audit (which samples 5-10%): 100% population testing means zero coverage gap.",
-      icon: '⊞', color: '#0891B2',
+      icon: '⊞', color: '#0BBF7A',
     },
   };
 

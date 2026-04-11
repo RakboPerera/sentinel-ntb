@@ -35,16 +35,15 @@ function extractEntities(text) {
 
 const AGENT_META = {
   credit:      { name: 'Credit Intelligence',       color: '#185FA5', icon: '◈', path: '/agents/credit',       methodology: 'Isolation Forest across 8 features (DPD, collateral ratio, restructure count, sector NPL, override flag, exposure vs cohort, origination quarter, customer risk rating). Scores 0.0–1.0.' },
-  transaction: { name: 'Transaction Surveillance',  color: '#534AB7', icon: '⟳', path: '/agents/transaction',  methodology: "Benford's Law first-digit test across all transactions, structuring cluster detection (3+ txns below threshold, combined >threshold within 24h), velocity scoring vs 90-day rolling baseline, network graph hub-and-spoke analysis." },
+  transaction: { name: 'Transaction Surveillance',  color: '#3D3C38', icon: '⟳', path: '/agents/transaction',  methodology: "Benford's Law first-digit test across all transactions, structuring cluster detection (3+ txns below threshold, combined >threshold within 24h), velocity scoring vs 90-day rolling baseline, network graph hub-and-spoke analysis." },
   suspense:    { name: 'Suspense & Reconciliation', color: '#993C1D', icon: '⊟', path: '/agents/suspense',    methodology: 'Daily growth-rate × clearing-ratio analysis per account. Flags: growth >50% in 30d, clearing ratio <0.30, aging >90d (CBSL breach). Phantom receivable score combines all three.' },
   kyc:         { name: 'Identity & KYC / AML',      color: '#0F6E56', icon: '✦', path: '/agents/kyc',         methodology: '47-rule CDD compliance engine applied to every account nightly. Rules cover: document expiry, PEP EDD status, FATF-country exposure, beneficial ownership, introducer concentration, dormant reactivation.' },
-  controls:    { name: 'Internal Controls',         color: '#854F0B', icon: '⚙', path: '/agents/controls',    methodology: '6-dimension composite score per branch: override rate (25%), SoD violations (20%), approval turnaround (15%), off-hours approvals (15%), approver concentration (15%), temporal clustering (10%).' },
+  controls:    { name: 'Internal Controls',         color: '#3A5A3A', icon: '⚙', path: '/agents/controls',    methodology: '6-dimension composite score per branch: override rate (25%), SoD violations (20%), approval turnaround (15%), off-hours approvals (15%), approver concentration (15%), temporal clustering (10%).' },
   digital:     { name: 'Digital Fraud & Identity',  color: '#993556', icon: '⊕', path: '/agents/digital',     methodology: 'Behavioral biometrics against 14-month session baseline. Geographic velocity vs Sri Lanka city-pair travel times. Device fingerprint clustering across accounts. Anomaly score per session 0–100.' },
   trade:       { name: 'Trade Finance & Treasury',  color: '#3B6D11', icon: '◎', path: '/agents/trade',       methodology: 'HS code price benchmarking vs UN COMTRADE + Sri Lanka Customs medians (flag: >25% deviation). Duplicate LC detection on overlapping shipment periods. FX position vs approved limit monitoring.' },
-  insider:     { name: 'Insider Risk',              color: '#7C3AED', icon: '◉', path: '/agents/insider-risk', methodology: 'Staff risk scoring across 6 dimensions: SoD violations (25%), override concentration (20%), off-hours activity (18%), same-cluster approvals (18%), approval turnaround anomaly (12%), session deviation (7%).' },
-  mje:         { name: 'MJE Testing',               color: '#0891B2', icon: '⊞', path: '/agents/mje',          methodology: 'Full-population MJE testing: timing flags (after-hours, weekend, month-end), amount anomalies (round numbers, Benford deviation), GL sensitivity (suspense/capital/intercompany), maker-checker SoD, document completeness.' },
-  mje:         { name: 'MJE Testing',               color: '#0891B2', icon: '⊞', path: '/agents/mje',          methodology: 'Full-population MJE testing: timing flags (after-hours, weekend, month-end), amount anomalies (round numbers, Benford deviation), GL sensitivity (suspense/capital/intercompany), maker-checker SoD, document completeness.' },
-  orchestrator:{ name: 'Orchestrator',              color: '#534AB7', icon: '◎', path: '/command-centre',      methodology: 'Receives signal feeds from all agents. Identifies entities appearing in 2+ agent feeds simultaneously. Combined severity = max(individual) + 0.25 bonus (3+ agents). Threshold for case-worthy: 0.85.' },
+  insider:     { name: 'Insider Risk',              color: '#2D2D2B', icon: '◉', path: '/agents/insider-risk', methodology: 'Staff risk scoring across 6 dimensions: SoD violations (25%), override concentration (20%), off-hours activity (18%), same-cluster approvals (18%), approval turnaround anomaly (12%), session deviation (7%).' },
+  mje:         { name: 'MJE Testing',               color: '#0BBF7A', icon: '⊞', path: '/agents/mje',          methodology: 'Full-population MJE testing: timing flags (after-hours, weekend, month-end), amount anomalies (round numbers, Benford deviation), GL sensitivity (suspense/capital/intercompany), maker-checker SoD, document completeness.' },
+  orchestrator:{ name: 'Orchestrator',              color: '#3D3C38', icon: '◎', path: '/command-centre',      methodology: 'Receives signal feeds from all agents. Identifies entities appearing in 2+ agent feeds simultaneously. Combined severity = max(individual) + 0.25 bonus (3+ agents). Threshold for case-worthy: 0.85.' },
 };
 
 const SEV_PALETTE = {
@@ -186,7 +185,7 @@ export default function GlobalFindingDrawer() {
                   {meta.icon} {meta.name}
                 </span>
                 {connectedCount > 0 && (
-                  <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 9px', borderRadius: 10, background: 'var(--color-purple-light)', color: 'var(--color-purple)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 9px', borderRadius: 10, background: '#F0F0EE', color: '#3D3C38', display: 'flex', alignItems: 'center', gap: 4 }}>
                     <GitMerge size={10} /> {connectedCount} connected
                     <InfoTooltip text="Number of findings from other agents that mention the same entity IDs as this finding. Multi-agent confirmation significantly increases combined severity." position="bottom" width={260} />
                   </span>
@@ -226,7 +225,7 @@ export default function GlobalFindingDrawer() {
               style={{ flex: 1, padding: '10px 4px', fontSize: 11, fontWeight: activeTab === tab.id ? 600 : 400, color: activeTab === tab.id ? meta.color : 'var(--color-text-2)', background: activeTab === tab.id ? `${meta.color}08` : 'transparent', borderBottom: `2px solid ${activeTab === tab.id ? meta.color : 'transparent'}`, border: 'none', cursor: 'pointer', transition: 'all 0.12s' }}>
               {tab.label}
               {tab.count > 0 && activeTab !== tab.id && (
-                <span style={{ marginLeft: 4, fontSize: 10, fontWeight: 700, padding: '0 5px', background: tab.id === 'connected' ? 'var(--color-purple)' : meta.color, color: 'white', borderRadius: 10 }}>{tab.count}</span>
+                <span style={{ marginLeft: 4, fontSize: 10, fontWeight: 700, padding: '0 5px', background: tab.id === 'connected' ? '#3D3C38' : meta.color, color: 'white', borderRadius: 10 }}>{tab.count}</span>
               )}
             </button>
           ))}
@@ -293,8 +292,8 @@ export default function GlobalFindingDrawer() {
                   </div>
                   {connectedCount > 0 && (
                     <div style={{ fontSize: 12, color: 'var(--color-text-2)', lineHeight: 1.6 }}>
-                      These entities appear in <strong style={{ color: 'var(--color-purple)' }}>{connectedCount} finding{connectedCount !== 1 ? 's' : ''}</strong> from other agents.{' '}
-                      <button onClick={() => setActiveTab('connected')} style={{ background: 'none', border: 'none', color: 'var(--color-purple)', fontWeight: 600, cursor: 'pointer', fontSize: 12, textDecoration: 'underline' }}>See connected →</button>
+                      These entities appear in <strong style={{ color: '#3D3C38' }}>{connectedCount} finding{connectedCount !== 1 ? 's' : ''}</strong> from other agents.{' '}
+                      <button onClick={() => setActiveTab('connected')} style={{ background: 'none', border: 'none', color: '#3D3C38', fontWeight: 600, cursor: 'pointer', fontSize: 12, textDecoration: 'underline' }}>See connected →</button>
                     </div>
                   )}
                 </div>
@@ -314,7 +313,7 @@ export default function GlobalFindingDrawer() {
               ) : (
                 <>
                   {/* Why connections matter */}
-                  <div style={{ padding: '10px 14px', background: 'var(--color-purple-light)', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 8, fontSize: 12, color: 'var(--color-purple)', lineHeight: 1.6, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                  <div style={{ padding: '10px 14px', background: '#F0F0EE', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 8, fontSize: 12, color: '#3D3C38', lineHeight: 1.6, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
                     <GitMerge size={14} style={{ flexShrink: 0, marginTop: 1 }} />
                     <div>
                       When multiple agents independently flag the same entity, the combined risk is significantly higher than any single finding — multi-agent corroboration is statistically powerful evidence. Click any connected finding to navigate into it.
@@ -325,14 +324,14 @@ export default function GlobalFindingDrawer() {
                   {/* Orchestrator correlations */}
                   {relatedCorrelations.length > 0 && (
                     <div>
-                      <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-purple)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#3D3C38', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
                         <GitMerge size={12} /> Orchestrator Correlations
                         <InfoTooltip text="Formal cross-agent correlations identified by the Orchestrator for the same entities. These carry a combined severity score that accounts for multi-agent confirmation." position="right" width={280} />
                       </div>
                       {relatedCorrelations.map((corr, i) => (
-                        <div key={i} style={{ padding: '12px 14px', background: 'var(--color-purple-light)', border: '1px solid rgba(83,74,183,0.25)', borderRadius: 10, marginBottom: 8 }}>
+                        <div key={i} style={{ padding: '12px 14px', background: '#F0F0EE', border: '1px solid rgba(83,74,183,0.25)', borderRadius: 10, marginBottom: 8 }}>
                           <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-                            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--color-purple)', flex: 1 }}>{corr.fraud_type_suspected}</span>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: '#3D3C38', flex: 1 }}>{corr.fraud_type_suspected}</span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                               <span style={{ fontSize: 13, fontWeight: 900, color: corr.combined_severity >= 0.95 ? '#DC2626' : '#D97706' }}>{(corr.combined_severity * 100).toFixed(0)}%</span>
                               <span style={{ fontSize: 10, color: 'var(--color-text-3)' }}>combined severity</span>
@@ -341,7 +340,7 @@ export default function GlobalFindingDrawer() {
                           </div>
                           <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
                             {(corr.agents_involved || []).map(a => (
-                              <span key={a} style={{ fontSize: 10, padding: '1px 6px', background: 'rgba(83,74,183,0.12)', color: 'var(--color-purple)', borderRadius: 4 }}>{a}</span>
+                              <span key={a} style={{ fontSize: 10, padding: '1px 6px', background: 'rgba(83,74,183,0.12)', color: '#3D3C38', borderRadius: 4 }}>{a}</span>
                             ))}
                           </div>
                           <div style={{ fontSize: 12, color: 'var(--color-text-2)', lineHeight: 1.5 }}>{corr.narrative.substring(0, 180)}…</div>
@@ -390,7 +389,7 @@ export default function GlobalFindingDrawer() {
               </div>
 
               {orchSignals.length > 0 ? orchSignals.map((sig, i) => {
-                const targetMeta = AGENT_META[sig.target_agent] || { color: '#534AB7', name: sig.target_agent, icon: '◎' };
+                const targetMeta = AGENT_META[sig.target_agent] || { color: '#3D3C38', name: sig.target_agent, icon: '◎' };
                 const sigColor = sig.severity === 'critical' ? '#DC2626' : sig.severity === 'high' ? '#D97706' : '#185FA5';
                 return (
                   <div key={i} style={{ padding: '12px 14px', background: 'var(--color-surface-2)', border: '1px solid var(--color-border)', borderRadius: 8 }}>
@@ -422,7 +421,7 @@ export default function GlobalFindingDrawer() {
                     <Microscope size={12} /> Detection Methodology
                     <InfoTooltip text="How this agent detected the finding — the specific algorithm, rules, or scoring method used. Understanding the methodology helps assess confidence and identify what data to review manually." position="right" width={270} />
                   </div>
-                  <div style={{ padding: '14px 16px', background: '#F3F1FF', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 10, fontSize: 12, color: '#534AB7', lineHeight: 1.8 }}>
+                  <div style={{ padding: '14px 16px', background: '#F3F1FF', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 10, fontSize: 12, color: '#3D3C38', lineHeight: 1.8 }}>
                     {meta.methodology}
                   </div>
                 </div>
@@ -430,8 +429,8 @@ export default function GlobalFindingDrawer() {
 
               {/* Linked cases */}
               {linkedCases.length > 0 && (
-                <div style={{ padding:'12px 14px', background:'var(--color-purple-light)', border:'1px solid rgba(83,74,183,0.2)', borderRadius:8 }}>
-                  <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-purple)', marginBottom:8 }}>Active Investigation Cases</div>
+                <div style={{ padding:'12px 14px', background:'#F0F0EE', border:'1px solid rgba(83,74,183,0.2)', borderRadius:8 }}>
+                  <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#3D3C38', marginBottom:8 }}>Active Investigation Cases</div>
                   {linkedCases.map(cas => (
                     <div key={cas.id} onClick={() => { navigate('/cases', { state:{ caseId:cas.id } }); close(); }}
                       style={{ padding:'8px 10px', background:'var(--color-surface)', borderRadius:7, border:`1px solid ${CASE_SEV_COLOR[cas.severity]}22`, cursor:'pointer', marginBottom:6, display:'flex', alignItems:'center', gap:8, transition:'background 0.12s' }}
@@ -440,7 +439,7 @@ export default function GlobalFindingDrawer() {
                       <span style={{ fontSize:9, fontWeight:800, textTransform:'uppercase', padding:'2px 5px', borderRadius:3, background:CASE_SEV_COLOR[cas.severity], color:'white', flexShrink:0 }}>{cas.severity}</span>
                       <code style={{ fontSize:10, color:'var(--color-text-3)', flexShrink:0 }}>{cas.id}</code>
                       <span style={{ fontSize:11, color:'var(--color-text)', flex:1 }}>{cas.title.slice(0,48)}{cas.title.length>48?'...':''}</span>
-                      <span style={{ fontSize:10, fontWeight:600, color:'var(--color-purple)', flexShrink:0 }}>Open →</span>
+                      <span style={{ fontSize:10, fontWeight:600, color:'#3D3C38', flexShrink:0 }}>Open →</span>
                     </div>
                   ))}
                 </div>
@@ -465,14 +464,14 @@ export default function GlobalFindingDrawer() {
                     agentId === 'mje' && { label: 'CBSL Financial Reporting Requirements', body: 'Manual journal entries above the materiality threshold (LKR 10M) require Maker-Checker approval from different individuals. After-hours postings to sensitive GL accounts require documented emergency authorisation. All MJE supporting documents must be retained for 7 years.' },
                   ].filter(Boolean).map((item, i) => (
                     <div key={i} style={{ padding: '12px 14px', background: '#FFFBEB', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8 }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#854F0B', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#3A5A3A', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 5 }}>
                         <Shield size={11} /> {item.label}
                       </div>
-                      <div style={{ fontSize: 12, color: '#854F0B', lineHeight: 1.7 }}>{item.body}</div>
+                      <div style={{ fontSize: 12, color: '#3A5A3A', lineHeight: 1.7 }}>{item.body}</div>
                     </div>
                   ))}
                   {!['credit','transaction','suspense','kyc','controls','digital','trade','insider','mje'].includes(agentId) && (
-                    <div style={{ padding: '12px 14px', background: '#FFFBEB', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8, fontSize: 12, color: '#854F0B', lineHeight: 1.7 }}>
+                    <div style={{ padding: '12px 14px', background: '#FFFBEB', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8, fontSize: 12, color: '#3A5A3A', lineHeight: 1.7 }}>
                       This finding should be reviewed against applicable CBSL directions, FTRA requirements, and SLFRS 9 where relevant to the affected entity.
                     </div>
                   )}

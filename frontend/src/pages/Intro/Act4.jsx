@@ -27,7 +27,7 @@ const scenarios = [
     body: 'One relationship manager. Eleven weeks of unconnected signals — SoD violations, credit staging flags, KYC introducer concentration, off-hours system access, insider risk score 94/100. The Insider Risk agent flags the behavioural pattern. The Orchestrator correlates six agents into a single forensic case at severity 0.98.',
     stat1val: 'LKR 187 Mn', stat1label: 'combined exposure across 3 loans',
     stat2val: '11 weeks', stat2label: 'of signals — correlated in one event',
-    color: '#854F0B',
+    color: '#3A5A3A',
   },
 ];
 

@@ -19,8 +19,8 @@ const RISK_BG = { critical:'#FEF8F8', red:'#FFF1F1', amber:'#FFFBEB', watch:'#EB
 function ClearingRatioBadge({ ratio }) {
   const isHealthy = ratio >= 0.85;
   const isWarning = ratio >= 0.5 && ratio < 0.85;
-  const color = isHealthy ? '#3B6D11' : isWarning ? '#854F0B' : '#A32D2D';
-  const bg = isHealthy ? '#EAF3DE' : isWarning ? '#FAEEDA' : '#FCEBEB';
+  const color = isHealthy ? '#3B6D11' : isWarning ? '#3A5A3A' : '#A32D2D';
+  const bg = isHealthy ? '#EAF3DE' : isWarning ? '#E8FDF4' : '#FCEBEB';
   return (
     <span style={{ display:'inline-flex', alignItems:'center', gap:6, padding:'3px 9px', background:bg, borderRadius:6 }}>
       <span style={{ fontSize:12, fontWeight:700, color }}>{ratio.toFixed(2)}</span>
@@ -128,14 +128,14 @@ export default function SuspenseAgent() {
                       <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
                         <code style={{ fontSize:13, fontWeight:800 }}>{acc.account_id}</code>
                         <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', background:RISK_COLORS[acc.risk_tier], color:'white', borderRadius:4, textTransform:'uppercase' }}>{acc.risk_tier}</span>
-                        {acc.ceft_fraud_indicators && <span style={{ fontSize:10, fontWeight:600, padding:'2px 7px', background:'#FAEEDA', color:'#854F0B', borderRadius:4 }}>CEFT</span>}
+                        {acc.ceft_fraud_indicators && <span style={{ fontSize:10, fontWeight:600, padding:'2px 7px', background:'#E8FDF4', color:'#3A5A3A', borderRadius:4 }}>CEFT</span>}
                         {acc.phantom_receivable_risk && <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'var(--color-red-light)', color:'var(--color-red)', borderRadius:4 }}>PHANTOM</span>}
                         <span style={{ marginLeft:'auto', fontSize:15, fontWeight:800 }}>LKR {(acc.current_balance_lkr/1e6).toFixed(0)}M</span>
                       </div>
                       <div style={{ display:'flex', gap:16, fontSize:11, color:'var(--color-text-2)', marginBottom:10, flexWrap:'wrap' }}>
                         <span>{acc.account_type} · {acc.branch_code}</span>
-                        <span style={{ color:acc.aging_days>=90?'var(--color-red)':acc.aging_days>=61?'#854F0B':'var(--color-text-2)', fontWeight:acc.aging_days>=61?700:400 }}>{acc.aging_days} days aged</span>
-                        <span>Growth: <strong style={{ color:acc.growth_rate_30d_pct>100?'var(--color-red)':'#854F0B' }}>+{acc.growth_rate_30d_pct}%</strong> in 30d</span>
+                        <span style={{ color:acc.aging_days>=90?'var(--color-red)':acc.aging_days>=61?'#3A5A3A':'var(--color-text-2)', fontWeight:acc.aging_days>=61?700:400 }}>{acc.aging_days} days aged</span>
+                        <span>Growth: <strong style={{ color:acc.growth_rate_30d_pct>100?'var(--color-red)':'#3A5A3A' }}>+{acc.growth_rate_30d_pct}%</strong> in 30d</span>
                       </div>
                       <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                         <span style={{ fontSize:11, color:'var(--color-text-3)' }}>Clearing ratio:</span>
@@ -163,14 +163,14 @@ export default function SuspenseAgent() {
                     {(data.reconciliation_depth.source_system_sync || []).map((sys,i) => {
                       const isMismatch = sys.status === 'Mismatch';
                       return (
-                        <div key={i} style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', background: isMismatch ? 'var(--color-amber-light)' : 'transparent' }}>
+                        <div key={i} style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', background: isMismatch ? '#E8FDF4' : 'transparent' }}>
                           <div style={{ display:'flex', gap:10, alignItems:'center', marginBottom:6 }}>
                             <span style={{ fontSize:12, fontWeight:600, flex:1 }}>{sys.system}</span>
-                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', borderRadius:4, background: isMismatch ? 'var(--color-amber)' : '#3B6D11', color:'white' }}>{sys.status}</span>
+                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', borderRadius:4, background: isMismatch ? '#3A5A3A' : '#3B6D11', color:'white' }}>{sys.status}</span>
                             {sys.breaks > 0 && <span style={{ fontSize:11, fontWeight:700, color:'var(--color-red)' }}>{sys.breaks} break{sys.breaks>1?'s':''}</span>}
                           </div>
                           <div style={{ fontSize:10, color:'var(--color-text-3)', marginBottom:4 }}>Last sync: {sys.last_sync}</div>
-                          <div style={{ fontSize:11, color: isMismatch ? 'var(--color-amber)' : 'var(--color-text-2)', lineHeight:1.5 }}>{sys.note}</div>
+                          <div style={{ fontSize:11, color: isMismatch ? '#3A5A3A' : 'var(--color-text-2)', lineHeight:1.5 }}>{sys.note}</div>
                         </div>
                       );
                     })}
@@ -188,15 +188,15 @@ export default function SuspenseAgent() {
                   {(data.reconciliation_depth.reaging_detected || []).length > 0 ? (
                     <div>
                       {(data.reconciliation_depth.reaging_detected || []).map((r,i) => (
-                        <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', background:'var(--color-amber-light)' }}>
+                        <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', background:'#E8FDF4' }}>
                           <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                             <code style={{ fontSize:12, fontWeight:700 }}>{r.account_id}</code>
-                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#854F0B', color:'white', borderRadius:4 }}>RE-AGING DETECTED</span>
+                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#3A5A3A', color:'white', borderRadius:4 }}>RE-AGING DETECTED</span>
                             <code style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>{r.reset_by}</code>
                           </div>
                           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:10 }}>
                             <div style={{ padding:'8px 10px', background:'rgba(255,255,255,0.6)', borderRadius:6, textAlign:'center' }}>
-                              <div style={{ fontSize:18, fontWeight:800, color:'var(--color-amber)' }}>{r.original_age_days}d</div>
+                              <div style={{ fontSize:18, fontWeight:800, color:'#3A5A3A' }}>{r.original_age_days}d</div>
                               <div style={{ fontSize:9, color:'var(--color-text-3)' }}>Original age before reset</div>
                             </div>
                             <div style={{ padding:'8px 10px', background:'rgba(255,255,255,0.6)', borderRadius:6, textAlign:'center' }}>

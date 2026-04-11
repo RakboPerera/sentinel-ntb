@@ -50,7 +50,7 @@ const LOAN_FEATURES = {
 // Stage badge definitions
 const STAGE_META = {
   1: { label: 'S1', bg: '#E6F1FB', color: COLOR, tooltip: 'Stage 1 — Performing. No significant increase in credit risk since origination. DPD < 30 days, collateral ratio ≥ 0.70, restructure count = 0. ECL provision is 12-month expected loss only.' },
-  2: { label: 'S2', bg: '#FAEEDA', color: '#854F0B', tooltip: 'Stage 2 — Significant increase in credit risk. DPD 30–89 days, OR collateral ratio 0.40–0.70, OR 1 restructuring. ECL provision expands to lifetime expected loss — materially higher than Stage 1.' },
+  2: { label: 'S2', bg: '#E8FDF4', color: '#3A5A3A', tooltip: 'Stage 2 — Significant increase in credit risk. DPD 30–89 days, OR collateral ratio 0.40–0.70, OR 1 restructuring. ECL provision expands to lifetime expected loss — materially higher than Stage 1.' },
   3: { label: 'S3', bg: '#FCEBEB', color: '#A32D2D', tooltip: 'Stage 3 — Credit-impaired. DPD ≥ 90 days, OR collateral ratio < 0.40, OR restructure count ≥ 2, OR legal action served. Maximum ECL provision — typically 66.7%+ of exposure.' },
 };
 
@@ -66,7 +66,7 @@ function StageBadge({ stage }) {
 
 function OvrBadge() {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#FAEEDA', color: '#854F0B', borderRadius: 3 }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#E8FDF4', color: '#3A5A3A', borderRadius: 3 }}>
       OVR
       <InfoTooltip text="Override-approved — this loan bypassed standard approval controls and was approved via a management override. Override-approved loans receive elevated scrutiny because they fall outside standard underwriting parameters." position="right" width={260} />
     </span>
@@ -128,8 +128,8 @@ function LoanDetailExpanded({ loan }) {
               <StageBadge stage={loan.predicted_stage} />
             </div>
           </div>
-          <div style={{ padding: '12px 14px', background: loan.predicted_stage === 3 ? 'var(--color-red-light)' : 'var(--color-amber-light)', borderRadius: 8, borderLeft: `3px solid ${loan.predicted_stage === 3 ? 'var(--color-red)' : 'var(--color-amber)'}` }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: loan.predicted_stage === 3 ? 'var(--color-red)' : 'var(--color-amber)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>
+          <div style={{ padding: '12px 14px', background: loan.predicted_stage === 3 ? 'var(--color-red-light)' : '#E8FDF4', borderRadius: 8, borderLeft: `3px solid ${loan.predicted_stage === 3 ? 'var(--color-red)' : '#3A5A3A'}` }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: loan.predicted_stage === 3 ? 'var(--color-red)' : '#3A5A3A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>
               <Zap size={11} style={{ display: 'inline', marginRight: 4 }} />Recommended action
             </div>
             <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.6 }}>{loan.recommended_action}</div>
@@ -280,7 +280,7 @@ export default function CreditAgent() {
                       <YAxis tick={{ fontSize: 10 }} unit="%" tickFormatter={v => v.toFixed(1)} />
                       <Tooltip formatter={(v) => [`${v}%`, 'Projected S3 migration']} labelFormatter={l => `Cohort: ${l}`} />
                       <ReferenceLine y={1.0} stroke="#EF9F27" strokeDasharray="4 3"
-                        label={{ value: 'Historic avg 1.0%', fontSize: 9, fill: '#854F0B', position: 'insideTopRight' }} />
+                        label={{ value: 'Historic avg 1.0%', fontSize: 9, fill: '#3A5A3A', position: 'insideTopRight' }} />
                       <Bar dataKey="projected_stage3_migration_pct" radius={[3, 3, 0, 0]}>
                         {(data.vintage_analysis || []).map((v, i) => (
                           <Cell key={i} fill={v.risk_flag === 'red' ? '#A32D2D' : v.risk_flag === 'amber' ? '#EF9F27' : '#3B6D11'} />
@@ -314,7 +314,7 @@ export default function CreditAgent() {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ fontSize: 13, fontWeight: 600 }}>{s.sector}</span>
-                          <span style={{ fontSize: 10, padding: '1px 6px', background: s.npl_rate_pct >= 2.5 ? 'var(--color-red-light)' : 'var(--color-amber-light)', color: s.npl_rate_pct >= 2.5 ? 'var(--color-red)' : 'var(--color-amber)', borderRadius: 4, fontWeight: 700 }}>
+                          <span style={{ fontSize: 10, padding: '1px 6px', background: s.npl_rate_pct >= 2.5 ? 'var(--color-red-light)' : '#E8FDF4', color: s.npl_rate_pct >= 2.5 ? 'var(--color-red)' : '#3A5A3A', borderRadius: 4, fontWeight: 700 }}>
                             {s.npl_rate_pct}% NPL
                             <InfoTooltip text={`NPL (Non-Performing Loan) rate for the ${s.sector} sector across the Sri Lankan banking industry. A high sector NPL rate elevates the risk of all loans in that sector — SLFRS 9 requires banks to factor in sector-level deterioration when computing expected credit loss.`} position="right" width={280} />
                           </span>
@@ -356,7 +356,7 @@ export default function CreditAgent() {
                         </div>
                         <span style={{ fontSize: 12, fontWeight: 600 }}>LKR {(b.flagged_exposure_lkr / 1e6).toFixed(0)}M</span>
                         {b.override_flagged_count > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', background: '#FAEEDA', color: '#854F0B', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 3 }}>
+                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', background: '#E8FDF4', color: '#3A5A3A', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 3 }}>
                             {b.override_flagged_count} overrides
                             <InfoTooltip text="Number of flagged loans at this branch that were approved via management override. High override counts combined with anomalous loans are the primary signal of insider-enabled loan fraud." position="left" width={260} />
                           </span>

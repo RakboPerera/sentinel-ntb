@@ -7,7 +7,7 @@ import { demoData } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { ChevronDown, ChevronUp, TrendingUp, TrendingDown, Minus, Shield, AlertTriangle, Zap, User } from 'lucide-react';
 
-const COLOR = '#7C3AED';
+const COLOR = '#1F2937';
 const SCHEMA = {
   agentName: 'Insider Risk',
   required: ['staff_id', 'branch_code', 'initiator_id', 'approver_id', 'amount_lkr', 'transaction_type', 'timestamp'],
@@ -122,7 +122,7 @@ function StaffDetailPanel({ profile }) {
         </div>
         <RiskGauge score={profile.risk_score} />
         {profile.linked_exposure_lkr > 0 && (
-          <div style={{ marginTop: 10, display: 'inline-flex', gap: 6, alignItems: 'center', padding: '4px 10px', background: 'rgba(0,0,0,0.06)', borderRadius: 7, fontSize: 12, fontWeight: 700, color: isCritical ? 'var(--color-red)' : '#854F0B' }}>
+          <div style={{ marginTop: 10, display: 'inline-flex', gap: 6, alignItems: 'center', padding: '4px 10px', background: 'rgba(0,0,0,0.06)', borderRadius: 7, fontSize: 12, fontWeight: 700, color: isCritical ? 'var(--color-red)' : '#3A5A3A' }}>
             <AlertTriangle size={12} />
             LKR {(profile.linked_exposure_lkr / 1e6).toFixed(0)}M linked exposure
           </div>
@@ -167,18 +167,18 @@ function StaffDetailPanel({ profile }) {
                     {/* Audit Opinion Banner */}
             <div style={{ background:'#7C3AED06', border:`1px solid #7C3AED22`, borderRadius:10, overflow:'hidden' }}>
               <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
-                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#7C3AED', color:'white', flexShrink:0, marginTop:2 }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#2D2D2B', color:'white', flexShrink:0, marginTop:2 }}>
                   ADVERSE
                 </div>
-                <div style={{ fontSize:12, color:'#7C3AED', lineHeight:1.7 }}>
+                <div style={{ fontSize:12, color:'#2D2D2B', lineHeight:1.7 }}>
                   In our opinion, the insider risk control environment is ADVERSE at Branch BR-14. STF-1847 scores 94/100 — all 6 insider fraud dimensions are simultaneously breached, which is definitively not coincidental.
                 </div>
               </div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #7C3AED18` }}>
                 {[['Population tested','2,462 staff members across 90 branches + corporate office'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','All staff with composite score &gt;40/100; any SoD violation'],['Model limitations','Collusion detection requires minimum 5 co-occurrences; staff active &lt;6 months have reduced baseline confidence']].map(([k,v],i)=>(
                   <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #7C3AED12`:'none', borderBottom:i<2?`1px solid #7C3AED12`:'none' }}>
-                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#7C3AED', opacity:0.65, marginBottom:2 }}>{k}</div>
-                    <div style={{ fontSize:11, color:'#7C3AED', lineHeight:1.5 }}>{v}</div>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#2D2D2B', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#2D2D2B', lineHeight:1.5 }}>{v}</div>
                   </div>
                 ))}
               </div>
@@ -232,9 +232,9 @@ function StaffDetailPanel({ profile }) {
               <div>
                 <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-3)', marginBottom: 8 }}>Linked GL Accounts</div>
                 {profile.linked_accounts.map((aid, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 10, padding: '9px 14px', background: 'var(--color-amber-light)', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8, marginBottom: 6, alignItems: 'center' }}>
-                    <code style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-amber)', flex: 1 }}>{aid}</code>
-                    <span style={{ fontSize: 10, color: 'var(--color-amber)' }}>Posting access</span>
+                  <div key={i} style={{ display: 'flex', gap: 10, padding: '9px 14px', background: '#E8FDF4', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8, marginBottom: 6, alignItems: 'center' }}>
+                    <code style={{ fontSize: 13, fontWeight: 700, color: '#3A5A3A', flex: 1 }}>{aid}</code>
+                    <span style={{ fontSize: 10, color: '#3A5A3A' }}>Posting access</span>
                   </div>
                 ))}
               </div>
@@ -446,7 +446,7 @@ export default function InsiderRiskAgent() {
           {/* ── COLLUSION DETECTION ── */}
           <div className="agent-panel">
             <div className="agent-panel-header" style={{ background:'#F5F0FF' }}>
-              <span className="agent-panel-title" style={{ color:'#7C3AED' }}>Collusion Detection — Staff Pair Analysis</span>
+              <span className="agent-panel-title" style={{ color:'#2D2D2B' }}>Collusion Detection — Staff Pair Analysis</span>
               <InfoTooltip text="Individual risk scores miss coordinated fraud between two or more staff. This computes co-occurrence ratios: how many times two staff appear on the same transaction vs expected by chance. Ratio > 3× is a collusion flag. Probability of 14 co-occurrences vs 1.2 expected: p<0.0001." width={320} position="left" />
             </div>
             {(data.collusion_pairs||[]).map((pair, i) => (
@@ -454,10 +454,10 @@ export default function InsiderRiskAgent() {
                 <div style={{ display:'flex', gap:12, alignItems:'flex-start', marginBottom:12 }}>
                   <div style={{ flex:1 }}>
                     <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
-                      <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:'rgba(124,58,237,0.12)', color:'#7C3AED', borderRadius:6 }}>{pair.staff_a}</span>
+                      <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:'rgba(124,58,237,0.12)', color:'#2D2D2B', borderRadius:6 }}>{pair.staff_a}</span>
                       <span style={{ fontSize:11, color:'var(--color-text-3)' }}>{pair.role_a} · {pair.branch_a}</span>
                       <span style={{ fontSize:14, color:'var(--color-text-3)' }}>⟷</span>
-                      <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:'rgba(124,58,237,0.12)', color:'#7C3AED', borderRadius:6 }}>{pair.staff_b}</span>
+                      <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:'rgba(124,58,237,0.12)', color:'#2D2D2B', borderRadius:6 }}>{pair.staff_b}</span>
                       <span style={{ fontSize:11, color:'var(--color-text-3)' }}>{pair.role_b} · {pair.branch_b}</span>
                     </div>
                     <div style={{ display:'flex', gap:20, marginBottom:8 }}>
@@ -469,7 +469,7 @@ export default function InsiderRiskAgent() {
                       ].map((m,j) => (
                         <div key={j}>
                           <div style={{ fontSize:10, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:2 }}>{m.label}</div>
-                          <div style={{ fontSize:18, fontWeight:800, color:m.red?'#DC2626':m.hi?'#7C3AED':'var(--color-text)' }}>{m.val}</div>
+                          <div style={{ fontSize:18, fontWeight:800, color:m.red?'#DC2626':m.hi?'#2D2D2B':'var(--color-text)' }}>{m.val}</div>
                         </div>
                       ))}
                     </div>
@@ -479,7 +479,7 @@ export default function InsiderRiskAgent() {
                 <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.7, padding:'10px 14px', background:'var(--color-surface-2)', borderRadius:8, marginBottom:8 }}>
                   <strong style={{ color:'var(--color-text)' }}>Pattern: </strong>{pair.pattern}
                 </div>
-                <div style={{ padding:'10px 14px', background:pair.severity==='critical'?'#FEF8F8':'#FEFBF0', borderRadius:8, fontSize:12, lineHeight:1.65, color:pair.severity==='critical'?'#DC2626':'#854F0B', border:`1px solid ${pair.severity==='critical'?'rgba(220,38,38,0.2)':'rgba(133,79,11,0.2)'}` }}>
+                <div style={{ padding:'10px 14px', background:pair.severity==='critical'?'#FEF8F8':'#FEFBF0', borderRadius:8, fontSize:12, lineHeight:1.65, color:pair.severity==='critical'?'#DC2626':'#3A5A3A', border:`1px solid ${pair.severity==='critical'?'rgba(220,38,38,0.2)':'rgba(133,79,11,0.2)'}` }}>
                   <strong>Statistical finding: </strong>{pair.finding}
                 </div>
               </div>

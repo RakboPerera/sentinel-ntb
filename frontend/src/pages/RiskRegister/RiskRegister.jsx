@@ -14,13 +14,13 @@ const RISK_REGISTER = [
     description: 'Same staff member initiated and approved loan disbursements. 87% override concentration. Branch score 41/100.',
     exposure: 387000000, owner: 'Chief Internal Auditor', dueDate: '2025-12-22',
     status: 'in_progress', caseRef: 'CASE-001', strRequired: true, cbslRequired: true,
-    agentPath: '/agents/controls', color: '#854F0B' },
+    agentPath: '/agents/controls', color: '#3A5A3A' },
   { id: 'RR-002', domain: 'Insider Risk', agent: 'insider', severity: 'critical', category: 'Insider Fraud',
     title: 'STF-1847 insider risk score 94/100 — all 6 dimensions',
     description: '6-dimension composite: SoD violations, 87% override concentration, same-cluster approvals, 12 off-hours, 1.4min turnaround, session anomalies.',
     exposure: 387000000, owner: 'Chief Internal Auditor', dueDate: '2025-12-21',
     status: 'complete', caseRef: 'CASE-001', strRequired: false, cbslRequired: true,
-    agentPath: '/agents/insider-risk', color: '#7C3AED' },
+    agentPath: '/agents/insider-risk', color: '#2D2D2B' },
   { id: 'RR-003', domain: 'Credit Intelligence', agent: 'credit', severity: 'critical', category: 'Credit / ECL',
     title: '11 override-approved loans — anomaly scores >0.85 — BR-14',
     description: 'LKR 387M in loans with Stage 1 assignment but predicted Stage 2-3. All override-approved by STF-1847. ECL understatement: LKR 310M.',
@@ -38,7 +38,7 @@ const RISK_REGISTER = [
     description: 'Structuring score 0.94. 15 transactions in 22 minutes, LKR 4.6M–4.95M. Round-trip: LKR 71.25M returned within 5 days.',
     exposure: 71250000, owner: 'MLCO', dueDate: '2025-12-27',
     status: 'pending', caseRef: 'CASE-004', strRequired: true, cbslRequired: false,
-    agentPath: '/agents/transaction', color: '#534AB7' },
+    agentPath: '/agents/transaction', color: '#3D3C38' },
   { id: 'RR-006', domain: 'Trade Finance & Treasury', agent: 'trade', severity: 'critical', category: 'TBML',
     title: 'NTB-CORP-0887 — over-invoicing 91% above benchmark (HS 6203)',
     description: 'TBML score 0.91. Duplicate LC applications. Beneficial ownership not disclosed. Estimated illicit flow: LKR 421M.',
@@ -51,7 +51,7 @@ const RISK_REGISTER = [
     description: 'Risk score 97/100. Midnight Saturday GL entry LKR 120M to Loans Receivable. Same maker and checker. No supporting documents.',
     exposure: 120000000, owner: 'Head of Finance', dueDate: '2026-01-05',
     status: 'pending', caseRef: null, strRequired: false, cbslRequired: false,
-    agentPath: '/agents/mje', color: '#0891B2' },
+    agentPath: '/agents/mje', color: '#0BBF7A' },
   { id: 'RR-008', domain: "Identity & KYC / AML", agent: 'kyc', severity: 'high', category: 'Regulatory Compliance',
     title: "KYC gap rate 4.7% — 39,290 accounts including 34 PEP",
     description: 'Gap rate exceeds CBSL 2% threshold. 34 PEP accounts with overdue EDD. 847 from HSBC migration batch.',
@@ -75,7 +75,7 @@ const RISK_REGISTER = [
     description: "First digit '4' at 14.2% vs expected 9.7%. Pattern consistent with sub-threshold structuring in GL postings to stay below LKR 10M internal materiality review threshold.",
     exposure: 0, owner: 'Head of Finance', dueDate: '2026-01-10',
     status: 'pending', caseRef: null, strRequired: false, cbslRequired: false,
-    agentPath: '/agents/mje', color: '#0891B2' },
+    agentPath: '/agents/mje', color: '#0BBF7A' },
   // Medium
   { id: 'RR-012', domain: 'Trade Finance & Treasury', agent: 'trade', severity: 'medium', category: 'Liquidity Risk',
     title: 'LCR declined 37% in FY2025 — 320.6% to 203.4%',
@@ -88,7 +88,7 @@ const RISK_REGISTER = [
     description: "First digit '4' at 18.3% vs expected 9.7% across full transaction population. Indicates systematic amount manipulation. 7 structuring clusters identified.",
     exposure: 0, owner: 'MLCO', dueDate: '2026-01-15',
     status: 'pending', caseRef: null, strRequired: false, cbslRequired: false,
-    agentPath: '/agents/transaction', color: '#534AB7' },
+    agentPath: '/agents/transaction', color: '#3D3C38' },
 ];
 
 const CATEGORIES = ['All', 'Insider Fraud', 'Credit / ECL', 'Payment Fraud', 'AML / Structuring', 'TBML', 'AML', 'Financial Reporting', 'Regulatory Compliance', 'Cyber Fraud', 'Liquidity Risk'];
@@ -229,7 +229,7 @@ export default function RiskRegister() {
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                       {r.strRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#DC2626', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ STR filing required</span>}
                       {r.cbslRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#DC2626', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ CBSL notification</span>}
-                      {r.caseRef && <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', background: 'var(--color-purple-light)', color: 'var(--color-purple)', borderRadius: 6 }}>Case: {r.caseRef}</span>}
+                      {r.caseRef && <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', background: '#F0F0EE', color: '#3D3C38', borderRadius: 6 }}>Case: {r.caseRef}</span>}
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0, minWidth: 180 }}>

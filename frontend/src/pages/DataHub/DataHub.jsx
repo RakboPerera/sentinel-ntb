@@ -42,7 +42,7 @@ const AGENTS = [
     ],
   },
   {
-    id: 'transaction', name: 'Transaction Surveillance', color: '#534AB7', bg: '#EEEDFE', icon: '⟳',
+    id: 'transaction', name: 'Transaction Surveillance', color: '#3D3C38', bg: '#F0F0EE', icon: '⟳',
     tagline: 'Structuring detection • Benford\'s Law • STR eligibility',
     what: 'Scans transactions for deliberate structuring below the LKR 5M STR threshold, velocity anomalies, and hub-and-spoke routing patterns consistent with layering.',
     required: ['transaction_id','account_id','amount_lkr','transaction_type','timestamp'],
@@ -124,7 +124,7 @@ const AGENTS = [
     ],
   },
   {
-    id: 'controls', name: 'Internal Controls', color: '#854F0B', bg: '#FAEEDA', icon: '⚙',
+    id: 'controls', name: 'Internal Controls', color: '#3A5A3A', bg: '#E8FDF4', icon: '⚙',
     tagline: 'SoD violations • Override concentration • Branch scoring',
     what: 'Detects Segregation of Duties violations where the same staff member both initiates and approves. Scores each branch on a 6-dimension composite to identify insider fraud risk.',
     required: ['transaction_id','branch_code','initiator_id','approver_id','amount_lkr','transaction_type','timestamp'],
@@ -214,7 +214,7 @@ const AGENTS = [
     ],
   },
   {
-    id: 'insider', name: 'Insider Risk', color: '#7C3AED', bg: '#F3F1FF', icon: '◉',
+    id: 'insider', name: 'Insider Risk', color: '#2D2D2B', bg: '#F3F1FF', icon: '◉',
     tagline: 'Staff access logs • override patterns • approval timing',
     what: 'Scores every staff member with system access on 6 insider fraud dimensions — SoD violations, override concentration, same-cluster approvals, off-hours activity, approval turnaround anomaly, and session behavioral deviation.',
     required: ['staff_id','branch_code','transaction_id','role','initiator_flag','approver_flag','timestamp','amount_lkr'],
@@ -246,7 +246,7 @@ const AGENTS = [
     ],
   },
   {
-    id: 'mje', name: 'MJE Testing', color: '#0891B2', bg: '#ECFEFF', icon: '⊞',
+    id: 'mje', name: 'MJE Testing', color: '#0BBF7A', bg: '#ECFEFF', icon: '⊞',
     tagline: 'Manual journal entries • GL accounts • maker-checker',
     what: 'Full-population testing of all manual journal entries. Scores each entry on timing anomalies, amount patterns (Benford, round numbers), GL account sensitivity, maker-checker SoD, and supporting document completeness.',
     required: ['entry_id','gl_account','gl_name','amount_lkr','debit_credit','entry_date','entry_time','maker_id','approver_id'],
@@ -344,7 +344,7 @@ function DataTable({ rows, color, maxRows = 7, highlightRequired = [], label }) 
                   const isNum = isNumericCol(col, rows);
                   const isBool = v === 'true' || v === 'false';
                   return (
-                    <td key={col} style={{ fontSize:12, whiteSpace:'nowrap', fontFamily: isNum ? 'monospace' : 'inherit', color: v === 'true' && col.includes('flag') ? 'var(--color-amber)' : v === 'false' ? 'var(--color-text-3)' : 'inherit', textAlign: isNum ? 'right' : 'left' }}>
+                    <td key={col} style={{ fontSize:12, whiteSpace:'nowrap', fontFamily: isNum ? 'monospace' : 'inherit', color: v === 'true' && col.includes('flag') ? '#3A5A3A' : v === 'false' ? 'var(--color-text-3)' : 'inherit', textAlign: isNum ? 'right' : 'left' }}>
                       {isNum && !isBool ? fmtNum(v) : String(v)}
                     </td>
                   );
@@ -463,7 +463,7 @@ function UploadPanel({ agent }) {
           </div>
         </div>
         {result.key_findings?.slice(0,2).map((f, i) => (
-          <div key={i} style={{ padding:'12px 14px', background: f.severity==='critical'?'var(--color-red-light)':'var(--color-amber-light)', borderRadius:8, fontSize:12, color: f.severity==='critical'?'var(--color-red)':'var(--color-amber)', lineHeight:1.5 }}>
+          <div key={i} style={{ padding:'12px 14px', background: f.severity==='critical'?'var(--color-red-light)':'#E8FDF4', borderRadius:8, fontSize:12, color: f.severity==='critical'?'var(--color-red)':'#3A5A3A', lineHeight:1.5 }}>
             <strong>{f.severity.toUpperCase()}:</strong> {f.finding.substring(0,180)}...
           </div>
         ))}
@@ -500,8 +500,8 @@ function UploadPanel({ agent }) {
 
         {/* Column mapping if needed */}
         {needsMapping && (
-          <div style={{ padding:'14px 16px', background:'var(--color-amber-light)', border:'1px solid rgba(133,79,11,0.2)', borderRadius:10 }}>
-            <div style={{ fontSize:12, fontWeight:600, color:'var(--color-amber)', marginBottom:10, display:'flex', alignItems:'center', gap:6 }}>
+          <div style={{ padding:'14px 16px', background:'#E8FDF4', border:'1px solid rgba(133,79,11,0.2)', borderRadius:10 }}>
+            <div style={{ fontSize:12, fontWeight:600, color:'#3A5A3A', marginBottom:10, display:'flex', alignItems:'center', gap:6 }}>
               <AlertCircle size={14}/>Column names don't match exactly — please map them below
             </div>
             <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
@@ -531,10 +531,10 @@ function UploadPanel({ agent }) {
 
         {/* API key warning */}
         {!hasKey && (
-          <div style={{ padding:'10px 14px', background:'var(--color-amber-light)', border:'1px solid rgba(133,79,11,0.2)', borderRadius:8, fontSize:12, color:'var(--color-amber)', display:'flex', gap:8, alignItems:'center' }}>
+          <div style={{ padding:'10px 14px', background:'#E8FDF4', border:'1px solid rgba(133,79,11,0.2)', borderRadius:8, fontSize:12, color:'#3A5A3A', display:'flex', gap:8, alignItems:'center' }}>
             <AlertCircle size={13} style={{ flexShrink:0 }}/>
             API key required to run.&nbsp;
-            <button onClick={() => dispatch({ type:'TOGGLE_SETTINGS' })} style={{ fontWeight:700, color:'var(--color-amber)', cursor:'pointer', textDecoration:'underline', background:'none', border:'none', padding:0 }}>Configure →</button>
+            <button onClick={() => dispatch({ type:'TOGGLE_SETTINGS' })} style={{ fontWeight:700, color:'#3A5A3A', cursor:'pointer', textDecoration:'underline', background:'none', border:'none', padding:0 }}>Configure →</button>
           </div>
         )}
 

@@ -8,7 +8,7 @@ import { demoData } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
 
-const COLOR = '#534AB7';
+const COLOR = '#4A6070';
 
 const SCHEMA = {
   agentName: 'Transaction Surveillance',
@@ -60,7 +60,7 @@ function StructuringTimeline({ cluster }) {
           const h = (t.amount / THRESHOLD) * 80;
           return (
             <div key={i} title={`T+${t.minute}min: LKR ${(t.amount/1e6).toFixed(2)}M`}
-              style={{ position: 'absolute', left: `${x}%`, bottom: 0, width: 5, height: `${h}%`, background: '#534AB7', borderRadius: '2px 2px 0 0', opacity: 0.8 }} />
+              style={{ position: 'absolute', left: `${x}%`, bottom: 0, width: 5, height: `${h}%`, background: '#3D3C38', borderRadius: '2px 2px 0 0', opacity: 0.8 }} />
           );
         })}
       </div>
@@ -91,7 +91,7 @@ export default function TransactionAgent() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
             {[
               { label: 'Transactions Analysed', value: data.surveillance_summary.total_transactions_analyzed.toLocaleString(), sub: `LKR ${(data.surveillance_summary.total_volume_lkr / 1e9).toFixed(1)} Bn volume`, color: COLOR, tooltip: 'All digital and branch transactions in the analysis window. Includes CEFT, RTGS, ATM, POS, and mobile banking. Each transaction is scored individually and as part of account-level clustering.' },
-              { label: 'Structuring Clusters', value: data.surveillance_summary.structuring_clusters, sub: 'Benford deviation detected', color: '#854F0B', tooltip: 'Groups of transactions that individually fall below the LKR 5M STR threshold but collectively exceed it — a pattern called structuring or smurfing. FTRA Section 7 makes structuring a criminal offence.' },
+              { label: 'Structuring Clusters', value: data.surveillance_summary.structuring_clusters, sub: 'Benford deviation detected', color: '#3A5A3A', tooltip: 'Groups of transactions that individually fall below the LKR 5M STR threshold but collectively exceed it — a pattern called structuring or smurfing. FTRA Section 7 makes structuring a criminal offence.' },
               { label: 'STR Eligible', value: data.surveillance_summary.str_eligible_count, sub: 'CBSL FIU filing required', color: '#A32D2D', tooltip: 'Accounts meeting CBSL FIU criteria for a Suspicious Transaction Report under the Financial Transactions Reporting Act. NTB must file within 5 working days of identification.', alert: 'File within 5 working days' },
               { label: 'High Risk Accounts', value: data.surveillance_summary.high_risk_accounts, sub: `${data.surveillance_summary.flagged_transactions} total flagged transactions`, color: '#EF9F27', tooltip: 'Accounts with velocity multiples > 3× their 90-day baseline, or counterparty concentration > 70% (hub-and-spoke pattern), or participating in a detected structuring cluster.' },
             ].map((s, i) => <StatCard key={i} {...s} />)}
@@ -168,7 +168,7 @@ export default function TransactionAgent() {
                   <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)' }}>
                     <div style={{ display: 'flex', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
                       <code style={{ fontSize: 12, fontWeight: 700 }}>{cl.account_id}</code>
-                      <span style={{ fontSize: 11, padding: '2px 8px', background: cl.structuring_score >= 0.9 ? 'var(--color-red-light)' : 'var(--color-amber-light)', color: cl.structuring_score >= 0.9 ? 'var(--color-red)' : 'var(--color-amber)', borderRadius: 4, fontWeight: 600 }}>Score {cl.structuring_score.toFixed(2)}</span>
+                      <span style={{ fontSize: 11, padding: '2px 8px', background: cl.structuring_score >= 0.9 ? 'var(--color-red-light)' : '#E8FDF4', color: cl.structuring_score >= 0.9 ? 'var(--color-red)' : '#3A5A3A', borderRadius: 4, fontWeight: 600 }}>Score {cl.structuring_score.toFixed(2)}</span>
                       {cl.str_eligible && <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', background: '#A32D2D', color: 'white', borderRadius: 4 }}>STR</span>}
                       <span style={{ marginLeft: 'auto', fontSize: 12, fontWeight: 600, color: 'var(--color-text-2)' }}>LKR {(cl.combined_amount_lkr/1e6).toFixed(1)}M</span>
                     </div>
@@ -211,14 +211,14 @@ export default function TransactionAgent() {
 
                 {activeTab === 'str' && (
                   <>
-                    <div style={{ padding: '10px 16px', background: 'var(--color-amber-light)', borderBottom: '1px solid var(--color-border)', fontSize: 12, color: 'var(--color-amber)', lineHeight: 1.5 }}>
+                    <div style={{ padding: '10px 16px', background: '#E8FDF4', borderBottom: '1px solid var(--color-border)', fontSize: 12, color: '#3A5A3A', lineHeight: 1.5 }}>
                       <strong>CBSL FIU requirement:</strong> STRs must be filed within 5 working days of identifying a suspicious transaction under Sri Lanka's Financial Transactions Reporting Act (FTRA). Failure to file is a criminal offence.
                     </div>
                     {(data.str_queue || []).map((str, i) => (
                       <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', background: str.urgency === 'immediate' ? '#FEF0F0' : 'transparent' }}>
                         <div style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
                           <code style={{ fontSize: 12, fontWeight: 700 }}>{str.account_id}</code>
-                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', background: str.urgency === 'immediate' ? '#A32D2D' : '#854F0B', color: 'white', borderRadius: 4 }}>{str.urgency.replace('_', ' ')}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', background: str.urgency === 'immediate' ? '#A32D2D' : '#3A5A3A', color: 'white', borderRadius: 4 }}>{str.urgency.replace('_', ' ')}</span>
                           <span style={{ marginLeft: 'auto', fontSize: 14, fontWeight: 800, color: '#A32D2D', fontVariantNumeric: 'tabular-nums' }}>LKR {(str.amount_lkr/1e6).toFixed(0)}M</span>
                         </div>
                         <div style={{ fontSize: 12, color: 'var(--color-text-2)', lineHeight: 1.6 }}>{str.str_grounds}</div>

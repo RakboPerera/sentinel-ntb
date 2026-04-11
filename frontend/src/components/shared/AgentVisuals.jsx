@@ -85,8 +85,8 @@ export function RiskGauge({ score, maxScore = 100, label, color, size = 100 }) {
 export function FindingCard({ finding, agentColor, index }) {
   const [expanded, setExpanded] = useState(false);
   const sev = finding.severity;
-  const sevColor = sev === 'critical' ? '#A32D2D' : sev === 'high' ? '#854F0B' : '#185FA5';
-  const sevBg = sev === 'critical' ? '#FCEBEB' : sev === 'high' ? '#FAEEDA' : '#E6F1FB';
+  const sevColor = sev === 'critical' ? '#A32D2D' : sev === 'high' ? '#3A5A3A' : '#185FA5';
+  const sevBg = sev === 'critical' ? '#FCEBEB' : sev === 'high' ? '#E8FDF4' : '#E6F1FB';
   const exposure = finding.affected_exposure_lkr || finding.affected_balance_lkr || finding.estimated_exposure_lkr || 0;
 
   return (
@@ -135,7 +135,7 @@ export function FindingCard({ finding, agentColor, index }) {
 
 // ─── STAGE BADGE ───────────────────────────────────────────────────────────────
 export function StageBadge({ stage, predicted }) {
-  const colors = { 1: ['#185FA5', '#E6F1FB'], 2: ['#854F0B', '#FAEEDA'], 3: ['#A32D2D', '#FCEBEB'] };
+  const colors = { 1: ['#185FA5', '#E6F1FB'], 2: ['#3A5A3A', '#E8FDF4'], 3: ['#A32D2D', '#FCEBEB'] };
   const [c, bg] = colors[stage] || ['#6b6963', '#f1efea'];
   const isMisstaged = predicted && predicted !== stage;
   return (
@@ -220,7 +220,7 @@ export function MetricRow({ label, value, subValue, color, bar, barMax = 100, to
 export function UrgencyBadge({ urgency }) {
   const map = {
     immediate: { bg: '#FCEBEB', color: '#A32D2D', label: '⚡ Immediate' },
-    within_24h: { bg: '#FAEEDA', color: '#854F0B', label: '🕐 Within 24h' },
+    within_24h: { bg: '#E8FDF4', color: '#3A5A3A', label: '🕐 Within 24h' },
     within_72h: { bg: '#E6F1FB', color: '#185FA5', label: '📅 Within 72h' },
     within_week: { bg: '#EAF3DE', color: '#3B6D11', label: '📆 Within week' },
   };
@@ -232,7 +232,7 @@ export function UrgencyBadge({ urgency }) {
 export function RiskTierBadge({ tier }) {
   const map = {
     critical: '#A32D2D', red: '#CF4343', amber: '#EF9F27',
-    high: '#854F0B', medium: '#185FA5', green: '#3B6D11', watch: '#534AB7',
+    high: '#3A5A3A', medium: '#185FA5', green: '#3B6D11', watch: '#3D3C38',
   };
   const color = map[tier?.toLowerCase()] || '#6b6963';
   return (

@@ -37,14 +37,14 @@
   --color-blue-light: #E6F1FB;
   --color-teal: #0F6E56;
   --color-teal-light: #E1F5EE;
-  --color-amber: #854F0B;
-  --color-amber-light: #FAEEDA;
+  --color-amber: #3A5A3A;
+  --color-amber-light: #E8FDF4;
   --color-red: #A32D2D;
   --color-red-light: #FCEBEB;
   --color-green: #3B6D11;
   --color-green-light: #EAF3DE;
-  --color-purple: #534AB7;
-  --color-purple-light: #EEEDFE;
+  --color-purple: #3D3C38;
+  --color-purple-light: #F0F0EE;
   --color-coral: #993C1D;
   --color-coral-light: #FAECE7;
   --color-pink: #993556;
@@ -155,7 +155,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--octave-turquoise
 /* ── Dot indicators ── */
 .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .dot-green { background: var(--octave-turquoise); }
-.dot-amber { background: #EF9F27; }
+.dot-amber { background: #8A8A85; }
 .dot-red { background: var(--color-red); }
 .dot-gray { background: var(--color-text-3); }
 .dot-pulse { animation: pulse 2s ease-in-out infinite; }

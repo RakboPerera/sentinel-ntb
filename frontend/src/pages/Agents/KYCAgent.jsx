@@ -10,8 +10,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 const SCHEMA = { agentName:'Identity & KYC / AML', required:['customer_id','risk_rating','kyc_last_refresh_date','account_open_date'], optional:['pep_flag','country_of_origin','entity_type','introducer_code','beneficial_owner_disclosed','dormant_flag'] };
 const COLOR = '#0F6E56';
 
-const PRIORITY_COLORS = { critical:'#A32D2D', high:'#854F0B', medium:'#185FA5', low:'#3B6D11' };
-const PRIORITY_BG    = { critical:'#FCEBEB', high:'#FAEEDA', medium:'#E6F1FB', low:'#EAF3DE' };
+const PRIORITY_COLORS = { critical:'#A32D2D', high:'#3A5A3A', medium:'#185FA5', low:'#3B6D11' };
+const PRIORITY_BG    = { critical:'#FCEBEB', high:'#E8FDF4', medium:'#E6F1FB', low:'#EAF3DE' };
 
 export default function KYCAgent() {
   const [activeTab, setActiveTab] = useState('gaps');
@@ -140,7 +140,7 @@ export default function KYCAgent() {
                         <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', background: !p.edd_current ? 'var(--color-red-light)' : 'transparent' }}>
                           <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:6 }}>
                             <code style={{ fontSize:12, fontWeight:700 }}>{p.customer_id}</code>
-                            <span style={{ fontSize:10, fontWeight:600, padding:'2px 7px', background: p.pep_type==='direct'?'var(--color-red-light)':'var(--color-amber-light)', color: p.pep_type==='direct'?'var(--color-red)':'var(--color-amber)', borderRadius:4 }}>
+                            <span style={{ fontSize:10, fontWeight:600, padding:'2px 7px', background: p.pep_type==='direct'?'var(--color-red-light)':'#E8FDF4', color: p.pep_type==='direct'?'var(--color-red)':'#3A5A3A', borderRadius:4 }}>
                               PEP {p.pep_type}
                             </span>
                             <span style={{ marginLeft:'auto', fontSize:11, color: !p.edd_current?'var(--color-red)':'var(--color-green)', fontWeight:600 }}>
@@ -149,7 +149,7 @@ export default function KYCAgent() {
                           </div>
                           <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                             <div style={{ flex:1, height:6, borderRadius:3, background:'var(--color-surface-2)', overflow:'hidden' }}>
-                              <div style={{ width:`${Math.min(p.last_review_days_ago/365*100,100)}%`, height:'100%', background: p.last_review_days_ago>365?'var(--color-red)':'var(--color-amber)', borderRadius:3 }} />
+                              <div style={{ width:`${Math.min(p.last_review_days_ago/365*100,100)}%`, height:'100%', background: p.last_review_days_ago>365?'var(--color-red)':'#3A5A3A', borderRadius:3 }} />
                             </div>
                             <span style={{ fontSize:11, color:'var(--color-text-2)', whiteSpace:'nowrap' }}>Last review: {p.last_review_days_ago} days ago</span>
                           </div>
@@ -173,10 +173,10 @@ export default function KYCAgent() {
                         </ResponsiveContainer>
                       </div>
                       {data.branch_compliance_heatmap.filter(b=>b.risk_score>=60).map((b,i) => (
-                        <div key={i} style={{ padding:'10px 16px', borderBottom:'1px solid var(--color-border)', background: b.risk_score>=80?'var(--color-red-light)':'var(--color-amber-light)' }}>
+                        <div key={i} style={{ padding:'10px 16px', borderBottom:'1px solid var(--color-border)', background: b.risk_score>=80?'var(--color-red-light)':'#E8FDF4' }}>
                           <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:4 }}>
                             <code style={{ fontSize:12, fontWeight:700 }}>{b.branch_code}</code>
-                            <span style={{ fontSize:11, fontWeight:600, color: b.risk_score>=80?'var(--color-red)':'var(--color-amber)' }}>Gap rate: {b.gap_rate_pct}%</span>
+                            <span style={{ fontSize:11, fontWeight:600, color: b.risk_score>=80?'var(--color-red)':'#3A5A3A' }}>Gap rate: {b.gap_rate_pct}%</span>
                             {b.pep_accounts > 0 && <span style={{ fontSize:10, padding:'1px 6px', background:'var(--color-red-light)', color:'var(--color-red)', borderRadius:4 }}>{b.pep_accounts} PEP</span>}
                           </div>
                           <div style={{ fontSize:11, color:'var(--color-text-2)' }}>{b.critical_gaps} critical gaps requiring immediate action</div>
