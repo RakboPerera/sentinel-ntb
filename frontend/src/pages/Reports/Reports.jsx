@@ -192,7 +192,7 @@ function ReportRenderer({ report }) {
                   const val = line.slice(colonIdx+1).trim();
                   return <div key={li} style={{ display:'grid', gridTemplateColumns:'200px 1fr', gap:8, padding:'7px 16px', borderBottom:'1px solid var(--color-border)', alignItems:'baseline' }}>
                     <span style={{ fontSize:11, fontWeight:600, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.04em' }}>{key}</span>
-                    <span style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.5, fontWeight: val.includes('CRITICAL') || val.includes('CONFIRMED') ? 700 : 400, color: val.includes('CRITICAL') ? '#C41E3A' : val.includes('HIGH') ? '#4A6070' : val.includes('EFFECTIVE') ? '#16A34A' : 'var(--color-text)' }}>{val}</span>
+                    <span style={{ fontSize:12, lineHeight:1.5, fontWeight: val.includes('CRITICAL') || val.includes('CONFIRMED') ? 700 : 400, color: val.includes('CRITICAL') ? '#C41E3A' : val.includes('HIGH') ? '#4A6070' : val.includes('EFFECTIVE') ? '#16A34A' : 'var(--color-text)' }}>{val}</span>
                   </div>;
                 }
                 return <div key={li} style={{ padding:'6px 16px', fontSize:12, color:'var(--color-text-2)', lineHeight:1.6, borderBottom:'1px solid rgba(0,0,0,0.04)' }}>{line}</div>;

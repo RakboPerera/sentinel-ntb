@@ -712,7 +712,7 @@ export function SignalMatrix({ signals, color }) {
             </div>
             <div>
               <div style={{ fontSize:11, fontWeight:active?700:500, color: active?'var(--color-text)':'var(--color-text-3)' }}>{sig.label || sig.name}</div>
-              {sig.value && <div style={{ fontSize:11, fontWeight:800, color: active?color:'var(--color-text-3)', marginTop:1 }}>{sig.value}</div>}
+              {sig.value && <div style={{ fontSize:11, fontWeight:800, color: active?marginTop:1 }}>{sig.value}</div>}
             </div>
           </div>
         );
