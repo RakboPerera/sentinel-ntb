@@ -119,7 +119,7 @@ export default function InternalControlsAgent() {
                         <SeverityPill level={sel.risk_tier || 'medium'} />
                       </div>
                       <ResponsiveContainer width="100%" height={200}>
-                        <RadarChart data={radarData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
+                        <RadarChart data={radarData||[]} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
                           <PolarGrid stroke="var(--color-border)" />
                           <PolarAngleAxis dataKey="dim" tick={{ fontSize: 10, fill: 'var(--color-text-2)' }} />
                           <Radar dataKey="score" stroke={scoreColor(sel.composite_score || 0)} fill={scoreColor(sel.composite_score || 0)} fillOpacity={0.15} dot={{ fill: scoreColor(sel.composite_score || 0), r: 3 }} />

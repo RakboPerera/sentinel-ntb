@@ -113,7 +113,7 @@ export default function KYCAgent() {
                 <div style={{ padding: 16 }}>
                   {heatmap.length === 0 && <EmptyState icon="✦" title="No branch data" />}
                   <ResponsiveContainer width="100%" height={Math.max(200, heatmap.length * 28)}>
-                    <BarChart data={heatmap.slice(0, 15)} layout="vertical" margin={{ top: 0, right: 60, bottom: 0, left: 16 }}>
+                    <BarChart data={(heatmap||[]).slice(0, 15)} layout="vertical" margin={{ top: 0, right: 60, bottom: 0, left: 16 }}>
                       <XAxis type="number" domain={[0, 20]} tick={{ fontSize: 10 }} unit="%" />
                       <YAxis type="category" dataKey="branch_code" width={50} tick={{ fontSize: 11 }} />
                       <Tooltip formatter={v => [`${v.toFixed(1)}% gap rate`]} />

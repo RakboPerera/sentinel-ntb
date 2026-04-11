@@ -125,7 +125,7 @@ export default function InsiderRiskAgent() {
                   {tab === 'profile' && (
                     <div style={{ padding: 16 }}>
                       <ResponsiveContainer width="100%" height={220}>
-                        <RadarChart data={radarData} margin={{ top: 10, right: 40, bottom: 10, left: 40 }}>
+                        <RadarChart data={radarData||[]} margin={{ top: 10, right: 40, bottom: 10, left: 40 }}>
                           <PolarGrid stroke="var(--color-border)" />
                           <PolarAngleAxis dataKey="dim" tick={{ fontSize: 10, fill: 'var(--color-text-2)' }} />
                           <Radar dataKey="v" stroke={scoreColor(sel.risk_score || 0)} fill={scoreColor(sel.risk_score || 0)} fillOpacity={0.15} dot={{ fill: scoreColor(sel.risk_score || 0), r: 3 }} />

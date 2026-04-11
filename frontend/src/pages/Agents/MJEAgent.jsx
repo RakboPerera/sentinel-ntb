@@ -75,7 +75,7 @@ export default function MJEAgent() {
             {/* Benford chart */}
             <ChartPanel title="Benford's Law — MJE Amount First-Digit Distribution" subtitle="Deviation in digits 4 and 9 indicates deliberate entry amount selection" tooltip="Benford's Law predicts first-digit frequency in any large natural financial dataset. Significant deviation in MJE amounts indicates deliberate choice of entry amounts — a signature of sub-threshold GL structuring.">
               <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={benfordData} margin={{ top: 8, right: 10, bottom: 8, left: 0 }}>
+                <BarChart data={benfordData||[]} margin={{ top: 8, right: 10, bottom: 8, left: 0 }}>
                   <XAxis dataKey="digit" tick={{ fontSize: 11 }} label={{ value: 'First digit of MJE amount', position: 'insideBottom', offset: -2, fontSize: 10 }} />
                   <YAxis tickFormatter={v => `${v}%`} tick={{ fontSize: 10 }} domain={[0, 35]} />
                   <Tooltip formatter={(v, n) => [`${v.toFixed(1)}%`, n === 'actual' ? 'Observed' : 'Expected']} />

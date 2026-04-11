@@ -108,7 +108,7 @@ export default function CreditAgent() {
               {tab === 'sectors' && (
                 <div style={{ padding: 20 }}>
                   <ResponsiveContainer width="100%" height={260}>
-                    <BarChart data={sectors} layout="vertical" margin={{ top: 0, right: 80, bottom: 0, left: 16 }}>
+                    <BarChart data={sectors||[]} layout="vertical" margin={{ top: 0, right: 80, bottom: 0, left: 16 }}>
                       <XAxis type="number" tickFormatter={v => `LKR ${(v / 1e9).toFixed(1)}Bn`} tick={{ fontSize: 10 }} />
                       <YAxis type="category" dataKey="sector" width={100} tick={{ fontSize: 11 }} />
                       <Tooltip formatter={v => [`LKR ${(v / 1e9).toFixed(2)}Bn`, 'Flagged exposure']} />
