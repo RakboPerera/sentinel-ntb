@@ -223,12 +223,13 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
   };
 
   return (
-    <div style={{ border: `1px solid ${p.border}33`, borderLeft: `4px solid ${p.border}`, borderRadius: 10, overflow: 'hidden', marginBottom: 12, background: p.bg, transition: 'box-shadow 0.15s' }}
-      onMouseEnter={e => { if (!expanded && !openFinding) e.currentTarget.style.boxShadow = `0 2px 12px ${p.border}22`; }}
-      onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+    <div style={{ border: `1px solid ${p.border}33`, borderLeft: `4px solid ${p.border}`, borderRadius: 10, overflow: 'hidden', marginBottom: 12, background: p.bg, transition: 'all 0.15s', cursor: openFinding ? 'pointer' : 'default' }}
+      onClick={openFinding ? handleClick : undefined}
+      onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 3px 14px ${p.border}33`; if(openFinding) e.currentTarget.style.borderColor = `${p.border}66`; }}
+      onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = `${p.border}33`; }}
     >
       {/* ── Header row ── */}
-      <div style={{ padding: '14px 16px', display: 'flex', gap: 10, alignItems: 'flex-start', cursor: 'pointer' }} onClick={handleClick}>
+      <div style={{ padding: '14px 16px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
         <div style={{ flex: 1 }}>
           {/* Badge row */}
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 10 }}>

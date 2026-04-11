@@ -26,12 +26,16 @@ export default function useOpenFinding(agentId) {
     controls:    { name: 'Internal Controls',         color: '#854F0B' },
     digital:     { name: 'Digital Fraud & Identity',  color: '#993556' },
     trade:       { name: 'Trade Finance & Treasury',  color: '#3B6D11' },
+    insider:     { name: 'Insider Risk',              color: '#7C3AED' },
+    mje:         { name: 'MJE Testing',               color: '#0891B2' },
+    orchestrator:{ name: 'Orchestrator',              color: '#534AB7' },
   };
 
   return function openFinding(finding, overrideAgentId, overrideColor, overrideData) {
     const effectiveId = overrideAgentId || agentId;
     const meta = AGENT_META[effectiveId] || AGENT_META.credit;
-    const agentData = overrideData || state.agentResults[effectiveId] || demoData[effectiveId];
+    const demoKey = effectiveId === 'insider' ? 'insiderRisk' : effectiveId;
+    const agentData = overrideData || state.agentResults[effectiveId] || demoData[demoKey];
 
     dispatch({
       type: 'OPEN_FINDING',
