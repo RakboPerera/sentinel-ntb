@@ -1,180 +1,175 @@
 import React, { useState } from 'react';
-import { ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import AgentModule from '../../components/shared/AgentModule.jsx';
-import { StatCard, VisualFindingCard, InsightBox, PanelWithMethod, MetricSpotlight, VerdictCard, HeatStrip, SignalMatrix, ComparisonSplit } from '../../components/shared/VisualComponents.jsx';
-import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
-import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
+import { VisualFindingCard } from '../../components/shared/VisualComponents.jsx';
+import { KPICard, ProgressBar, DataRow, OpinionBanner, AgentHeader, ChartPanel, SeverityPill, EmptyState } from '../../components/shared/AgentUI.jsx';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { demoData } from '../../data/demoData.js';
 
 const COLOR = '#993556';
-const SCHEMA = [{ field:'session_id',type:'string' },{ field:'account_id',type:'string' },{ field:'behavioral_score',type:'number' },{ field:'device_registered',type:'boolean' },{ field:'ip_country',type:'string' },{ field:'impossible_travel',type:'boolean' }];
 
-function BehavioralGauge({ score }) {
-  const pct = Math.round(score * 100);
-  const color = pct >= 80 ? '#C41E3A' : pct >= 50 ? '#4A6070' : '#0BBF7A';
-  const angle = -135 + (pct / 100) * 270;
+function ScoreArc({ score, size = 80 }) {
+  const pct = Math.min(100, Math.max(0, score));
+  const c = pct >= 80 ? '#C41E3A' : pct >= 50 ? '#4A6070' : '#0BBF7A';
+  const r = (size / 2) - 8;
+  const circ = Math.PI * r; // half circle
+  const offset = circ - (pct / 100) * circ;
   return (
-    <div style={{ textAlign:'center', padding:'8px 0' }}>
-      <svg width={100} height={60} viewBox="0 0 100 60">
-        <path d="M 10 55 A 40 40 0 0 1 90 55" fill="none" stroke="var(--color-border)" strokeWidth={8} strokeLinecap="round"/>
-        <path d="M 10 55 A 40 40 0 0 1 90 55" fill="none" stroke={color} strokeWidth={8} strokeLinecap="round"
-          strokeDasharray={`${(pct/100)*125.6} 125.6`} />
-        <text x="50" y="52" textAnchor="middle" fontSize="16" fontWeight="900" fill={color} fontFamily="var(--font-display)">{pct}</text>
-      </svg>
-      <div style={{ fontSize:9, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.06em', marginTop:-4 }}>Risk Score</div>
-    </div>
+    <svg width={size} height={size / 2 + 10} viewBox={`0 0 ${size} ${size / 2 + 10}`}>
+      <path d={`M 8 ${size/2} A ${r} ${r} 0 0 1 ${size-8} ${size/2}`} fill="none" stroke="var(--color-border)" strokeWidth={7} strokeLinecap="round" />
+      <path d={`M 8 ${size/2} A ${r} ${r} 0 0 1 ${size-8} ${size/2}`} fill="none" stroke={c} strokeWidth={7} strokeLinecap="round"
+        strokeDasharray={circ} strokeDashoffset={offset} />
+      <text x={size/2} y={size/2 - 2} textAnchor="middle" fontSize={14} fontWeight={900} fill={c} fontFamily="var(--font-display)">{pct}</text>
+    </svg>
   );
 }
 
 export default function DigitalFraudAgent() {
-  const [expandedSession, setExpandedSession] = useState(null);
+  const [expanded, setExpanded] = useState(null);
   const openFinding = useOpenFinding('digital');
 
   return (
-    <AgentModule agentId="digital" agentName="Digital Fraud & Identity Agent" agentColor={COLOR} demoData={demoData.digital} schema={SCHEMA}>
+    <AgentModule agentId="digital" agentName="Digital Fraud & Identity Agent" agentColor={COLOR} demoData={demoData.digital} schema={[]}>
       {(data) => {
         const ds = data.digital_summary || {};
+        const sessions = data.anomalous_sessions || [];
+        const travel = data.impossible_travel_cases || [];
+        const devices = data.device_sharing_clusters || [];
         const ps = data.population_shift || {};
 
         return (
-          <>
-            <ExplainerBox color={COLOR} icon="⊕"
-              title="How this agent detects account takeover and digital fraud"
-              summary="Each user has a behavioral biometric baseline from 14 months of session history. The agent scores every new session against that baseline — combining device fingerprint, geographic velocity, and transaction pattern."
-              detail="Three detection layers: (1) Behavioral biometrics — does this session look like you? (2) Geographic velocity — could you physically travel that fast? (3) Device fingerprinting — is this device shared across multiple accounts?"
-              collapsible />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-            {/* Audit Opinion */}
-            <div style={{ background:'#99355606', border:'1px solid #99355622', borderRadius:10, overflow:'hidden' }}>
-              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
-                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#993556', color:'white', flexShrink:0, marginTop:2 }}>QUALIFIED</div>
-                <div style={{ fontSize:12, color:'#993556', lineHeight:1.7 }}>In our opinion, the digital fraud detection environment is PARTIALLY EFFECTIVE. Behavioral biometrics detected 4 high-risk sessions. Impossible travel confirmed in 2 cases. PSI 0.14 indicates model drift requiring recalibration ahead of HSBC migration.</div>
-              </div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:'1px solid #99355618' }}>
-                {[['Population tested','148,247 authenticated sessions (100%)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','Sessions with behavioral score &lt;50; impossible travel within same day'],['Model limitations','Behavioral baseline requires 90-day history; HSBC migrated accounts have reduced baseline confidence']].map(([k,v],i)=>(
-                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?'1px solid #99355612':'none', borderBottom:i<2?'1px solid #99355612':'none' }}>
-                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#993556', opacity:0.65, marginBottom:2 }}>{k}</div>
-                    <div style={{ fontSize:11, color:'#993556', lineHeight:1.5 }} dangerouslySetInnerHTML={{__html:v}} />
-                  </div>
-                ))}
-              </div>
+            <AgentHeader
+              name="Digital Fraud & Identity Agent"
+              icon="⊕"
+              color={COLOR}
+              tagline="Behavioral biometrics against 14-month session baseline — geographic velocity, device fingerprinting, and transaction pattern analysis"
+              stats={[
+                { label: 'Sessions analysed', value: (ds.total_sessions_analyzed || 148247).toLocaleString() },
+                { label: 'Anomalous', value: ds.anomalous_sessions || 14, alert: true },
+                { label: 'Critical', value: ds.critical_sessions || 4, alert: true },
+                { label: 'Impossible travel', value: ds.impossible_travel_cases || 2, alert: true },
+                { label: 'PSI score', value: (ps.psi_score || 0.14).toFixed(2), alert: (ps.psi_score || 0.14) > 0.1 },
+              ]}
+            />
+
+            <OpinionBanner
+              verdict="QUALIFIED"
+              color={COLOR}
+              opinion="In our opinion, the digital fraud detection environment is PARTIALLY EFFECTIVE. 4 high-risk sessions detected. Impossible travel confirmed in 2 cases. PSI of 0.14 indicates model drift — recalibration required before HSBC migration."
+              methodology={{
+                'Population tested': '148,247 authenticated sessions — 100%',
+                'Period covered': 'FY 2025 (Jan–Dec)',
+                'Materiality threshold': 'Behavioral score <50; impossible travel within same day',
+                'Model limitations': 'Baseline requires 90 days; HSBC migrated accounts have reduced confidence',
+              }}
+            />
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+              <KPICard label="Critical sessions" value={ds.critical_sessions || 4} sub="Score < 30/100" color="#C41E3A" icon="⊕" />
+              <KPICard label="Impossible travel" value={ds.impossible_travel_cases || 2} sub="Geographic impossibility" color="#C41E3A" />
+              <KPICard label="Unregistered device" value={ds.unregistered_device_high_value || 3} sub="High-value txn on unknown device" color="#4A6070" />
+              <KPICard label="PSI model drift" value={(ps.psi_score || 0.14).toFixed(2)} sub={ps.psi_score > 0.1 ? '⚠ Recalibration needed' : 'Stable'} color={ps.psi_score > 0.1 ? '#C41E3A' : '#0BBF7A'} delta={ps.psi_score > 0.1 ? 1 : 0} deltaLabel=" drift detected" />
             </div>
 
-            {/* Hero metrics */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
-              <MetricSpotlight value={(ds.total_sessions_analyzed||0).toLocaleString()} label="Sessions Analysed" sub={`${ds.anomalous_session_count||0} anomalous`} color={COLOR} icon="⊕" />
-              <MetricSpotlight value={ds.critical_sessions||0} label="Critical Sessions" sub="Behavioral score < 30" color="#C41E3A" trend="Immediate review" trendDir="up" />
-              <MetricSpotlight value={ds.impossible_travel_cases||0} label="Impossible Travel" sub="Geographic impossibility" color="#4A6070" />
-              <MetricSpotlight value={ps.psi_score?.toFixed(2)||'0.14'} label="Model PSI" sub={ps.psi_score > 0.1 ? '⚠ Drift detected' : 'Stable'} color={ps.psi_score > 0.1 ? '#C41E3A' : '#0BBF7A'} trend="Recalibration needed" trendDir={ps.psi_score > 0.1 ? 'up' : 'down'} />
-            </div>
+            <ChartPanel title="Key Findings">
+              {(data.key_findings || []).map((f, i) => (
+                <VisualFindingCard key={i} finding={f} agentColor={COLOR} index={i} agentId="digital" agentData={data} openFinding={openFinding} />
+              ))}
+            </ChartPanel>
 
-            <div className="agent-panel">
-              <div className="agent-panel-header"><span className="agent-panel-title">Key Findings</span></div>
-              <div className="agent-panel-body">{(data.key_findings||[]).map((f,i) => <VisualFindingCard key={i} finding={f} agentColor={COLOR} index={i} agentId="digital" agentData={data} openFinding={openFinding} />)}</div>
-            </div>
-
-            <div className="agent-grid">
-              {/* Left column */}
-              <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
-
-                {/* PSI Model Drift */}
-                <PanelWithMethod title="Population Stability Index" tooltip="PSI > 0.10 = model drift. Current population behaves differently from training population." methodology="Compares distribution of behavioral scores across 10 buckets between training period and current population. Divergence = drift." agentColor={COLOR}>
-                  <div style={{ padding:'16px' }}>
-                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10, marginBottom:14 }}>
-                      {[
-                        { label:'PSI Score', val:ps.psi_score?.toFixed(2)||'0.14', color: ps.psi_score>0.1?'#C41E3A':'#0BBF7A' },
-                        { label:'Mean Score', val:ps.mean_behavioral_score?.toFixed(1)||'52.3', color:'var(--color-text)' },
-                        { label:'Expected Mean', val:ps.expected_mean?.toFixed(1)||'67.8', color:'#4A6070' },
-                      ].map((m,i)=>(
-                        <div key={i} style={{ textAlign:'center', padding:'12px 8px', background:`${m.color}08`, borderRadius:8, border:`1px solid ${m.color}20` }}>
-                          <div style={{ fontSize:26, fontWeight:900, color:m.color, lineHeight:1, fontFamily:'var(--font-display)' }}>{m.val}</div>
-                          <div style={{ fontSize:10, color:'var(--color-text-3)', marginTop:4, textTransform:'uppercase', letterSpacing:'0.05em' }}>{m.label}</div>
+            {/* Sessions */}
+            <ChartPanel title={`Anomalous Sessions (${sessions.length})`} subtitle="Click any session to expand explanation" noPad>
+              {sessions.length === 0 && <EmptyState icon="⊕" title="No anomalous sessions" sub="All sessions within normal parameters." />}
+              {sessions.map((sess, i) => (
+                <div key={i}>
+                  <div onClick={() => setExpanded(expanded === i ? null : i)}
+                    style={{ padding: '12px 16px', borderBottom: expanded === i ? 'none' : '1px solid var(--color-border)', cursor: 'pointer', background: expanded === i ? 'var(--color-surface-2)' : i % 2 === 0 ? 'white' : 'var(--color-surface-2)', transition: 'background 0.1s' }}>
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                      <ScoreArc score={sess.behavioral_score || 0} size={70} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 }}>
+                          <code style={{ fontSize: 12, fontWeight: 700 }}>{sess.account_id}</code>
+                          <SeverityPill level={sess.risk_score >= 0.85 ? 'critical' : sess.risk_score >= 0.6 ? 'high' : 'medium'} />
+                          {!sess.device_registered && <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px', background: 'var(--color-surface-2)', color: '#4A6070', borderRadius: 4, border: '1px solid var(--color-border)' }}>UNREGISTERED DEVICE</span>}
+                          {sess.impossible_travel && <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px', background: '#FCEEF1', color: '#C41E3A', borderRadius: 4 }}>IMPOSSIBLE TRAVEL</span>}
                         </div>
-                      ))}
+                        <div style={{ fontSize: 11, color: 'var(--color-text-2)' }}>{sess.anomaly_type}</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        {sess.max_txn_lkr > 0 && <div style={{ fontSize: 13, fontWeight: 800, color: '#C41E3A', fontFamily: 'var(--font-display)' }}>LKR {((sess.max_txn_lkr || 0) / 1e6).toFixed(1)}M</div>}
+                        <div style={{ fontSize: 10, color: 'var(--color-text-3)', marginTop: 2 }}>{expanded === i ? '▲ Collapse' : '▼ Expand'}</div>
+                      </div>
                     </div>
-                    <HeatStrip value={ps.psi_score||0.14} max={0.25} color="#C41E3A" label="PSI Severity" sublabel="0.10 = monitor  ·  0.20 = retrain  ·  0.25+ = suspend" format={v=>v.toFixed(3)} />
-                    <InsightBox type={ps.detected?'warning':'success'} body={ps.interpretation||'Model shows drift ahead of HSBC migration. Recalibration recommended before Q2 2026 cutover.'} />
                   </div>
-                </PanelWithMethod>
-
-                {/* Impossible Travel */}
-                <PanelWithMethod title="Impossible Travel Cases" tooltip="Two consecutive logins where elapsed time < minimum travel time between locations." methodology="Each login is geolocated via IP. Consecutive sessions for the same account are compared against a city-pair minimum travel time database." agentColor={COLOR}>
-                  <div>
-                    {(data.impossible_travel_cases||[]).map((itc,i)=>(
-                      <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)' }}>
-                        <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
-                          <code style={{ fontSize:12, fontWeight:700 }}>{itc.account_id}</code>
-                          <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{itc.from_city} → {itc.to_city}</span>
-                          <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#C41E3A' }}>Impossible</span>
-                        </div>
-                        <ComparisonSplit leftLabel="Elapsed time" leftValue={`${itc.time_elapsed_minutes}min`} leftColor="#C41E3A" rightLabel="Minimum travel" rightValue={`${itc.minimum_travel_minutes}min`} rightColor="#0BBF7A" note={`${Math.round((itc.minimum_travel_minutes/itc.time_elapsed_minutes)*100)}% faster than physically possible`} />
-                      </div>
-                    ))}
-                  </div>
-                </PanelWithMethod>
-              </div>
-
-              {/* Right: Anomalous sessions */}
-              <PanelWithMethod title="Anomalous Sessions" tooltip="Sessions risk-scored 0–100. Score combines behavioral biometrics (40%), device registration (20%), geographic velocity (25%), transaction pattern (15%)." methodology="Each session scored against 14-month baseline. Scores below 50 flag for review; below 30 trigger immediate response." agentColor={COLOR}>
-                <div style={{ maxHeight:560, overflowY:'auto' }}>
-                  {(data.anomalous_sessions||[]).map((sess,i)=>{
-                    const score = sess.behavioral_score || 0;
-                    const riskColor = score < 30 ? '#C41E3A' : score < 60 ? '#4A6070' : '#0BBF7A';
-                    return (
-                      <div key={i}>
-                        <div style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', cursor:'pointer', background: expandedSession===i?'var(--color-surface-2)':'transparent' }}
-                          onClick={()=>setExpandedSession(expandedSession===i?null:i)}>
-                          <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:6 }}>
-                            <BehavioralGauge score={score/100} />
-                            <div style={{ flex:1 }}>
-                              <div style={{ display:'flex', gap:6, alignItems:'center', marginBottom:4, flexWrap:'wrap' }}>
-                                <code style={{ fontSize:12, fontWeight:700 }}>{sess.account_id}</code>
-                                {!sess.device_registered && <span style={{ fontSize:9, fontWeight:700, padding:'2px 6px', background:'#F3F3F1', color:'#4A6070', borderRadius:4, border:'1px solid #D1D0CB' }}>Unregistered device</span>}
-                                {sess.impossible_travel && <span style={{ fontSize:9, fontWeight:700, padding:'2px 6px', background:'#FCEEF1', color:'#C41E3A', borderRadius:4 }}>Impossible travel</span>}
-                              </div>
-                              <div style={{ fontSize:11, color:'var(--color-text-2)' }}>{sess.anomaly_type}</div>
-                            </div>
+                  {expanded === i && (
+                    <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface-2)' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 12 }}>
+                        {[
+                          { label: 'MFA result', val: sess.mfa_triggered ? (sess.mfa_passed ? '✓ Passed' : '✗ Failed') : 'Not triggered' },
+                          { label: 'Device', val: sess.device_registered ? '✓ Registered' : '✗ Unregistered' },
+                          { label: 'Behavioral score', val: `${sess.behavioral_score || 0}/100` },
+                        ].map((m, j) => (
+                          <div key={j} style={{ padding: '10px 12px', background: 'var(--color-surface)', borderRadius: 8, border: '1px solid var(--color-border)' }}>
+                            <div style={{ fontSize: 10, color: 'var(--color-text-3)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{m.label}</div>
+                            <div style={{ fontSize: 13, fontWeight: 700 }}>{m.val}</div>
                           </div>
-                        </div>
-                        {expandedSession === i && (
-                          <div style={{ padding:'14px 16px', background:'var(--color-surface-2)', borderBottom:'1px solid var(--color-border)' }}>
-                            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8, marginBottom:10 }}>
-                              {[
-                                { label:'Max transaction', val:sess.max_txn_lkr>0?`LKR ${(sess.max_txn_lkr/1e6).toFixed(1)}M`:'No txn' },
-                                { label:'MFA result', val:sess.mfa_triggered?(sess.mfa_passed?'Passed':'Failed'):'Not triggered' },
-                                { label:'Device status', val:sess.device_registered?'Registered':'Unregistered' },
-                              ].map((m,j)=>(
-                                <div key={j} style={{ padding:'8px 12px', background:'var(--color-surface)', borderRadius:8, border:'1px solid var(--color-border)' }}>
-                                  <div style={{ fontSize:10, color:'var(--color-text-3)', marginBottom:2, textTransform:'uppercase', letterSpacing:'0.05em' }}>{m.label}</div>
-                                  <div style={{ fontSize:12, fontWeight:700 }}>{m.val}</div>
-                                </div>
-                              ))}
-                            </div>
-                            <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.6, padding:'10px 14px', background:'var(--color-surface)', borderRadius:8, marginBottom:8 }}>
-                              {sess.explanation}
-                            </div>
-                            <div style={{ padding:'8px 14px', background:'#FCEEF1', borderRadius:8, fontSize:12, fontWeight:600, color:'#C41E3A', border:'1px solid rgba(196,30,58,0.2)' }}>
-                              → {sess.recommended_action}
-                            </div>
-                          </div>
-                        )}
+                        ))}
                       </div>
-                    );
-                  })}
+                      <div style={{ fontSize: 12, color: 'var(--color-text-2)', lineHeight: 1.65, padding: '10px 14px', background: 'var(--color-surface)', borderRadius: 8, marginBottom: 8 }}>{sess.explanation}</div>
+                      {sess.recommended_action && <div style={{ fontSize: 12, fontWeight: 600, color: '#C41E3A' }}>→ {sess.recommended_action}</div>}
+                    </div>
+                  )}
                 </div>
-              </PanelWithMethod>
-            </div>
+              ))}
+            </ChartPanel>
 
-            {/* Device sharing */}
-            <PanelWithMethod title="Device Sharing Clusters" tooltip="One device ID accessing 3+ distinct accounts is a money mule indicator or credential theft." methodology="Device fingerprinting maps each device ID to all accounts using it. Cluster risk = number of accounts × session frequency." agentColor={COLOR}>
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:12, padding:'16px' }}>
-                {(data.device_sharing_clusters||[]).map((cluster,i)=>(
-                  <VerdictCard key={i} verdict={cluster.risk} confidence={cluster.risk==='critical'?0.94:0.72} finding={cluster.description||`Device ${cluster.device_id} accessed ${cluster.account_count} distinct accounts`} evidence={cluster.account_ids} color={cluster.risk==='critical'?'#C41E3A':'#4A6070'} action={cluster.recommended_action} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              {/* Impossible travel */}
+              <ChartPanel title={`Impossible Travel Cases (${travel.length})`} noPad>
+                {travel.length === 0 && <EmptyState icon="✈" title="No impossible travel" />}
+                {travel.map((t, i) => (
+                  <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)' }}>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 10 }}>
+                      <code style={{ fontSize: 12, fontWeight: 700 }}>{t.account_id}</code>
+                      <span style={{ fontSize: 11, color: 'var(--color-text-2)' }}>{t.from_city} → {t.to_city}</span>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                      <div style={{ padding: '10px', background: '#FCEEF1', borderRadius: 8, textAlign: 'center', border: '1px solid rgba(196,30,58,0.2)' }}>
+                        <div style={{ fontSize: 20, fontWeight: 900, color: '#C41E3A', fontFamily: 'var(--font-display)' }}>{t.time_elapsed_minutes}min</div>
+                        <div style={{ fontSize: 10, color: '#C41E3A', textTransform: 'uppercase' }}>Elapsed time</div>
+                      </div>
+                      <div style={{ padding: '10px', background: '#E8FDF4', borderRadius: 8, textAlign: 'center', border: '1px solid rgba(11,191,122,0.2)' }}>
+                        <div style={{ fontSize: 20, fontWeight: 900, color: '#0BBF7A', fontFamily: 'var(--font-display)' }}>{t.minimum_travel_minutes}min</div>
+                        <div style={{ fontSize: 10, color: '#0BBF7A', textTransform: 'uppercase' }}>Min travel time</div>
+                      </div>
+                    </div>
+                    <div style={{ marginTop: 8, fontSize: 11, color: '#C41E3A', fontWeight: 600 }}>
+                      Account would need to travel {Math.round((t.minimum_travel_minutes / t.time_elapsed_minutes) * 100)}% faster than physically possible
+                    </div>
+                  </div>
                 ))}
-              </div>
-            </PanelWithMethod>
-          </>
+              </ChartPanel>
+
+              {/* Device sharing */}
+              <ChartPanel title={`Device Sharing Clusters (${devices.length})`} noPad>
+                {devices.length === 0 && <EmptyState icon="📱" title="No device sharing clusters" />}
+                {devices.map((d, i) => (
+                  <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', borderLeft: `3px solid ${d.risk === 'critical' ? '#C41E3A' : '#4A6070'}` }}>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
+                      <code style={{ fontSize: 11, fontWeight: 700 }}>{d.device_id}</code>
+                      <SeverityPill level={d.risk || 'high'} />
+                      <span style={{ marginLeft: 'auto', fontSize: 13, fontWeight: 900, color: d.risk === 'critical' ? '#C41E3A' : '#4A6070', fontFamily: 'var(--font-display)' }}>{d.account_count} accounts</span>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 8 }}>
+                      {(d.account_ids || []).map(id => <code key={id} style={{ fontSize: 10, padding: '2px 7px', background: 'var(--color-surface-2)', borderRadius: 4, color: 'var(--color-text-2)' }}>{id}</code>)}
+                    </div>
+                    <div style={{ fontSize: 11, color: 'var(--color-text-2)', lineHeight: 1.5 }}>{d.interpretation}</div>
+                  </div>
+                ))}
+              </ChartPanel>
+            </div>
+          </div>
         );
       }}
     </AgentModule>

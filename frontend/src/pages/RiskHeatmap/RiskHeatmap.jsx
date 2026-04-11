@@ -418,7 +418,7 @@ function CellDetailDrawer({ branch, col, onClose }) {
             <div style={{ display:'flex', gap:6, marginTop:10, flexWrap:'wrap' }}>
               {branch.aml_flag && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#FEF0F0', color:'#991B1B', borderRadius:5, border:'1px solid #FECACA' }}>⚠ AML Active</span>}
               {branch.cbsl_flag && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#FEF0F0', color:'#991B1B', borderRadius:5, border:'1px solid #FECACA' }}>⚠ CBSL Pending</span>}
-              {branch.sla_breach && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#F3F3F1', color:'#3A5A3A', borderRadius:5, border:'1px solid #FDE68A' }}>⏱ SLA Breach</span>}
+              {branch.sla_breach && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#F3F3F1', color:'#3A5A3A', borderRadius:5, border:'1px solid #D1D0CB' }}>⏱ SLA Breach</span>}
             </div>
           )}
         </div>

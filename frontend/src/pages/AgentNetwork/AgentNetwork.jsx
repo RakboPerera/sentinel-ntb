@@ -6,6 +6,7 @@ import { demoData } from '../../data/demoData.js';
 import { getCasesForDomain, CASE_SEV_COLOR } from '../../data/caseRegistry.js';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import { ChevronRight, AlertTriangle, CheckCircle, Activity, Network } from 'lucide-react';
+import { HeatStrip } from '../../components/shared/VisualComponents.jsx';
 
 const AGENTS = [
   {
@@ -358,7 +359,7 @@ export default function AgentNetwork() {
             { tier: 3, label: 'Layer 3 — Entity / Behavioural', color: '#3A5A3A', desc: 'These agents build comprehensive risk profiles for people and entities across all their activity' },
           ].map(tier => (
             <div key={tier.tier}>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, paddingBottom: 10, borderBottom: `2px solid ${tier.color}30` }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 14, paddingBottom: 10, borderBottom: `2px solid ${tier.color}30` }}>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: `${tier.color}15`, border: `1px solid ${tier.color}33`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, color: tier.color }}>L{tier.tier}</div>
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-text)' }}>{tier.label}</div>

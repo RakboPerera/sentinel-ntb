@@ -47,7 +47,7 @@ export function ScoreBar({ score, width = 72, height = 8, showLabel = true, tool
         ? <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}><InfoTooltip text={tooltip} width={220} position="top" /></div>
         : null}
       <div style={{ width, height, borderRadius: height / 2, background: 'var(--color-surface-2)', flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`, borderRadius: height / 2, background: `linear-gradient(90deg, #3B6D11 0%, #EF9F27 60%, #A32D2D 100%)`, clipPath: `inset(0 ${100 - pct}% 0 0)`, transition: 'width 0.6s ease' }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`, borderRadius: height / 2, background: `linear-gradient(90deg, #3B6D11 0%, #26EA9F 60%, #A32D2D 100%)`, clipPath: `inset(0 ${100 - pct}% 0 0)`, transition: 'width 0.6s ease' }} />
       </div>
       {showLabel && (
         <span style={{ fontSize: 11, fontWeight: 700, color, minWidth: 32, fontVariantNumeric: 'tabular-nums' }}>{score.toFixed(2)}</span>
