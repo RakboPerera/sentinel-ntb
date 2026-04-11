@@ -269,7 +269,7 @@ function SeverityMeter({ value, color, size = 120 }) {
   return (
     <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
       <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--color-surface-2)" strokeWidth={10} />
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={value >= 0.9 ? '#A32D2D' : value >= 0.7 ? '#26EA9F' : color}
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={value >= 0.9 ? '#C41E3A' : value >= 0.7 ? '#26EA9F' : color}
         strokeWidth={10} strokeDasharray={`${dash} ${circ}`} strokeLinecap="round"
         style={{ transition: 'stroke-dasharray 0.8s ease, stroke 0.3s' }} />
       <text x={size/2} y={size/2 + 6} textAnchor="middle" fill="var(--color-text)" fontSize={size < 100 ? 14 : 18}
@@ -480,7 +480,7 @@ export default function ScenarioPlayer() {
                   <div style={{ flex: 1, padding: '8px 14px', background: 'rgba(0,0,0,0.03)', borderRadius: 8 }}>
                     <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--color-text-3)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4 }}>Anomaly Score</div>
                     <div style={{ height: 8, background: 'var(--color-border)', borderRadius: 4 }}>
-                      <div style={{ height: '100%', width: `${activeStep.severity * 100}%`, background: activeStep.severity >= 0.9 ? '#A32D2D' : activeStep.severity >= 0.7 ? '#26EA9F' : activeStep.agentColor, borderRadius: 4, transition: 'width 1s ease' }} />
+                      <div style={{ height: '100%', width: `${activeStep.severity * 100}%`, background: activeStep.severity >= 0.9 ? '#C41E3A' : activeStep.severity >= 0.7 ? '#26EA9F' : activeStep.agentColor, borderRadius: 4, transition: 'width 1s ease' }} />
                     </div>
                     <div style={{ fontSize: 12, fontWeight: 700, color: activeStep.severity >= 0.9 ? 'var(--color-red)' : 'var(--color-text)', marginTop: 4 }}>{activeStep.severity.toFixed(2)} / 1.00</div>
                   </div>

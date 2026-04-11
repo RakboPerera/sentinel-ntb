@@ -674,7 +674,7 @@ export default function DataHub() {
             <div style={{ display:'flex', gap:16, fontSize:12, color:'#166534' }}>
               <span>📋 {AGENTS.reduce((s,a) => s + (state.agentResults[a.id]?.key_findings?.length || 0), 0)} total findings</span>
               {AGENTS.reduce((s,a) => s + (state.agentResults[a.id]?.key_findings?.filter(f=>f.severity==='critical')?.length || 0), 0) > 0 && (
-                <span style={{ fontWeight:700, color:'#DC2626' }}>🔴 {AGENTS.reduce((s,a) => s + (state.agentResults[a.id]?.key_findings?.filter(f=>f.severity==='critical')?.length || 0), 0)} critical — immediate action required</span>
+                <span style={{ fontWeight:700, color:'#C41E3A' }}>🔴 {AGENTS.reduce((s,a) => s + (state.agentResults[a.id]?.key_findings?.filter(f=>f.severity==='critical')?.length || 0), 0)} critical — immediate action required</span>
               )}
             </div>
           </div>

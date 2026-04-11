@@ -30,7 +30,7 @@ const AGENTS = [
     how: 'Applies Benford\'s Law to detect amount manipulation across the full population. Uses Z-score velocity analysis to flag accounts transacting at multiples of their historical baseline. Builds counterparty graphs to detect hub-and-spoke layering patterns. Scores each account for STR eligibility.',
     methods: ['Benford\'s Law', 'Velocity Z-Score', 'Network Graph Analysis', 'STR Rule Engine', 'Isolation Forest'],
     ntbContext: 'NTB processes over 96% of transactions through digital channels. The LKR 5M STR threshold is a known attack surface — systematic structuring slightly below this threshold is the most common CEFT fraud vector in Sri Lankan banking.',
-    metric: '4 STR-eligible', metricSub: 'LKR 1.44 Bn combined', metricColor: '#A32D2D',
+    metric: '4 STR-eligible', metricSub: 'LKR 1.44 Bn combined', metricColor: '#C41E3A',
     tier: 1, tierLabel: 'Transaction / Event',
     critical: 4, findings: 847,
     keySignal: 'Digit "4" at 18.3% vs 9.7% expected (Benford)',
@@ -43,7 +43,7 @@ const AGENTS = [
     how: 'The key insight: legitimate CEFT receivables clear within 3–5 business days. An account that grows rapidly in balance while clearing ratio falls toward zero is definitively not processing real transactions — it is accumulating phantom entries. The agent tracks growth rate × clearing ratio as a combined fraud score.',
     methods: ['Growth-Rate Anomaly Detection', 'Clearing Ratio Analysis', 'Aging Tier Classification', 'CEFT Velocity Monitoring'],
     ntbContext: 'CBSL requires all suspense balances >90 days to be escalated. NTB currently has LKR 3.98 Bn in accounts exceeding this guideline — representing a systemic reconciliation control gap that creates the conditions for fraud.',
-    metric: 'SUS-017 critical', metricSub: '+312% in 30 days · 94 days aged', metricColor: '#A32D2D',
+    metric: 'SUS-017 critical', metricSub: '+312% in 30 days · 94 days aged', metricColor: '#C41E3A',
     tier: 2, tierLabel: 'Account / Position',
     critical: 3, findings: 46,
     keySignal: 'Clearing ratio collapsed to 0.08 (benchmark: 0.95)',
@@ -69,7 +69,7 @@ const AGENTS = [
     how: 'Scores each branch on a 6-dimension composite (0–100): override rate, SoD violation rate, approval turnaround, off-hours approvals, approver concentration, and temporal clustering. Branches below 65/100 are escalated. A single approver responsible for >40% of overrides triggers automatic investigation.',
     methods: ['SoD Violation Detection', 'Override Concentration Index', 'Temporal Pattern Analysis', '6-Dimension Branch Scoring', 'Cluster Approval Detection'],
     ntbContext: 'NTB\'s high-growth period (2025) created pressure on branch approval processes. Branches with the highest loan growth also show the highest override rates — a compounding risk that the Controls Agent monitors specifically.',
-    metric: 'BR-14 score: 41/100', metricSub: 'STF-1847: 87% override concentration', metricColor: '#A32D2D',
+    metric: 'BR-14 score: 41/100', metricSub: 'STF-1847: 87% override concentration', metricColor: '#C41E3A',
     tier: 3, tierLabel: 'Entity / Behavioural',
     critical: 2, findings: 7,
     keySignal: '4 SoD violations by single approver STF-1847',
@@ -82,7 +82,7 @@ const AGENTS = [
     how: 'Each user has a behavioral baseline score (target: 75/100) built from navigation patterns, typing rhythm, session duration, and transaction sequencing. Sessions that deviate significantly (score <50) are escalated. Impossible travel detection compares login geolocation timestamps against Sri Lanka city-pair travel benchmarks.',
     methods: ['Behavioral Biometrics', 'Impossible Travel Detection', 'Device Fingerprinting', 'Population Stability Index (PSI)', 'MFA Challenge Analysis'],
     ntbContext: 'NTB processes 96%+ of transactions digitally. Each digital session is a potential account takeover vector. The PSI metric is particularly important for the HSBC migration — a sudden influx of 200,000 new accounts will shift the behavioral distribution, requiring model recalibration.',
-    metric: '23 critical sessions', metricSub: '4 impossible travel cases detected', metricColor: '#A32D2D',
+    metric: '23 critical sessions', metricSub: '4 impossible travel cases detected', metricColor: '#C41E3A',
     tier: 1, tierLabel: 'Transaction / Event',
     critical: 23, findings: 312,
     keySignal: 'DEV-A4F7-9921 shared across 4 accounts in SUS-017 network',
@@ -95,7 +95,7 @@ const AGENTS = [
     how: 'Builds a behavioural baseline for each staff member from 14 months of access and approval logs. Any staff member scoring above 40/100 enters watch monitoring; above 70 triggers investigation; above 85 triggers immediate action. The key insight: normal staff have naturally distributed override approval times. Rubber-stamping (< 2 minutes per approval for complex loans) combined with override concentration and off-hours activity is the definitive insider fraud signature.',
     methods: ['6-Dimension Composite Scoring', 'SoD Violation Detection', 'Approval Turnaround Analysis', 'Peer Comparison Engine', 'Override Concentration Index', 'Temporal Pattern Clustering'],
     ntbContext: 'STF-1847 at BR-14 (Ratnapura) scores 94/100 — matching all 6 insider fraud dimensions simultaneously: 4 SoD violations, 87% override concentration, 12 off-hours approvals, 3 same-cluster loan approvals, 1.4-minute average approval time, and corroborating signals from 4 other agents. This is the highest-risk individual in NTB\'s 2,462-staff workforce.',
-    metric: 'STF-1847: 94/100', metricSub: '12 flagged staff · LKR 418M linked exposure', metricColor: '#A32D2D',
+    metric: 'STF-1847: 94/100', metricSub: '12 flagged staff · LKR 418M linked exposure', metricColor: '#C41E3A',
     tier: 3, tierLabel: 'Entity / Behavioural',
     critical: 2, findings: 12,
     keySignal: 'STF-1847 matches all 6 insider fraud dimensions — immediate suspension required',
@@ -108,7 +108,7 @@ const AGENTS = [
     how: 'Most MJE frauds are hidden in plain sight — individually each entry looks plausible. The agent detects combinations: an after-hours round-number entry to a suspense GL where the same person was maker and checker with no supporting documents is the accounting fraud signature. Benford\'s Law applied specifically to journal entry amounts (not transactions) detects sub-threshold structuring in GL postings.',
     methods: ['Full-Population MJE Testing', 'Benford\'s Law (First-Digit)', 'Timing Anomaly Detection', 'Maker-Checker SoD Validation', 'Document Completeness Scoring', 'GL Sensitivity Classification'],
     ntbContext: 'MJE-2026-4205 — a midnight, month-end, round-number LKR 120M entry to Loans Receivable with zero supporting documents and the same staff member as both maker and checker — scores 97/100. This is statistically the most improbable combination of legitimate accounting in the NTB population.',
-    metric: 'MJE-2026-4205: 97/100', metricSub: '5 escalated · 8 Benford failures · LKR 120M', metricColor: '#A32D2D',
+    metric: 'MJE-2026-4205: 97/100', metricSub: '5 escalated · 8 Benford failures · LKR 120M', metricColor: '#C41E3A',
     tier: 1, tierLabel: 'Transaction / Event',
     critical: 5, findings: 847,
     keySignal: 'Digits 4 & 5 over-represented — sub-threshold structuring in GL postings',
@@ -121,7 +121,7 @@ const AGENTS = [
     how: 'Compares declared unit prices against HS code industry benchmarks. Deviations >25% are flagged as potential TBML. Duplicate LC detection identifies overlapping shipment periods on the same borrower. LCR and NSFR are tracked quarterly with trend alerts when either metric deteriorates >10%.',
     methods: ['HS Code Price Benchmarking', 'Duplicate LC Detection', 'NOP Monitoring', 'LCR/NSFR Trend Analysis', 'FATF Counterparty Screening'],
     ntbContext: 'NTB\'s LCR declined from 320.6% to 203.4% in FY2025 — a 37% decline driven by 50% loan growth outpacing stable funding growth. At current trajectory, LCR approaches the CBSL 150% amber threshold by mid-2026.',
-    metric: 'LKR 412 Mn TBML', metricSub: 'NTB-CORP-0887 over-invoiced 91%', metricColor: '#A32D2D',
+    metric: 'LKR 412 Mn TBML', metricSub: 'NTB-CORP-0887 over-invoiced 91%', metricColor: '#C41E3A',
     tier: 2, tierLabel: 'Account / Position',
     critical: 1, findings: 6,
     keySignal: 'LCR declining: 320.6% → 203.4% (–37% in FY2025)',
@@ -240,7 +240,7 @@ function NetworkView() {
 
     // Critical badge
     node.filter(d => d.critical > 0).append('circle')
-      .attr('r', 9).attr('cx', d => d.r - 5).attr('cy', d => -(d.r - 5)).attr('fill', '#A32D2D');
+      .attr('r', 9).attr('cx', d => d.r - 5).attr('cy', d => -(d.r - 5)).attr('fill', '#C41E3A');
     node.filter(d => d.critical > 0).append('text')
       .attr('x', d => d.r - 5).attr('y', d => -(d.r - 5))
       .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
@@ -407,7 +407,7 @@ export default function AgentNetwork() {
                           if (agentCases.length === 0) return null;
                           return (
                             <div onClick={e => { e.stopPropagation(); navigate('/cases', { state: { domain: agent.id } }); }}
-                              style={{ marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', background: '#FEF0F0', border: '1px solid rgba(220,38,38,0.2)', borderRadius: 4, fontSize: 10, fontWeight: 700, color: '#DC2626', cursor: 'pointer' }}>
+                              style={{ marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', background: '#FEF0F0', border: '1px solid rgba(220,38,38,0.2)', borderRadius: 4, fontSize: 10, fontWeight: 700, color: '#C41E3A', cursor: 'pointer' }}>
                               🗂 {agentCases.length} open case{agentCases.length > 1 ? 's' : ''} →
                             </div>
                           );

@@ -96,7 +96,7 @@ const SEVERITIES = ['All', 'critical', 'high', 'medium', 'low'];
 const STATUSES = ['All', 'pending', 'in_progress', 'complete'];
 const DOMAINS = ['All', 'Credit Intelligence', 'Transaction Surveillance', 'Suspense & Reconciliation', 'Identity & KYC / AML', 'Internal Controls', 'Digital Fraud & Identity', 'Trade Finance & Treasury', 'Insider Risk', 'MJE Testing'];
 
-const SEV_COLORS = { critical: '#DC2626', high: '#4A6070', medium: '#185FA5', low: '#16A34A' };
+const SEV_COLORS = { critical: '#C41E3A', high: '#4A6070', medium: '#185FA5', low: '#16A34A' };
 const SEV_BG = { critical: '#FEF0F0', high: '#F3F3F1', medium: '#E8FDF4', low: '#F0FDF4' };
 const STATUS_COLORS = { pending: '#9ca3af', in_progress: '#4A6070', complete: '#16A34A' };
 const STATUS_LABELS = { pending: 'Pending', in_progress: 'In Progress', complete: 'Closed' };
@@ -145,9 +145,9 @@ export default function RiskRegister() {
           {[
             { label: 'Total findings', value: RISK_REGISTER.length, color: '#185FA5' },
             { label: 'Open / In-Progress', value: openCount, color: '#4A6070' },
-            { label: 'Critical open', value: criticalOpen, color: '#DC2626' },
-            { label: 'STR obligations', value: strRequired, color: '#DC2626' },
-            { label: 'Open exposure', value: `LKR ${(exposureOpen / 1e9).toFixed(2)}Bn`, color: '#DC2626', tooltip: 'Total financial exposure across all open and in-progress findings. Excludes resolved findings. Does not include reputational or regulatory penalty exposure.' },
+            { label: 'Critical open', value: criticalOpen, color: '#C41E3A' },
+            { label: 'STR obligations', value: strRequired, color: '#C41E3A' },
+            { label: 'Open exposure', value: `LKR ${(exposureOpen / 1e9).toFixed(2)}Bn`, color: '#C41E3A', tooltip: 'Total financial exposure across all open and in-progress findings. Excludes resolved findings. Does not include reputational or regulatory penalty exposure.' },
           ].map((m, i) => (
             <div key={i} style={{ padding: '10px 14px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 10, borderTop: `3px solid ${m.color}` }}>
               <div style={{ fontSize: 10, color: 'var(--color-text-3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{m.label}</div>
@@ -210,13 +210,13 @@ export default function RiskRegister() {
                 <div style={{ fontSize: 11, color: r.color, fontWeight: 500 }}>{r.domain.split(' ')[0]}</div>
                 <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--color-text)', paddingRight: 12 }}>{r.title}</div>
                 <div style={{ fontSize: 11, color: 'var(--color-text-2)' }}>{r.owner.split(' ')[0]}</div>
-                <div style={{ fontSize: 11, color: od ? '#DC2626' : 'var(--color-text-2)', fontWeight: od ? 700 : 400 }}>
+                <div style={{ fontSize: 11, color: od ? '#C41E3A' : 'var(--color-text-2)', fontWeight: od ? 700 : 400 }}>
                   {od && '⚠ '}{fmt(r.dueDate)}
                 </div>
                 <div>
                   <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: `${stC}18`, color: stC }}>{STATUS_LABELS[r.status]}</span>
                 </div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: r.exposure > 0 ? '#DC2626' : 'var(--color-text-3)', textAlign: 'right' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: r.exposure > 0 ? '#C41E3A' : 'var(--color-text-3)', textAlign: 'right' }}>
                   {r.exposure > 0 ? `${(r.exposure / 1e6).toFixed(0)}M` : '—'}
                 </div>
               </div>
@@ -227,15 +227,15 @@ export default function RiskRegister() {
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
                     <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.7 }}>{r.description}</div>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      {r.strRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#DC2626', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ STR filing required</span>}
-                      {r.cbslRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#DC2626', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ CBSL notification</span>}
+                      {r.strRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#C41E3A', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ STR filing required</span>}
+                      {r.cbslRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#C41E3A', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ CBSL notification</span>}
                       {r.caseRef && <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', background: '#F0F0EE', color: '#3D3C38', borderRadius: 6 }}>Case: {r.caseRef}</span>}
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0, minWidth: 180 }}>
                     <div style={{ fontSize: 11, color: 'var(--color-text-2)' }}>
                       <div style={{ marginBottom: 3 }}>Owner: <strong>{r.owner}</strong></div>
-                      <div style={{ marginBottom: 3 }}>Due: <strong style={{ color: isOverdue(r.dueDate, r.status) ? '#DC2626' : 'var(--color-text)' }}>{fmt(r.dueDate)}</strong></div>
+                      <div style={{ marginBottom: 3 }}>Due: <strong style={{ color: isOverdue(r.dueDate, r.status) ? '#C41E3A' : 'var(--color-text)' }}>{fmt(r.dueDate)}</strong></div>
                       <div>Category: <strong>{r.category}</strong></div>
                     </div>
                     <div style={{ display: 'flex', gap: 6 }}>
@@ -270,9 +270,9 @@ export default function RiskRegister() {
       {/* Remediation velocity */}
       <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
         {[
-          { label: 'Critical findings', total: RISK_REGISTER.filter(r=>r.severity==='critical').length, closed: RISK_REGISTER.filter(r=>r.severity==='critical' && r.status==='complete').length, color: '#DC2626' },
+          { label: 'Critical findings', total: RISK_REGISTER.filter(r=>r.severity==='critical').length, closed: RISK_REGISTER.filter(r=>r.severity==='critical' && r.status==='complete').length, color: '#C41E3A' },
           { label: 'High findings', total: RISK_REGISTER.filter(r=>r.severity==='high').length, closed: RISK_REGISTER.filter(r=>r.severity==='high' && r.status==='complete').length, color: '#4A6070' },
-          { label: 'STR obligations', total: RISK_REGISTER.filter(r=>r.strRequired).length, closed: RISK_REGISTER.filter(r=>r.strRequired && r.status==='complete').length, color: '#DC2626' },
+          { label: 'STR obligations', total: RISK_REGISTER.filter(r=>r.strRequired).length, closed: RISK_REGISTER.filter(r=>r.strRequired && r.status==='complete').length, color: '#C41E3A' },
         ].map((m, i) => {
           const pct = m.total === 0 ? 0 : Math.round((m.closed / m.total) * 100);
           return (

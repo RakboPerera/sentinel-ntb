@@ -10,7 +10,7 @@ const REPORTS = [
   { id:'board', title:'Board Audit Committee Report', subtitle:'Audit opinion, all 9 agent findings, KRI dashboard, management action plan', icon:ShieldCheck, color:'#3D3C38', category:'Executive', pages:16 },
   { id:'credit', title:'SLFRS 9 Staging Review', subtitle:'Full staging analysis, vintage cohort report, sector concentration, ECL impact', icon:BarChart3, color:'#185FA5', category:'Credit', pages:9 },
   { id:'aml', title:'AML & CTF Compliance Report', subtitle:'KYC gaps, STR queue, PEP findings, FATF exposure — for CBSL FIU submission', icon:AlertTriangle, color:'#0F6E56', category:'Compliance', pages:14 },
-  { id:'fraud', title:'Fraud Investigation Summary', subtitle:'BR-14 insider fraud, SUS-017 CEFT scheme, NTB-CORP-0887 TBML — full evidence packages including MJE and Insider Risk findings', icon:AlertTriangle, color:'#A32D2D', category:'Fraud', pages:22 },
+  { id:'fraud', title:'Fraud Investigation Summary', subtitle:'BR-14 insider fraud, SUS-017 CEFT scheme, NTB-CORP-0887 TBML — full evidence packages including MJE and Insider Risk findings', icon:AlertTriangle, color:'#C41E3A', category:'Fraud', pages:22 },
   { id:'liquidity', title:'ALCO Liquidity Report', subtitle:'LCR/NSFR trend, NOP summary, treasury limit breach log, stabilisation options', icon:TrendingDown, color:'#3B6D11', category:'Treasury', pages:7 },
   { id:'controls', title:'Branch Controls Assessment', subtitle:'Branch risk scores — all 90 branches, override analysis, SoD violations, MJE audit, Insider Risk profiles, remediation roadmap', icon:ShieldCheck, color:'#3A5A3A', category:'Operations', pages:28 },
 ];
@@ -105,7 +105,7 @@ function buildReport(reportId) {
       { title:'5. REGULATORY SUBMISSIONS REQUIRED', content:'STR 1: NTB-0841-X — structuring (15 CEFT transfers LKR 71.25M) — deadline 5 working days from 2025-12-20\nSTR 2: SUS-017 CEFT network — phantom receivable scheme — FILED: FIU-STR-2025-1847\nSTR 3: NTB-CORP-0887 — TBML over-invoicing — deadline 2025-12-26\nCBSL notification: BR-14 material fraud (>LKR 250M) — PENDING\nCBSL notification: SUS-017 CBSL 90-day breach — FILED 2025-12-22' },
     ],
     fraud: [
-      { title:'FRAUD INVESTIGATION OPINION', type:'mini_opinion', text:'Three confirmed fraud cases require board awareness and executive action. The convergence of Insider Risk, Internal Controls, MJE Testing, Credit Intelligence, KYC, and Digital Fraud agents on common entities (STF-1847, BR-14, SUS-017) provides multi-source evidentiary support that is highly defensible in regulatory and legal proceedings.', classification:'3 ACTIVE INVESTIGATIONS', classColor:'#DC2626' },
+      { title:'FRAUD INVESTIGATION OPINION', type:'mini_opinion', text:'Three confirmed fraud cases require board awareness and executive action. The convergence of Insider Risk, Internal Controls, MJE Testing, Credit Intelligence, KYC, and Digital Fraud agents on common entities (STF-1847, BR-14, SUS-017) provides multi-source evidentiary support that is highly defensible in regulatory and legal proceedings.', classification:'3 ACTIVE INVESTIGATIONS', classColor:'#C41E3A' },
       { title:'CASE 1: BR-14 INSIDER-ENABLED LOAN FRAUD', content:'Fraud type: Insider-enabled loan fraud\nPrimary actor: STF-1847 (Senior Loans Officer, Ratnapura branch)\nInsider Risk score: 94/100 — all 6 dimensions simultaneously\nExposure: LKR 387 Mn (11 override-approved anomalous loans)\nSoD violations: 4 confirmed (same person as maker and approver)\nOff-hours approvals: 12 (22.1% of BR-14 approvals, vs network avg 4.0%)\nApproval turnaround: 1.4 min avg — impossible for genuine credit review on complex loans\nSame-cluster approvals: 3 loans to borrowers sharing guarantor addresses\nMJE involvement: MJE-2026-4201 and MJE-2026-4202 — after-hours SoD violations by STF-1847 to suspense GL\nAgent confirmation: Controls, Credit, KYC, Digital Fraud, Insider Risk, MJE Testing, Orchestrator (9 agents)\nCombined severity: 0.98/1.00\nStatus: Investigation in progress. STF-1847 suspended. Field team at BR-14.' },
       { title:'CASE 2: SUS-017 CEFT PHANTOM RECEIVABLE', content:`Fraud type: CEFT payment fraud — phantom receivable scheme\nAccount: SUS-017 (Pettah Main Street CEFT Receivables)\nBalance: LKR 1.24 Bn\nGrowth: +312% in 30 days\nClearing ratio: 0.08 (benchmark for legitimate CEFT account: 0.95+)\nAging: 94 days — CBSL 90-day guideline breached\nStructuring: 15 CEFT transfers, amounts LKR 4.6M–4.95M (below LKR 5M STR threshold)\nDevice cluster: DEV-A4F7-9921 shared across 4 accounts in counterparty network\nSTR filed: FIU-STR-2025-1847\nAgent confirmation: Suspense, Transaction, Digital Fraud, Orchestrator\nCombined severity: 0.99/1.00\nStatus: Account frozen. STR filed. Forensic review in progress.` },
       { title:'CASE 3: NTB-CORP-0887 TBML', content:`Fraud type: Trade-based money laundering\nEntity: NTB-CORP-0887 (corporate customer)\nTBML method: Over-invoicing on HS 6203 apparel exports\nDeviation: 91% above UN COMTRADE median (USD 8.40/kg benchmark; declared USD 16.04/kg)\nDuplicate LCs: LC-2025-3341 and LC-3412 on overlapping shipment periods\nBeneficial ownership: Not disclosed\nTotal suspicious flow: LKR 421 Mn\nSTR status: Pending — deadline 2025-12-26\nAgent confirmation: Trade Finance, Transaction Surveillance, KYC/AML\nCombined severity: 0.94/1.00\nStatus: Facilities suspended. Beneficial ownership declaration requested.` },
@@ -145,7 +145,7 @@ function ReportRenderer({ report }) {
             <div style={{ fontSize:12, color:'var(--color-text-2)' }}>Period: {PERIOD} · Generated: {TODAY}</div>
           </div>
           <div style={{ textAlign:'right' }}>
-            <div style={{ fontSize:11, fontWeight:700, color:'#DC2626', padding:'3px 10px', background:'var(--color-red-light)', borderRadius:4 }}>CONFIDENTIAL</div>
+            <div style={{ fontSize:11, fontWeight:700, color:'#C41E3A', padding:'3px 10px', background:'var(--color-red-light)', borderRadius:4 }}>CONFIDENTIAL</div>
             <div style={{ fontSize:10, color:'var(--color-text-3)', marginTop:4 }}>Sentinel by Octave</div>
           </div>
         </div>
@@ -192,7 +192,7 @@ function ReportRenderer({ report }) {
                   const val = line.slice(colonIdx+1).trim();
                   return <div key={li} style={{ display:'grid', gridTemplateColumns:'200px 1fr', gap:8, padding:'7px 16px', borderBottom:'1px solid var(--color-border)', alignItems:'baseline' }}>
                     <span style={{ fontSize:11, fontWeight:600, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.04em' }}>{key}</span>
-                    <span style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.5, fontWeight: val.includes('CRITICAL') || val.includes('CONFIRMED') ? 700 : 400, color: val.includes('CRITICAL') ? '#DC2626' : val.includes('HIGH') ? '#4A6070' : val.includes('EFFECTIVE') ? '#16A34A' : 'var(--color-text)' }}>{val}</span>
+                    <span style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.5, fontWeight: val.includes('CRITICAL') || val.includes('CONFIRMED') ? 700 : 400, color: val.includes('CRITICAL') ? '#C41E3A' : val.includes('HIGH') ? '#4A6070' : val.includes('EFFECTIVE') ? '#16A34A' : 'var(--color-text)' }}>{val}</span>
                   </div>;
                 }
                 return <div key={li} style={{ padding:'6px 16px', fontSize:12, color:'var(--color-text-2)', lineHeight:1.6, borderBottom:'1px solid rgba(0,0,0,0.04)' }}>{line}</div>;
@@ -216,8 +216,8 @@ function ReportRenderer({ report }) {
                     <tr key={fi} style={{ borderBottom:'1px solid var(--color-border)', background:fi%2===0?'transparent':'var(--color-surface-2)' }}>
                       <td style={{ padding:'8px 10px' }}><code style={{ fontSize:10, color:'var(--color-text-3)' }}>{f.ref}</code></td>
                       <td style={{ padding:'8px 10px', fontSize:11, lineHeight:1.5, maxWidth:300 }}>{f.finding}</td>
-                      <td style={{ padding:'8px 10px' }}><span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', borderRadius:4, background:f.severity==='Critical'?'#FEF0F0':'#F3F3F1', color:f.severity==='Critical'?'#DC2626':'#4A6070' }}>{f.severity}</span></td>
-                      <td style={{ padding:'8px 10px', fontSize:11, fontWeight:700, color:'#DC2626', whiteSpace:'nowrap' }}>{f.exposure}</td>
+                      <td style={{ padding:'8px 10px' }}><span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', borderRadius:4, background:f.severity==='Critical'?'#FEF0F0':'#F3F3F1', color:f.severity==='Critical'?'#C41E3A':'#4A6070' }}>{f.severity}</span></td>
+                      <td style={{ padding:'8px 10px', fontSize:11, fontWeight:700, color:'#C41E3A', whiteSpace:'nowrap' }}>{f.exposure}</td>
                       <td style={{ padding:'8px 10px', fontSize:11, color:'var(--color-text-2)' }}>{f.agents}</td>
                       <td style={{ padding:'8px 10px', fontSize:11 }}>{f.owner}</td>
                       <td style={{ padding:'8px 10px', fontSize:10, color:'var(--color-text-2)' }}>{f.status}</td>
@@ -241,7 +241,7 @@ function ReportRenderer({ report }) {
                 </thead>
                 <tbody>
                   {section.kris.map((k,ki) => {
-                    const sc = { Green:'#16A34A', Amber:'#4A6070', Red:'#DC2626' }[k.status] || '#6b6963';
+                    const sc = { Green:'#16A34A', Amber:'#4A6070', Red:'#C41E3A' }[k.status] || '#6b6963';
                     return (
                       <tr key={ki} style={{ borderBottom:'1px solid var(--color-border)' }}>
                         <td style={{ padding:'8px 10px', fontWeight:600 }}>{k.metric}</td>
@@ -277,7 +277,7 @@ function ReportRenderer({ report }) {
                         <td style={{ padding:'8px 10px', fontSize:10, color:'var(--color-text-3)' }}>{a.finding}</td>
                         <td style={{ padding:'8px 10px', lineHeight:1.5, maxWidth:280 }}>{a.action}</td>
                         <td style={{ padding:'8px 10px', color:'var(--color-text-2)' }}>{a.owner}</td>
-                        <td style={{ padding:'8px 10px', whiteSpace:'nowrap', color:new Date(a.due)<new Date('2026-01-01')&&a.status!=='Resolved'?'#DC2626':'var(--color-text-2)' }}>{a.due}</td>
+                        <td style={{ padding:'8px 10px', whiteSpace:'nowrap', color:new Date(a.due)<new Date('2026-01-01')&&a.status!=='Resolved'?'#C41E3A':'var(--color-text-2)' }}>{a.due}</td>
                         <td style={{ padding:'8px 10px' }}><span style={{ fontSize:10, fontWeight:600, padding:'2px 7px', borderRadius:4, background:`${sc}15`, color:sc }}>{a.status}</span></td>
                       </tr>
                     );

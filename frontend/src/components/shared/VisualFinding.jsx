@@ -3,7 +3,7 @@ import { AlertTriangle, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import InfoTooltip from './InfoTooltip.jsx';
 
 const SEV_STYLES = {
-  critical: { bg: 'var(--color-red-light)', border: 'rgba(163,45,45,0.25)', color: 'var(--color-red)', label: 'Critical', dot: '#A32D2D' },
+  critical: { bg: 'var(--color-red-light)', border: 'rgba(163,45,45,0.25)', color: 'var(--color-red)', label: 'Critical', dot: '#C41E3A' },
   high:     { bg: '#FFF8F0', border: 'rgba(133,79,11,0.2)', color: '#3A5A3A', label: 'High', dot: '#26EA9F' },
   medium:   { bg: 'var(--color-blue-light)', border: 'rgba(24,95,165,0.2)', color: 'var(--color-blue)', label: 'Medium', dot: '#185FA5' },
   low:      { bg: 'var(--color-gray-light)', border: 'rgba(95,94,90,0.15)', color: 'var(--color-gray)', label: 'Low', dot: '#6b6963' },
@@ -11,7 +11,7 @@ const SEV_STYLES = {
 
 function SeverityBar({ score, color }) {
   const pct = Math.min(100, Math.max(0, score * 100));
-  const c = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#26EA9F' : '#3B6D11';
+  const c = score >= 0.85 ? '#C41E3A' : score >= 0.65 ? '#26EA9F' : '#3B6D11';
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'var(--color-border)' }}>
@@ -41,7 +41,7 @@ export function MetricSpotlight({ items, color }) {
   );
 }
 
-export function ChartAnnotation({ x, y, text, color = '#A32D2D', position = 'top' }) {
+export function ChartAnnotation({ x, y, text, color = '#C41E3A', position = 'top' }) {
   const posStyle = position === 'top'
     ? { bottom: '100%', left: x, marginBottom: 4 }
     : { top: '100%', left: x, marginTop: 4 };
@@ -57,7 +57,7 @@ export function InfoBox({ title, children, variant = 'info', tooltip }) {
   const variants = {
     info:    { bg: 'var(--color-blue-light)', border: 'rgba(24,95,165,0.2)', icon: '#185FA5' },
     warning: { bg: '#E8FDF4', border: 'rgba(133,79,11,0.2)', icon: '#3A5A3A' },
-    danger:  { bg: 'var(--color-red-light)', border: 'rgba(163,45,45,0.2)', icon: '#A32D2D' },
+    danger:  { bg: 'var(--color-red-light)', border: 'rgba(163,45,45,0.2)', icon: '#C41E3A' },
     success: { bg: 'var(--color-green-light)', border: 'rgba(59,109,17,0.2)', icon: '#3B6D11' },
     subtle:  { bg: 'var(--color-surface-2)', border: 'var(--color-border)', icon: 'var(--color-text-3)' },
   };

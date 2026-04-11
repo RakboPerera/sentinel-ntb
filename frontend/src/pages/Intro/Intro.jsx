@@ -23,9 +23,9 @@ const STATS = [
 ];
 
 const CASES = [
-  { id:'CASE-001', title:'BR-14 Insider-Enabled Loan Fraud', color:'#DC2626', sev:'critical', exposure:'LKR 387M', agents:6 },
-  { id:'CASE-002', title:'SUS-017 CEFT Phantom Receivable',  color:'#DC2626', sev:'critical', exposure:'LKR 1.24Bn', agents:3 },
-  { id:'CASE-003', title:'NTB-CORP-0887 Trade-Based Money Laundering', color:'#DC2626', sev:'critical', exposure:'LKR 421M', agents:3 },
+  { id:'CASE-001', title:'BR-14 Insider-Enabled Loan Fraud', color:'#C41E3A', sev:'critical', exposure:'LKR 387M', agents:6 },
+  { id:'CASE-002', title:'SUS-017 CEFT Phantom Receivable',  color:'#C41E3A', sev:'critical', exposure:'LKR 1.24Bn', agents:3 },
+  { id:'CASE-003', title:'NTB-CORP-0887 Trade-Based Money Laundering', color:'#C41E3A', sev:'critical', exposure:'LKR 421M', agents:3 },
 ];
 
 const WORKFLOW = [
@@ -152,8 +152,8 @@ export default function Intro() {
         {/* Live alert card */}
         <div style={{ background:'#FAFAF8', border:'1px solid #E8E6DF', borderRadius:16, overflow:'hidden', boxShadow:'0 16px 48px rgba(0,0,0,0.07)' }}>
           <div style={{ padding:'11px 16px', borderBottom:'1px solid #E8E6DF', display:'flex', alignItems:'center', gap:8, background:'white' }}>
-            <div style={{ width:7, height:7, borderRadius:'50%', background:'#DC2626' }} />
-            <span style={{ fontSize:10, fontWeight:700, color:'#DC2626', letterSpacing:'0.07em', textTransform:'uppercase' }}>Live — 3 Critical Alerts</span>
+            <div style={{ width:7, height:7, borderRadius:'50%', background:'#C41E3A' }} />
+            <span style={{ fontSize:10, fontWeight:700, color:'#C41E3A', letterSpacing:'0.07em', textTransform:'uppercase' }}>Live — 3 Critical Alerts</span>
             <span style={{ marginLeft:'auto', fontSize:10, color:'#9c9890' }}>Command Centre</span>
           </div>
           {LIVE_ALERTS.map((a,i) => (
@@ -165,9 +165,9 @@ export default function Intro() {
               <p style={{ fontSize:11, color:'#4b4a47', lineHeight:1.55, margin:'0 0 7px' }}>{a.text}</p>
               <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                 <div style={{ flex:1, height:3, borderRadius:2, background:'#F4F3EF', overflow:'hidden' }}>
-                  <div style={{ width:`${a.score*100}%`, height:'100%', background:'#DC2626', borderRadius:2 }} />
+                  <div style={{ width:`${a.score*100}%`, height:'100%', background:'#C41E3A', borderRadius:2 }} />
                 </div>
-                <span style={{ fontSize:10, fontWeight:800, color:'#DC2626', fontVariantNumeric:'tabular-nums' }}>{a.score.toFixed(2)}</span>
+                <span style={{ fontSize:10, fontWeight:800, color:'#C41E3A', fontVariantNumeric:'tabular-nums' }}>{a.score.toFixed(2)}</span>
               </div>
             </div>
           ))}
@@ -190,9 +190,9 @@ export default function Intro() {
           <div>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
               {[
-                { label:'Traditional audit cycle', value:'15 weeks', sub:'Planning to final report', color:'#DC2626', bg:'#FEF0F0' },
+                { label:'Traditional audit cycle', value:'15 weeks', sub:'Planning to final report', color:'#C41E3A', bg:'#FEF0F0' },
                 { label:'Sentinel detection', value:'6m 58s', sub:'Signal to account freeze', color:'#16A34A', bg:'#F0FDF4' },
-                { label:'Traditional coverage', value:'3–5%', sub:'Portfolio sampling rate', color:'#DC2626', bg:'#FEF0F0' },
+                { label:'Traditional coverage', value:'3–5%', sub:'Portfolio sampling rate', color:'#C41E3A', bg:'#FEF0F0' },
                 { label:'Sentinel coverage', value:'100%', sub:'Every record, every cycle', color:'#16A34A', bg:'#F0FDF4' },
               ].map((s,i) => (
                 <div key={i} style={{ padding:'20px', background:s.bg, borderRadius:12, border:`1px solid ${s.color}22` }}>

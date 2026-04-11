@@ -39,7 +39,7 @@ export function StatCard({ label, value, sub, color, tooltip, trend, trendLabel,
 // Gradient horizontal bar for anomaly / risk scores (0.0 – 1.0)
 export function ScoreBar({ score, width = 72, height = 8, showLabel = true, tooltip }) {
   const pct = Math.min(Math.max(score, 0), 1) * 100;
-  const color = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#26EA9F' : '#3B6D11';
+  const color = score >= 0.85 ? '#C41E3A' : score >= 0.65 ? '#26EA9F' : '#3B6D11';
   const label = score >= 0.85 ? 'Critical' : score >= 0.65 ? 'Elevated' : 'Normal';
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -47,7 +47,7 @@ export function ScoreBar({ score, width = 72, height = 8, showLabel = true, tool
         ? <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}><InfoTooltip text={tooltip} width={220} position="top" /></div>
         : null}
       <div style={{ width, height, borderRadius: height / 2, background: 'var(--color-surface-2)', flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`, borderRadius: height / 2, background: `linear-gradient(90deg, #3B6D11 0%, #26EA9F 60%, #A32D2D 100%)`, clipPath: `inset(0 ${100 - pct}% 0 0)`, transition: 'width 0.6s ease' }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct}%`, borderRadius: height / 2, background: `linear-gradient(90deg, #3B6D11 0%, #26EA9F 60%, #C41E3A 100%)`, clipPath: `inset(0 ${100 - pct}% 0 0)`, transition: 'width 0.6s ease' }} />
       </div>
       {showLabel && (
         <span style={{ fontSize: 11, fontWeight: 700, color, minWidth: 32, fontVariantNumeric: 'tabular-nums' }}>{score.toFixed(2)}</span>
@@ -64,7 +64,7 @@ export function RiskGauge({ score, maxScore = 100, label, color, size = 100 }) {
   const circ = Math.PI * r;
   const dash = pct * circ;
   const gap = circ - dash;
-  const gaugeColor = pct >= 0.75 ? '#A32D2D' : pct >= 0.5 ? '#26EA9F' : '#3B6D11';
+  const gaugeColor = pct >= 0.75 ? '#C41E3A' : pct >= 0.5 ? '#26EA9F' : '#3B6D11';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
       <svg width={size} height={size / 2 + 10} viewBox={`0 0 ${size} ${size / 2 + 10}`} style={{ overflow: 'visible' }}>
@@ -85,7 +85,7 @@ export function RiskGauge({ score, maxScore = 100, label, color, size = 100 }) {
 export function FindingCard({ finding, agentColor, index }) {
   const [expanded, setExpanded] = useState(false);
   const sev = finding.severity;
-  const sevColor = sev === 'critical' ? '#A32D2D' : sev === 'high' ? '#3A5A3A' : '#185FA5';
+  const sevColor = sev === 'critical' ? '#C41E3A' : sev === 'high' ? '#3A5A3A' : '#185FA5';
   const sevBg = sev === 'critical' ? '#FCEBEB' : sev === 'high' ? '#E8FDF4' : '#E6F1FB';
   const exposure = finding.affected_exposure_lkr || finding.affected_balance_lkr || finding.estimated_exposure_lkr || 0;
 
@@ -135,7 +135,7 @@ export function FindingCard({ finding, agentColor, index }) {
 
 // ─── STAGE BADGE ───────────────────────────────────────────────────────────────
 export function StageBadge({ stage, predicted }) {
-  const colors = { 1: ['#185FA5', '#E6F1FB'], 2: ['#3A5A3A', '#E8FDF4'], 3: ['#A32D2D', '#FCEBEB'] };
+  const colors = { 1: ['#185FA5', '#E6F1FB'], 2: ['#3A5A3A', '#E8FDF4'], 3: ['#C41E3A', '#FCEBEB'] };
   const [c, bg] = colors[stage] || ['#6b6963', '#f1efea'];
   const isMisstaged = predicted && predicted !== stage;
   return (
@@ -143,8 +143,8 @@ export function StageBadge({ stage, predicted }) {
       <span style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: bg, color: c, border: `1px solid ${c}22` }}>S{stage}</span>
       {isMisstaged && (
         <>
-          <span style={{ fontSize: 10, color: '#A32D2D' }}>→</span>
-          <span style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: '#FCEBEB', color: '#A32D2D', border: '1px solid rgba(163,45,45,0.2)' }}>S{predicted}</span>
+          <span style={{ fontSize: 10, color: '#C41E3A' }}>→</span>
+          <span style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: '#FCEBEB', color: '#C41E3A', border: '1px solid rgba(163,45,45,0.2)' }}>S{predicted}</span>
         </>
       )}
     </div>
@@ -169,7 +169,7 @@ export function ChartTooltip({ active, payload, label, formatter, labelPrefix = 
 }
 
 // ─── REFERENCE LINE ANNOTATION ──────────────────────────────────────────────────
-export function ReferenceAnnotation({ label, color = '#A32D2D' }) {
+export function ReferenceAnnotation({ label, color = '#C41E3A' }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color }}>
       <div style={{ width: 24, height: 1.5, background: color, borderTop: `1.5px dashed ${color}` }} />
@@ -219,7 +219,7 @@ export function MetricRow({ label, value, subValue, color, bar, barMax = 100, to
 // ─── URGENCY BADGE ─────────────────────────────────────────────────────────────
 export function UrgencyBadge({ urgency }) {
   const map = {
-    immediate: { bg: '#FCEBEB', color: '#A32D2D', label: '⚡ Immediate' },
+    immediate: { bg: '#FCEBEB', color: '#C41E3A', label: '⚡ Immediate' },
     within_24h: { bg: '#E8FDF4', color: '#3A5A3A', label: '🕐 Within 24h' },
     within_72h: { bg: '#E6F1FB', color: '#185FA5', label: '📅 Within 72h' },
     within_week: { bg: '#EAF3DE', color: '#3B6D11', label: '📆 Within week' },
@@ -231,7 +231,7 @@ export function UrgencyBadge({ urgency }) {
 // ─── RISK TIER BADGE ────────────────────────────────────────────────────────────
 export function RiskTierBadge({ tier }) {
   const map = {
-    critical: '#A32D2D', red: '#CF4343', amber: '#26EA9F',
+    critical: '#C41E3A', red: '#CF4343', amber: '#26EA9F',
     high: '#3A5A3A', medium: '#185FA5', green: '#3B6D11', watch: '#3D3C38',
   };
   const color = map[tier?.toLowerCase()] || '#6b6963';
