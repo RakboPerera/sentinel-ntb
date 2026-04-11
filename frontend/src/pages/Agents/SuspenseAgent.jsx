@@ -170,6 +170,7 @@ export default function SuspenseAgent() {
                 {/* Re-aging detection */}
                 <PanelWithMethod
                   title="Re-aging Detection"
+                tooltip="Re-aging is a fraud technique where an old suspense balance is reversed and re-posted with a new date — resetting the aging clock to hide the true age of the liability. The agent detects this by tracking the original creation date versus the posted date."
                   methodology="Re-aging occurs when aged entries are reversed and reposted to reset the aging clock — commonly used to avoid CBSL 90-day breach reporting. The agent detects this by tracking the original posting date vs re-entry date across the GL journal history. Any re-aging within 15 days of the CBSL threshold is flagged as potential concealment."
                   agentColor={COLOR}
                   tooltip="Re-aging via reversal-repost is one of the most common techniques used to conceal aged suspense balances from regulators and auditors."

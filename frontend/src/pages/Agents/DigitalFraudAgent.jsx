@@ -85,6 +85,7 @@ export default function DigitalFraudAgent() {
                 {/* PSI explainer */}
                 <PanelWithMethod
                   title="Population Stability Index (PSI)"
+                tooltip="PSI measures whether today\'s user population behaves like the model\'s training population. PSI > 0.10 = minor drift (flag). PSI > 0.20 = significant drift (urgent recalibration). Critical ahead of the HSBC migration."
                   methodology="PSI measures whether the distribution of behavioral scores in the current population matches the distribution used to train the model. PSI < 0.10 = stable (no action). PSI 0.10–0.20 = minor shift (flag for review). PSI > 0.20 = significant drift (urgent recalibration). The HSBC migration will add 200,000 new accounts with unknown behavioral baselines — PSI monitoring is critical in Q2 2026."
                   agentColor={COLOR}
                   tooltip="PSI > 0.10 means model drift — the current population behaves differently from the training population, potentially causing false positives or missed fraud."
@@ -112,6 +113,7 @@ export default function DigitalFraudAgent() {
                 {/* Device sharing */}
                 <PanelWithMethod
                   title="Device Sharing Clusters"
+                tooltip="One device ID accessing 3+ distinct accounts is a money mule network indicator or credential theft. Legitimate shared devices (family plans) show consistent behavioral profiles across accounts — these do not."
                   methodology="Device fingerprinting maps each device ID to the accounts that use it. A single device ID accessing 3+ distinct accounts is a strong indicator of either account sharing within a money mule network or credential theft enabling multi-account access from one device. Cross-referenced with Transaction Agent suspicious accounts."
                   agentColor={COLOR}
                 >
@@ -136,6 +138,7 @@ export default function DigitalFraudAgent() {
                 {/* Impossible travel */}
                 <PanelWithMethod
                   title="Impossible Travel Cases"
+                tooltip="Two consecutive logins to the same account where elapsed time < minimum travel time between the two geolocated cities. A passed MFA in the second session indicates OTP theft — likely SIM swap fraud."
                   methodology="Each login is geolocated via IP. Consecutive sessions for the same account are compared against a Sri Lanka city-pair travel time matrix (road and air). If elapsed time < minimum travel time, the case is flagged. MFA passing in the impossible session indicates OTP compromise — likely SIM swap."
                   agentColor={COLOR}
                 >
@@ -166,6 +169,7 @@ export default function DigitalFraudAgent() {
               {/* Anomalous sessions */}
               <PanelWithMethod
                 title="Anomalous Sessions"
+                tooltip="Sessions risk-scored 0-1 combining: behavioral biometrics (40%), device registration (20%), geographic impossibility (25%), MFA outcome (15%). Above 0.75 = flagged. Above 0.85 = critical."
                 methodology="Each session is risk-scored 0.0–1.0 combining: behavioral biometric score (weighted 40%), device registration status (20%), geographic impossibility (25%), MFA outcome (15%). Sessions above 0.75 are flagged; above 0.85 are critical. Click any session to see its full behavioral profile."
                 agentColor={COLOR}
               >

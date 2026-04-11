@@ -558,7 +558,11 @@ export default function CaseManager() {
             const colCases = filtered.filter(c => getStatus(c)===col);
             return (
               <div key={col} className="kanban-col">
-                <div className="kanban-col-header"><span style={{ color:COL_COLORS[col] }}>{COL_LABELS[col]}</span><span className="kanban-count">{colCases.length}</span></div>
+                <div className="kanban-col-header">
+                <span style={{ color:COL_COLORS[col] }}>{COL_LABELS[col]}</span>
+                <InfoTooltip text={{'open':'New — assigned but not yet actively investigated. Critical cases: 4-hour SLA.','investigating':'Active investigation. Evidence gathering, interviews, STR assessment underway.','resolved':'All steps complete, evidence obtained, management response recorded.','closed':'Formally closed. Audit trail preserved.'}[col] || ''} position="bottom" width={220} />
+                <span className="kanban-count" style={{ marginLeft:'auto' }}>{colCases.length}</span>
+              </div>
                 {colCases.map(c => {
                   const sc2 = CASE_SEV_COLOR[c.severity] || '#185FA5';
                   const d2 = CASE_DETAIL[c.id] || {};

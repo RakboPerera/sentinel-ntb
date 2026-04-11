@@ -147,7 +147,7 @@ export default function RiskRegister() {
             { label: 'Open / In-Progress', value: openCount, color: '#D97706' },
             { label: 'Critical open', value: criticalOpen, color: '#DC2626' },
             { label: 'STR obligations', value: strRequired, color: '#DC2626' },
-            { label: 'Open exposure', value: `LKR ${(exposureOpen / 1e9).toFixed(2)}Bn`, color: '#DC2626' },
+            { label: 'Open exposure', value: `LKR ${(exposureOpen / 1e9).toFixed(2)}Bn`, color: '#DC2626', tooltip: 'Total financial exposure across all open and in-progress findings. Excludes resolved findings. Does not include reputational or regulatory penalty exposure.' },
           ].map((m, i) => (
             <div key={i} style={{ padding: '10px 14px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 10, borderTop: `3px solid ${m.color}` }}>
               <div style={{ fontSize: 10, color: 'var(--color-text-3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{m.label}</div>

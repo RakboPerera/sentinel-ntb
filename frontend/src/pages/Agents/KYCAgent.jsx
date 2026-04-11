@@ -60,6 +60,7 @@ export default function KYCAgent() {
 
                 <PanelWithMethod
                   title="KYC Gap Rate vs Threshold"
+                tooltip="Gap rate = accounts with material KYC gaps ÷ total accounts. Green threshold: <2%. Amber: 2–5%. Red: >5%. The 4.7% rate is in amber — CBSL considers remediation mandatory above 2%."
                   methodology="The KYC gap rate is computed as: accounts with any CDD gap ÷ total accounts. Green threshold: <2%. Amber: 2–5%. Red: >5%. The 4.7% rate sits in amber. The HSBC migration will add 200,000+ accounts requiring KYC verification before Q2 2026 integration — this is the critical remediation window."
                   agentColor={COLOR}
                   tooltip="Gap rate = accounts with material KYC gaps ÷ total accounts. Threshold: 2% green, 5% red."
@@ -73,6 +74,7 @@ export default function KYCAgent() {
 
                 <PanelWithMethod
                   title="Introducer Concentration Flags"
+                tooltip="An introducer who brought in >15% of accounts with KYC gaps is statistically anomalous — either negligent or deliberately bypassing onboarding controls. Cross-referenced against Credit Agent flagged borrowers."
                   methodology="Rule: Flag any introducer where KYC gap rate exceeds 15% of their introduced accounts AND at least 3 accounts have gaps. High concentrations suggest either deliberately weak onboarding (to obscure beneficial ownership) or systematic negligence by that introducer. Cross-referenced against Credit Agent flagged borrowers."
                   agentColor={COLOR}
                 >

@@ -233,6 +233,7 @@ export default function TradeTreasuryAgent() {
           {/* Pricing anomalies detail */}
           <PanelWithMethod
             title="Invoice Pricing Anomalies — TBML Detection"
+                tooltip="Declared invoice price vs UN COMTRADE + Sri Lanka Customs median for that HS code. >25% deviation in either direction is a TBML flag. Over-invoicing extracts value abroad. Under-invoicing injects value informally."
             methodology="Each invoice's declared unit price is benchmarked against the HS code median from UN COMTRADE and Sri Lanka Customs. Over-invoicing: declared >25% above benchmark — exporter paid too much in forex, likely extracting value abroad. Under-invoicing: declared >25% below benchmark — the difference transferred through informal channels."
             agentColor={COLOR}
             tooltip="HS code benchmarking flags invoices where declared unit price deviates >25% from commodity market median."

@@ -99,6 +99,7 @@ export default function InternalControlsAgent() {
             <div className="agent-grid">
               <PanelWithMethod
                 title="6-Dimension Radar — BR-14 vs BR-23 vs Network"
+                tooltip="Each branch is scored on 6 independent control dimensions. A branch that scores high across ALL 6 simultaneously is exhibiting the insider fraud pattern."
                 methodology="Each branch is scored on 6 independent control dimensions. The radar chart compares the two highest-risk branches against the network average. A branch that scores high across ALL 6 dimensions simultaneously is exhibiting the insider fraud pattern — no single dimension alone is sufficient."
                 agentColor={COLOR}
               >
@@ -131,6 +132,7 @@ export default function InternalControlsAgent() {
               <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
                 <PanelWithMethod
                   title="Branch Risk Scores — All Flagged Branches"
+                tooltip="Composite score 0-100: Override rate (25%), SoD violations (20%), approval turnaround (15%), off-hours (15%), approver concentration (15%), temporal clustering (10%). Below 65 = audit intervention. Below 50 = immediate field investigation."
                   methodology="The 6-dimension composite is weighted: Override rate 25%, SoD violations 20%, approval turnaround 15%, off-hours 15%, approver concentration 15%, override temporal clustering 10%. A score below 65/100 triggers audit intervention; below 50 triggers immediate field investigation."
                   agentColor={COLOR}
                 >
@@ -141,6 +143,7 @@ export default function InternalControlsAgent() {
 
                 <PanelWithMethod
                   title="SoD Violations — All Instances"
+                tooltip="SoD (Segregation of Duties): the same person cannot both initiate AND approve the same transaction. Any SoD violation is a critical control failure under CBSL Direction No. 5/2024."
                   methodology="A SoD violation occurs when the same staff_id appears as both initiator and approver on the same transaction. Even one instance is a critical control failure. Four instances by the same individual at the same branch — plus 87% override concentration — is consistent only with deliberate circumvention."
                   agentColor={COLOR}
                 >
@@ -164,6 +167,7 @@ export default function InternalControlsAgent() {
             {/* Flagged approvers */}
             <PanelWithMethod
               title="Flagged Approver Profiles"
+                tooltip="Staff members flagged on 3+ of 5 dimensions: override count, concentration, SoD violations, same-cluster approvals, off-hours approvals. A staff member triggering all 5 simultaneously is the insider fraud signature."
               methodology="Each approver is scored on 5 behaviours: override count, override concentration (share of total branch overrides), SoD violations, same-cluster approvals (loans to connected borrowers), and off-hours approvals. A staff member triggering 3+ of these simultaneously is flagged for investigation."
               agentColor={COLOR}
             >

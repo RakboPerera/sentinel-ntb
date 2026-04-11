@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Play, Pause, RotateCcw, ChevronLeft, Zap, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 
 // ─── SCENARIO DATA ────────────────────────────────────────────────────────────
 
@@ -527,8 +528,9 @@ export default function ScenarioPlayer() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {/* Severity meter */}
           <div style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 12, padding: '16px', textAlign: 'center' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-2)', marginBottom: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-2)', marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
               Combined Severity
+              <InfoTooltip text="The Orchestrator combines individual agent scores using: max(scores) + 0.15 per additional confirming agent. A combined score above 0.95 triggers automatic case opening and management escalation. Multi-agent confirmation is statistically far stronger than any single-agent finding." position="bottom" width={280} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
               <SeverityMeter value={currentSeverity} color={color} size={110} />

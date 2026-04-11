@@ -975,6 +975,18 @@ function RegulatoryView({ navigate }) {
 
 
 
+// KRI tile navigation — each KRI routes to the specific case/page
+const KRI_ROUTE_FN = (navigate) => ({
+  'Stage 3 Ratio':          () => navigate('/cases', { state: { caseId: 'CASE-001', domain: 'credit' } }),
+  'LCR (All Currency)':     () => navigate('/agents/trade'),
+  'Loan Growth YoY':        () => navigate('/agents/credit'),
+  'Network Override Rate':  () => navigate('/cases', { state: { caseId: 'CASE-001', domain: 'controls' } }),
+  'KYC Gap Rate':           () => navigate('/cases', { state: { caseId: 'CASE-005', domain: 'kyc' } }),
+  'Suspense Aging >30d':    () => navigate('/cases', { state: { caseId: 'CASE-002', domain: 'suspense' } }),
+  'Active Fraud Scores >0.8': () => navigate('/heatmap'),
+  'Branches Below Threshold': () => navigate('/agents/controls'),
+});
+
 const KRI_TOOLTIPS = {
   'Stage 3 Ratio': "SLFRS 9 non-performing loans as % of total portfolio. NTB at 0.91% is the lowest in Sri Lankan banking. Even small staging errors materially change this figure given the LKR 430 Bn portfolio.",
   'LCR (All Currency)': "Liquidity Coverage Ratio — ability to survive a 30-day stress scenario. CBSL minimum: 100%. Declining from 320.6% to 203.4% warrants monitoring. Amber threshold: 250%.",
