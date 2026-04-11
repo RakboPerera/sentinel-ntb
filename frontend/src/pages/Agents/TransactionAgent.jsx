@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import AgentModule, { SeverityBadge } from '../../components/shared/AgentModule.jsx';
 import { VisualFindingCard, StatCard, InsightBox } from '../../components/shared/VisualComponents.jsx';
-import { CoverageStatement } from '../../components/shared/VisualComponents.jsx';
 import ExplainerBox, { InlineExplainer } from '../../components/shared/ExplainerBox.jsx';
 import { DetectionSteps } from '../../components/shared/FeatureContribution.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';

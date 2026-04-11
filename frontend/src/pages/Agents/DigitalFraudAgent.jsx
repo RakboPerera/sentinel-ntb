@@ -3,7 +3,6 @@ import AgentModule from '../../components/shared/AgentModule.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
 import { VisualFindingCard, InsightBox, StatCard, PanelWithMethod, ScoreBar } from '../../components/shared/VisualComponents.jsx';
-import { CoverageStatement } from '../../components/shared/VisualComponents.jsx';
 import { demoData } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 

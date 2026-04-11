@@ -5,7 +5,6 @@ import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
 import FeatureContribution, { DetectionSteps } from '../../components/shared/FeatureContribution.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import { VisualFindingCard, InsightBox, StatCard } from '../../components/shared/VisualComponents.jsx';
-import { CoverageStatement } from '../../components/shared/VisualComponents.jsx';
 import { demoData } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
