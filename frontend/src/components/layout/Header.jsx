@@ -49,19 +49,19 @@ export default function Header() {
 
       <div className="header-actions">
         {/* Presentation ↔ Platform toggle */}
-        <div style={{ display:'flex', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:20, padding:3, gap:2 }}>
+        <div style={{ display:'flex', background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:20, padding:3, gap:2 }}>
           <button
-            style={{ padding:'5px 13px', borderRadius:16, fontSize:12, fontWeight:500, cursor:'pointer', background:'var(--color-surface)', color:'var(--color-text)', border:'none', boxShadow:'var(--shadow)', display:'flex', alignItems:'center', gap:5 }}
+            style={{ padding:'5px 13px', borderRadius:16, fontSize:12, fontWeight:500, cursor:'pointer', background:'rgba(255,255,255,0.14)', color:'rgba(255,255,255,0.90)', border:'none', boxShadow:'none', display:'flex', alignItems:'center', gap:5 }}
             title="You are in the platform"
           >
-            <Monitor size={12} style={{ color:'var(--color-blue)' }}/>
+            <Monitor size={12} style={{ color:'var(--octave-turquoise)' }}/>
             Platform
           </button>
           <button
             onClick={() => navigate('/')}
-            style={{ padding:'5px 13px', borderRadius:16, fontSize:12, fontWeight:500, cursor:'pointer', background:'none', color:'var(--color-text-2)', border:'none', display:'flex', alignItems:'center', gap:5, transition:'all 0.15s' }}
-            onMouseEnter={e => e.currentTarget.style.background='rgba(0,0,0,0.04)'}
-            onMouseLeave={e => e.currentTarget.style.background='none'}
+            style={{ padding:'5px 13px', borderRadius:16, fontSize:12, fontWeight:500, cursor:'pointer', background:'none', color:'rgba(255,255,255,0.40)', border:'none', display:'flex', alignItems:'center', gap:5, transition:'all 0.15s' }}
+            onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.07)'}
+            onMouseLeave={e => e.currentTarget.style.background='transparent'}
             title="Switch to presentation view"
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m7 21 5-5 5 5"/></svg>

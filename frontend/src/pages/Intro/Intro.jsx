@@ -8,7 +8,7 @@ const AGENTS = [
   { id:'transaction', name:'Transaction Surveillance',  color:'#534AB7', icon:'⟳', layer:'Transaction / Event', finding:'7 structuring clusters · 4 STR-eligible' },
   { id:'suspense',    name:'Suspense & Reconciliation', color:'#993C1D', icon:'⊟', layer:'Account / Position', finding:'SUS-017 · LKR 1.24Bn · 94 days aged' },
   { id:'kyc',         name:'Identity & KYC / AML',      color:'#0F6E56', icon:'✦', layer:'Entity / Behavioural', finding:'39,290 gaps · 34 PEP overdue EDD' },
-  { id:'controls',    name:'Internal Controls',         color:'#854F0B', icon:'⚙', layer:'Entity / Behavioural', finding:'4 SoD violations · BR-14 score 41/100' },
+  { id:'controls',    name:'Internal Controls',         color:'#0BBF7A', icon:'⚙', layer:'Entity / Behavioural', finding:'4 SoD violations · BR-14 score 41/100' },
   { id:'digital',     name:'Digital Fraud & Identity',  color:'#993556', icon:'⊕', layer:'Transaction / Event', finding:'4 impossible-travel · device cluster' },
   { id:'trade',       name:'Trade Finance & Treasury',  color:'#3B6D11', icon:'◎', layer:'Account / Position', finding:'HS 6203 over-invoiced 91% · LCR −37%' },
   { id:'insider',     name:'Insider Risk',              color:'#7C3AED', icon:'◉', layer:'Entity / Behavioural', finding:'STF-1847 · score 94/100 · 6 dimensions' },
@@ -53,7 +53,7 @@ function Divider() {
 
 function Section({ children, dark=false, style={} }) {
   return (
-    <section style={{ background: dark ? '#0A0A0B' : '#fff', padding:'80px 0', ...style }}>
+    <section style={{ background: dark ? '#111110' : '#fff', padding:'80px 0', ...style }}>
       <div style={{ maxWidth:1160, margin:'0 auto', padding:'0 40px' }}>
         {children}
       </div>
@@ -63,7 +63,7 @@ function Section({ children, dark=false, style={} }) {
 
 function Eyebrow({ children }) {
   return (
-    <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'#EF9F27', marginBottom:12 }}>
+    <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'#26EA9F', marginBottom:12 }}>
       {children}
     </div>
   );
@@ -71,7 +71,7 @@ function Eyebrow({ children }) {
 
 function H2({ children, dark=false }) {
   return (
-    <h2 style={{ fontSize:'clamp(28px,3.5vw,44px)', fontWeight:900, letterSpacing:'-0.03em', color: dark ? '#f4f2ec' : '#0A0A0B', lineHeight:1.1, margin:'0 0 16px' }}>
+    <h2 style={{ fontSize:'clamp(28px,3.5vw,44px)', fontWeight:900, letterSpacing:'-0.03em', color: dark ? '#f4f2ec' : '#111110', lineHeight:1.1, margin:'0 0 16px' }}>
       {children}
     </h2>
   );
@@ -104,17 +104,17 @@ export default function Intro() {
   const alert = LIVE_ALERTS[alertIdx];
 
   return (
-    <div style={{ background:'#fff', color:'#1a1917', fontFamily:'var(--font)', overflowX:'hidden' }}>
+    <div style={{ background:'#fff', color:'#1a1917', fontFamily:'var(--font-display), var(--font)', overflowX:'hidden' }}>
 
       {/* ── FIXED NAV ── */}
       <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:100, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 40px', height:56, background:'rgba(255,255,255,0.95)', backdropFilter:'blur(8px)', borderBottom:'1px solid #E8E6DF' }}>
-        <div style={{ fontSize:15, fontWeight:800, letterSpacing:'-0.02em', color:'#0A0A0B' }}>
-          Sentinel <span style={{ color:'#EF9F27' }}>by Octave</span>
+        <div style={{ fontSize:15, fontWeight:800, letterSpacing:'-0.02em', color:'#111110' }}>
+          Sentinel <span style={{ color:'#26EA9F' }}>by Octave</span>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
           <span style={{ fontSize:11, color:'#9c9890', letterSpacing:'0.06em', textTransform:'uppercase' }}>Nations Trust Bank · FY 2025</span>
           <button onClick={enter}
-            style={{ padding:'8px 20px', background:'#0A0A0B', color:'white', border:'none', borderRadius:8, fontSize:13, fontWeight:700, cursor:'pointer', letterSpacing:'-0.01em' }}>
+            style={{ padding:'8px 20px', background:'#111110', color:'white', border:'none', borderRadius:8, fontSize:13, fontWeight:700, cursor:'pointer', letterSpacing:'-0.01em' }}>
             Enter platform →
           </button>
         </div>
@@ -124,13 +124,13 @@ export default function Intro() {
       <section style={{ maxWidth:1160, margin:'0 auto', padding:'140px 40px 80px', display:'grid', gridTemplateColumns:'1fr 380px', gap:64, alignItems:'center' }}>
 
         <div>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'4px 12px', background:'#FEF8EE', border:'1px solid rgba(239,159,39,0.3)', borderRadius:20, marginBottom:24 }}>
-            <div style={{ width:6, height:6, borderRadius:'50%', background:'#EF9F27' }} />
-            <span style={{ fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#854F0B' }}>Octave · Agentic AI Audit Intelligence</span>
+          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'4px 12px', background:'#E8FDF4', border:'1px solid rgba(38,234,159,0.3)', borderRadius:20, marginBottom:24 }}>
+            <div style={{ width:6, height:6, borderRadius:'50%', background:'#26EA9F' }} />
+            <span style={{ fontSize:11, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'#0BBF7A' }}>Octave · Agentic AI Audit Intelligence</span>
           </div>
 
-          <h1 style={{ fontSize:'clamp(52px,6.5vw,84px)', fontWeight:900, lineHeight:0.94, letterSpacing:'-0.04em', color:'#0A0A0B', margin:'0 0 24px' }}>
-            Sentinel<br/><span style={{ color:'#EF9F27' }}>by Octave</span>
+          <h1 style={{ fontSize:'clamp(52px,6.5vw,84px)', fontWeight:900, lineHeight:0.94, letterSpacing:'-0.04em', color:'#111110', margin:'0 0 24px' }}>
+            Sentinel<br/><span style={{ color:'#26EA9F' }}>by Octave</span>
           </h1>
 
           <p style={{ fontSize:19, color:'#4b4a47', lineHeight:1.65, margin:'0 0 12px', maxWidth:520 }}>
@@ -141,7 +141,7 @@ export default function Intro() {
           <div style={{ display:'flex', gap:16, flexWrap:'wrap' }}>
             {STATS.map((s,i) => (
               <div key={i} style={{ padding:'14px 20px', background:'#FAFAF8', border:'1px solid #E8E6DF', borderRadius:10 }}>
-                <div style={{ fontSize:22, fontWeight:900, color:'#0A0A0B', letterSpacing:'-0.02em', lineHeight:1 }}>{s.num}</div>
+                <div style={{ fontSize:22, fontWeight:900, color:'#111110', letterSpacing:'-0.02em', lineHeight:1 }}>{s.num}</div>
                 <div style={{ fontSize:11, fontWeight:600, color:'#4b4a47', marginTop:3 }}>{s.label}</div>
                 <div style={{ fontSize:10, color:'#9c9890', marginTop:1 }}>{s.sub}</div>
               </div>
@@ -229,7 +229,7 @@ export default function Intro() {
                 <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
                   <div style={{ width:30, height:30, borderRadius:7, background:`${agent.color}14`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, color:agent.color, border:`1px solid ${agent.color}20`, flexShrink:0 }}>{agent.icon}</div>
                   <div>
-                    <div style={{ fontSize:12, fontWeight:700, color:'#0A0A0B', lineHeight:1.2 }}>{agent.name}</div>
+                    <div style={{ fontSize:12, fontWeight:700, color:'#111110', lineHeight:1.2 }}>{agent.name}</div>
                     <div style={{ fontSize:10, color:'#9c9890', textTransform:'uppercase', letterSpacing:'0.05em', fontWeight:600 }}>{agent.layer}</div>
                   </div>
                 </div>
@@ -241,7 +241,7 @@ export default function Intro() {
           </div>
 
           {/* Orchestrator bar */}
-          <div style={{ background:'#0A0A0B', borderRadius:'0 0 16px 16px', padding:'16px 24px', display:'flex', alignItems:'center', gap:16, marginTop:1 }}>
+          <div style={{ background:'#111110', borderRadius:'0 0 16px 16px', padding:'16px 24px', display:'flex', alignItems:'center', gap:16, marginTop:1 }}>
             <div style={{ width:32, height:32, borderRadius:8, background:'rgba(83,74,183,0.25)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, border:'1px solid rgba(83,74,183,0.4)', flexShrink:0 }}>◎</div>
             <div style={{ flex:1 }}>
               <div style={{ fontSize:13, fontWeight:700, color:'#f4f2ec', marginBottom:2 }}>Orchestrator — Cross-Agent Correlation Engine</div>
@@ -267,11 +267,11 @@ export default function Intro() {
               onMouseLeave={() => setHoveredStep(null)}
               style={{ padding:'28px', background: hoveredStep===i ? 'white' : '#FAFAF8', border:'1px solid #E8E6DF', transition:'all 0.14s', boxShadow: hoveredStep===i ? '0 4px 20px rgba(0,0,0,0.06)' : 'none', position:'relative', zIndex: hoveredStep===i ? 1 : 0 }}>
               <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
-                <span style={{ fontSize:11, fontWeight:800, color:'#EF9F27', letterSpacing:'-0.01em', minWidth:20 }}>{step.n}</span>
+                <span style={{ fontSize:11, fontWeight:800, color:'#26EA9F', letterSpacing:'-0.01em', minWidth:20 }}>{step.n}</span>
                 <div style={{ flex:1, height:1, background:'#E8E6DF' }} />
                 <span style={{ fontSize:18 }}>{step.icon}</span>
               </div>
-              <div style={{ fontSize:14, fontWeight:700, color:'#0A0A0B', marginBottom:8, lineHeight:1.3 }}>{step.title}</div>
+              <div style={{ fontSize:14, fontWeight:700, color:'#111110', marginBottom:8, lineHeight:1.3 }}>{step.title}</div>
               <p style={{ fontSize:12, color:'#6b6963', lineHeight:1.65, margin:0 }}>{step.body}</p>
             </div>
           ))}
@@ -296,7 +296,7 @@ export default function Intro() {
                   <code style={{ fontSize:10, color:'#9c9890' }}>{cas.id}</code>
                   <span style={{ marginLeft:'auto', fontSize:12, fontWeight:700, color:cas.color }}>{cas.exposure}</span>
                 </div>
-                <div style={{ fontSize:12, fontWeight:600, color:'#0A0A0B', marginBottom:3, lineHeight:1.35 }}>{cas.title}</div>
+                <div style={{ fontSize:12, fontWeight:600, color:'#111110', marginBottom:3, lineHeight:1.35 }}>{cas.title}</div>
                 <div style={{ fontSize:11, color:'#9c9890' }}>{cas.agents} agents involved · Investigating</div>
               </div>
             ))}
@@ -308,9 +308,9 @@ export default function Intro() {
       </Section>
 
       {/* ── DARK CTA ── */}
-      <section style={{ background:'#0A0A0B', padding:'96px 40px' }}>
+      <section style={{ background:'#111110', padding:'96px 40px' }}>
         <div style={{ maxWidth:1160, margin:'0 auto', textAlign:'center' }}>
-          <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'#EF9F27', marginBottom:16 }}>
+          <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'#26EA9F', marginBottom:16 }}>
             Nations Trust Bank · FY 2025 · NTB Demo data pre-loaded
           </div>
           <h2 style={{ fontSize:'clamp(32px,4.5vw,56px)', fontWeight:900, letterSpacing:'-0.04em', color:'#f4f2ec', lineHeight:1.05, margin:'0 0 20px' }}>
@@ -325,16 +325,16 @@ export default function Intro() {
             ))}
           </div>
           <button onClick={enter}
-            style={{ padding:'18px 52px', background:'#EF9F27', color:'#0A0A0B', border:'none', borderRadius:12, fontSize:17, fontWeight:800, cursor:'pointer', letterSpacing:'-0.01em', transition:'all 0.2s', boxShadow:'0 8px 32px rgba(239,159,39,0.3)' }}
+            style={{ padding:'18px 52px', background:'#26EA9F', color:'#111110', border:'none', borderRadius:12, fontSize:17, fontWeight:800, cursor:'pointer', letterSpacing:'-0.01em', transition:'all 0.2s', boxShadow:'0 8px 32px rgba(38,234,159,0.3)' }}
             onMouseEnter={e => { e.currentTarget.style.background='#FAC775'; e.currentTarget.style.transform='translateY(-2px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background='#EF9F27'; e.currentTarget.style.transform='none'; }}>
+            onMouseLeave={e => { e.currentTarget.style.background='#26EA9F'; e.currentTarget.style.transform='none'; }}>
             Enter Sentinel →
           </button>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <div style={{ background:'#0A0A0B', borderTop:'1px solid rgba(255,255,255,0.06)', padding:'18px 40px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+      <div style={{ background:'#111110', borderTop:'1px solid rgba(255,255,255,0.06)', padding:'18px 40px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
         <span style={{ fontSize:11, color:'rgba(232,230,224,0.2)' }}>Sentinel by Octave · Nations Trust Bank PLC · FY 2025 · Confidential</span>
         <span style={{ fontSize:11, color:'rgba(232,230,224,0.2)' }}>9 agents · 100% coverage · LKR 700Bn AUM</span>
       </div>

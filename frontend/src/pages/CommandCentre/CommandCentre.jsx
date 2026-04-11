@@ -291,7 +291,7 @@ const liveAlerts = [
 
 const SCORE_ZONES = [
   { from: 0, to: 0.5,  label: 'Normal',   color: '#3B6D11' },
-  { from: 0.5, to: 0.65, label: 'Watch',  color: '#EF9F27' },
+  { from: 0.5, to: 0.65, label: 'Watch',  color: '#26EA9F' },
   { from: 0.65, to: 0.85, label: 'High',  color: '#854F0B' },
   { from: 0.85, to: 1.0,  label: 'Critical', color: '#A32D2D' },
 ];
@@ -429,7 +429,7 @@ function AlertDrawer({ alert, onClose }) {
               ))}
               <div style={{ display: 'flex', gap: 12, fontSize: 10, color: 'var(--color-text-3)', paddingTop: 4, borderTop: '1px solid var(--color-border)' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: '#3B6D11', borderRadius: 1 }} />Low &lt;0.6</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: '#EF9F27', borderRadius: 1 }} />Elevated 0.6–0.8</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: '#26EA9F', borderRadius: 1 }} />Elevated 0.6–0.8</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: '#A32D2D', borderRadius: 1 }} />Critical &gt;0.8</span>
               </div>
             </>
@@ -1081,7 +1081,7 @@ export default function CommandCentre() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
                 {[
                   { label: 'Tier 1 CAR', value: '19.06%', sub: 'CBSL min: 11.5%', color: '#3B6D11', good: true },
-                  { label: 'LCR (All Currency)', value: '203.4%', sub: '↓ from 320.6% — watch trend', color: '#EF9F27', good: false },
+                  { label: 'LCR (All Currency)', value: '203.4%', sub: '↓ from 320.6% — watch trend', color: '#26EA9F', good: false },
                   { label: 'NSFR', value: '138.3%', sub: 'CBSL min: 100% — stable', color: '#3B6D11', good: true },
                   { label: 'Stage 3 Ratio', value: '0.91%', sub: 'Lowest in Sri Lankan industry', color: '#3B6D11', good: true },
                 ].map((s,i) => (
@@ -1110,9 +1110,9 @@ export default function CommandCentre() {
                       <Tooltip contentStyle={{ fontSize: 11 }} />
                       <ReferenceLine yAxisId="left" y={11.5} stroke="#A32D2D" strokeDasharray="4 3" label={{ value: 'CAR min 11.5%', fontSize: 9, fill: '#A32D2D' }} />
                       <ReferenceLine yAxisId="right" y={100} stroke="#A32D2D" strokeDasharray="4 3" label={{ value: 'LCR min 100%', fontSize: 9, fill: '#A32D2D' }} />
-                      <ReferenceLine yAxisId="right" y={150} stroke="#EF9F27" strokeDasharray="3 3" label={{ value: 'LCR amber 150%', fontSize: 9, fill: '#EF9F27' }} />
+                      <ReferenceLine yAxisId="right" y={150} stroke="#26EA9F" strokeDasharray="3 3" label={{ value: 'LCR amber 150%', fontSize: 9, fill: '#26EA9F' }} />
                       <Line yAxisId="left" type="monotone" dataKey="car" stroke="#185FA5" strokeWidth={2.5} name="CAR %" dot={{ r: 3 }} />
-                      <Line yAxisId="right" type="monotone" dataKey="lcr" stroke="#EF9F27" strokeWidth={2.5} name="LCR %" dot={{ r: 3 }} />
+                      <Line yAxisId="right" type="monotone" dataKey="lcr" stroke="#26EA9F" strokeWidth={2.5} name="LCR %" dot={{ r: 3 }} />
                       <Line yAxisId="right" type="monotone" dataKey="nsfr" stroke="#3B6D11" strokeWidth={2} name="NSFR %" dot={{ r: 3 }} strokeDasharray="5 3" />
                       <Legend wrapperStyle={{ fontSize: 10 }} />
                     </LineChart>
@@ -1184,7 +1184,7 @@ export default function CommandCentre() {
                   const pct = higherGood
                     ? Math.min(100, Math.round((r.limit / r.actual) * 100))
                     : Math.min(100, Math.round((r.actual / (r.limit > 0 ? r.limit : 1)) * 100));
-                  const color = r.status === 'green' ? '#3B6D11' : r.status === 'amber' ? '#EF9F27' : '#DC2626';
+                  const color = r.status === 'green' ? '#3B6D11' : r.status === 'amber' ? '#26EA9F' : '#DC2626';
                   return (
                     <div key={i} style={{ marginBottom: 16 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
@@ -1371,13 +1371,13 @@ export default function CommandCentre() {
                   <Tooltip formatter={(v) => [`${v}/100`, 'Score']} labelFormatter={l => `Branch ${l}`} />
                   <Bar dataKey="score" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: '#6b6963' }}>
                     {branchData.map((d, i) => (
-                      <Cell key={i} fill={d.score < 50 ? '#A32D2D' : d.score < 65 ? '#EF9F27' : '#3B6D11'} />
+                      <Cell key={i} fill={d.score < 50 ? '#A32D2D' : d.score < 65 ? '#26EA9F' : '#3B6D11'} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
               <div style={{ display: 'flex', gap: 14, justifyContent: 'center', marginTop: 8, fontSize: 11, color: 'var(--color-text-2)' }}>
-                {[['#A32D2D','Critical <50'],['#EF9F27','Amber 50–65'],['#3B6D11','Good >65']].map(([c,l]) => (
+                {[['#A32D2D','Critical <50'],['#26EA9F','Amber 50–65'],['#3B6D11','Good >65']].map(([c,l]) => (
                   <span key={l} style={{ display:'flex', alignItems:'center', gap:4 }}><span style={{ width:8, height:8, borderRadius:2, background:c, display:'inline-block' }}/>{l}</span>
                 ))}
               </div>
@@ -1439,7 +1439,7 @@ export default function CommandCentre() {
                     {/* Mini score bar */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
                       <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'var(--color-surface-2)', overflow: 'hidden' }}>
-                        <div style={{ width: `${alert.anomalyScore * 100}%`, height: '100%', background: alert.anomalyScore >= 0.85 ? '#A32D2D' : '#EF9F27', borderRadius: 2 }} />
+                        <div style={{ width: `${alert.anomalyScore * 100}%`, height: '100%', background: alert.anomalyScore >= 0.85 ? '#A32D2D' : '#26EA9F', borderRadius: 2 }} />
                       </div>
                       <span style={{ fontSize: 10, fontWeight: 700, color: alert.anomalyScore >= 0.85 ? 'var(--color-red)' : 'var(--color-amber)', fontVariantNumeric: 'tabular-nums', minWidth: 28 }}>{alert.anomalyScore.toFixed(2)}</span>
                     </div>

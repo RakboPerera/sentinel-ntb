@@ -49,8 +49,12 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo" onClick={() => navigate('/command-centre')} style={{ cursor: 'pointer' }}>
-        <div className="sidebar-logo-title">Sentinel <span style={{ color: 'var(--color-text-3)', fontWeight: 400 }}>by Octave</span></div>
-        <div className="sidebar-logo-sub">NTB Audit Intelligence · FY 2025</div>
+        <div className="sidebar-logo-title">
+          Sentinel
+          <span style={{ color: 'var(--octave-turquoise)', fontWeight: 600 }}> ·</span>
+          <span style={{ color: 'rgba(255,255,255,0.38)', fontWeight: 400, fontSize: 13 }}> Octave</span>
+        </div>
+        <div className="sidebar-logo-sub">NTB · Audit Intelligence · FY 2025</div>
       </div>
 
       <div className="sidebar-section">
