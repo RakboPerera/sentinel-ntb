@@ -667,9 +667,17 @@ export default function DataHub() {
 
       {/* ── Bulk done banner ── */}
       {bulkDone && resultCount > 0 && (
-        <div className="animate-fade-in" style={{ marginBottom:20, padding:'14px 20px', background:'var(--color-green-light)', border:'1px solid rgba(59,109,17,0.25)', borderRadius:10, display:'flex', gap:12, alignItems:'center' }}>
-          <CheckCircle size={18} style={{ color:'var(--color-green)', flexShrink:0 }}/>
-          <div style={{ flex:1 }}><div style={{ fontSize:13, fontWeight:600, color:'var(--color-green)' }}>{resultCount} agent{resultCount>1?'s':''} completed. Cases auto-generated from critical findings.</div></div>
+        <div className="animate-fade-in" style={{ marginBottom:20, padding:'16px 20px', background:'linear-gradient(135deg, #F0FDF4, #ECFDF5)', border:'1px solid rgba(59,109,17,0.3)', borderRadius:10, display:'flex', gap:16, alignItems:'center' }}>
+          <CheckCircle size={20} style={{ color:'#16A34A', flexShrink:0 }}/>
+          <div style={{ flex:1 }}>
+            <div style={{ fontSize:14, fontWeight:700, color:'#15803D', marginBottom:4 }}>{resultCount} of {AGENTS.length} agents completed analysis</div>
+            <div style={{ display:'flex', gap:16, fontSize:12, color:'#166534' }}>
+              <span>📋 {AGENTS.reduce((s,a) => s + (state.agentResults[a.id]?.key_findings?.length || 0), 0)} total findings</span>
+              {AGENTS.reduce((s,a) => s + (state.agentResults[a.id]?.key_findings?.filter(f=>f.severity==='critical')?.length || 0), 0) > 0 && (
+                <span style={{ fontWeight:700, color:'#DC2626' }}>🔴 {AGENTS.reduce((s,a) => s + (state.agentResults[a.id]?.key_findings?.filter(f=>f.severity==='critical')?.length || 0), 0)} critical — immediate action required</span>
+              )}
+            </div>
+          </div>
           <button onClick={() => navigate('/command-centre')} className="btn btn-sm" style={{ background:'var(--color-green)', color:'white', border:'none', display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
             Command Centre <ChevronRight size={12}/>
           </button>

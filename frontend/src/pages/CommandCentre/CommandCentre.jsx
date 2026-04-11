@@ -973,16 +973,7 @@ function RegulatoryView({ navigate }) {
 
 // ─── KRI TILE ─────────────────────────────────────────────────────────────────
 
-const KRI_ROUTES = {
-  'Stage 3 Ratio': '/agents/credit',
-  'LCR (All Currency)': '/agents/trade',
-  'Loan Growth YoY': '/agents/credit',
-  'Network Override Rate': '/agents/controls',
-  'KYC Gap Rate': '/agents/kyc',
-  'Suspense Aging >30d': '/agents/suspense',
-  'Active Fraud Scores >0.8': '/agents/digital',
-  'Branches Below Threshold': '/agents/controls',
-};
+
 
 const KRI_TOOLTIPS = {
   'Stage 3 Ratio': "SLFRS 9 non-performing loans as % of total portfolio. NTB at 0.91% is the lowest in Sri Lankan banking. Even small staging errors materially change this figure given the LKR 430 Bn portfolio.",
@@ -1318,7 +1309,11 @@ export default function CommandCentre() {
             </div>
             <div>
               {orchData.correlations.map((corr, i) => (
-                <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', cursor: 'pointer', transition: 'background 0.12s' }}
+                <div key={i} onClick={() => {
+                    const caseMap = {'CORR-001':'CASE-001','CORR-002':'CASE-002','CORR-003':'CASE-003'};
+                    navigate('/cases', { state: { caseId: caseMap[corr.id] || null } });
+                  }}
+                  style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', cursor: 'pointer', transition: 'background 0.12s' }}
                   onMouseEnter={e => e.currentTarget.style.background = 'var(--color-surface-2)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
@@ -1326,6 +1321,9 @@ export default function CommandCentre() {
                     <div style={{ padding: '4px 8px', borderRadius: 6, fontSize: 13, fontWeight: 800, color: corr.combined_severity >= 0.95 ? 'var(--color-red)' : 'var(--color-amber)', background: corr.combined_severity >= 0.95 ? 'var(--color-red-light)' : 'var(--color-amber-light)', flexShrink: 0 }}>
                       {(corr.combined_severity * 100).toFixed(0)}%
                     </div>
+                    <span style={{ fontSize: 10, color: 'var(--color-text-3)', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 3 }}>
+                      {({'CORR-001':'CASE-001','CORR-002':'CASE-002','CORR-003':'CASE-003'})[corr.id] || ''} Open case →
+                    </span>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{corr.fraud_type_suspected}</div>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>

@@ -427,6 +427,24 @@ export default function GlobalFindingDrawer() {
                 </div>
               )}
 
+              {/* Linked cases */}
+              {linkedCases.length > 0 && (
+                <div style={{ padding:'12px 14px', background:'var(--color-purple-light)', border:'1px solid rgba(83,74,183,0.2)', borderRadius:8 }}>
+                  <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-purple)', marginBottom:8 }}>Active Investigation Cases</div>
+                  {linkedCases.map(cas => (
+                    <div key={cas.id} onClick={() => { navigate('/cases', { state:{ caseId:cas.id } }); close(); }}
+                      style={{ padding:'8px 10px', background:'var(--color-surface)', borderRadius:7, border:`1px solid ${CASE_SEV_COLOR[cas.severity]}22`, cursor:'pointer', marginBottom:6, display:'flex', alignItems:'center', gap:8, transition:'background 0.12s' }}
+                      onMouseEnter={e=>e.currentTarget.style.background=`${CASE_SEV_COLOR[cas.severity]}06`}
+                      onMouseLeave={e=>e.currentTarget.style.background='var(--color-surface)'}>
+                      <span style={{ fontSize:9, fontWeight:800, textTransform:'uppercase', padding:'2px 5px', borderRadius:3, background:CASE_SEV_COLOR[cas.severity], color:'white', flexShrink:0 }}>{cas.severity}</span>
+                      <code style={{ fontSize:10, color:'var(--color-text-3)', flexShrink:0 }}>{cas.id}</code>
+                      <span style={{ fontSize:11, color:'var(--color-text)', flex:1 }}>{cas.title.slice(0,48)}{cas.title.length>48?'...':''}</span>
+                      <span style={{ fontSize:10, fontWeight:600, color:'var(--color-purple)', flexShrink:0 }}>Open →</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* Regulatory framework */}
               <div>
                 <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-3)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
