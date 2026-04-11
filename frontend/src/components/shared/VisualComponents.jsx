@@ -202,6 +202,7 @@ export function CreateCaseModal({ finding, agentId, agentColor, onClose }) {
 
 export function VisualFindingCard({ finding, agentColor = '#185FA5', index, features, agentId, agentData, openFinding }) {
   const [expanded, setExpanded] = useState(index === 0);
+  const [showCreateCase, setShowCreateCase] = useState(false);
   const sev = finding.severity || 'medium';
   const palette = {
     critical: { border: '#A32D2D', bg: '#FEF8F8', text: '#991B1B', label: '#FCEBEB', badge: '#DC2626' },
