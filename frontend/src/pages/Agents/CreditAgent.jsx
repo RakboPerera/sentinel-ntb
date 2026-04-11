@@ -227,9 +227,24 @@ export default function CreditAgent() {
             <div className="agent-panel-header">
               {/* ── AUDIT OPINION — WITH METHODOLOGY ── */}
             <div style={{ padding:'10px 16px', background:'#185FA508', border:`1px solid #185FA525`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#185FA5', color:'white', flexShrink:0, marginTop:1 }}>
-                QUALIFIED
+              <div style={{ background:'#185FA506', border:'1px solid #185FA522', borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#185FA5', color:'white', flexShrink:0, marginTop:2 }}>
+                  QUALIFIED
+                </div>
+                <div style={{ fontSize:12, color:'#185FA5', lineHeight:1.7 }}>
+                  Staging anomalies identified across LKR 1.41Bn of loans. In our opinion, SLFRS 9 staging controls are NOT EFFECTIVE at Branch BR-14. 11 loans are misclassified; ECL is understated by approximately LKR 310M.
+                </div>
               </div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:'1px solid #185FA518' }}>
+                {[['Population tested','16,631 loans (100% of portfolio)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','LKR 50M per loan; all loans with override flag'],['Model limitations','Isolation Forest assumes linear feature relationships; management FLI overlays require separate staging committee review']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?'1px solid #185FA512':'none', borderBottom:i<2?'1px solid #185FA512':'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#185FA5', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#185FA5', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
               <div style={{ fontSize:12, color:'#185FA5', lineHeight:1.65 }}>
                 Staging anomalies identified across LKR 1.41Bn of loans. In our opinion, SLFRS 9 staging controls are NOT EFFECTIVE at Branch BR-14. 11 loans are misclassified; ECL is understated by approximately LKR 310M.
               </div>

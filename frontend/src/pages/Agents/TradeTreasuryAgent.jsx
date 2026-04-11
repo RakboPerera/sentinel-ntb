@@ -67,13 +67,24 @@ export default function TradeTreasuryAgent() {
 
           {/* Audit Opinion */}
           <div style={{ padding:'10px 16px', background:'#3B6D1108', border:'1px solid #3B6D1125', borderRadius:10, display:'flex', gap:10, alignItems:'flex-start' }}>
-            <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#3B6D11', color:'white', flexShrink:0, marginTop:1 }}>QUALIFIED
-                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(59,109,17,0.2)', fontSize:11, color:'#3B6D11' }}>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Population tested</div>All LCs and FX transactions in period; 6,230 NOP positions</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Materiality threshold</div>Invoice deviations >25% from UN COMTRADE; NOP breaches at any intraday point</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Model limitations</div>UN COMTRADE benchmark updated semi-annually; HS benchmarks are median-based and may not capture specific commodity price movements</div>
-                </div></div>
+            <div style={{ background:'#3B6D1106', border:'1px solid #3B6D1122', borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#3B6D11', color:'white', flexShrink:0, marginTop:2 }}>
+                  QUALIFIED
+                </div>
+                <div style={{ fontSize:12, color:'#3B6D11', lineHeight:1.7 }}>
+                  In our opinion, trade finance controls are PARTIALLY EFFECTIVE. NTB-CORP-0887 TBML is confirmed (91% over-invoicing, combined severity 0.94). LCR decline trajectory requires ALCO action. NOP monitoring should move from daily to intraday.
+                </div>
+              </div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:'1px solid #3B6D1118' }}>
+                {[['Population tested','All LCs and FX transactions in period; 6,230 NOP positions'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','Invoice deviations &gt;25% from UN COMTRADE; NOP breaches at any intraday point'],['Model limitations','UN COMTRADE benchmark updated semi-annually; HS benchmarks are median-based and may not capture specific commodity price movements']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?'1px solid #3B6D1112':'none', borderBottom:i<2?'1px solid #3B6D1112':'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#3B6D11', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#3B6D11', lineHeight:1.5 }} dangerouslySetInnerHTML={{__html:v}} />
+                  </div>
+                ))}
+              </div>
+            </div>
             <div style={{ fontSize:12, color:'#3B6D11', lineHeight:1.65 }}>In our opinion, trade finance controls are PARTIALLY EFFECTIVE. NTB-CORP-0887 exhibits confirmed TBML pattern with 91% invoice deviation. 2 FX positions breach approved limits intraday. LCR declining — ALCO action in progress. Gold under-invoicing (HS 7108) requires immediate STR assessment.</div>
           </div>
 
