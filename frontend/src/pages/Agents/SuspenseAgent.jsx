@@ -59,7 +59,13 @@ export default function SuspenseAgent() {
               </div>
               <div style={{ fontSize:12, color:'#993C1D', lineHeight:1.65 }}>
                 In our opinion, suspense account reconciliation controls are NOT EFFECTIVE. SUS-017 has breached the CBSL 90-day aging guideline. LKR 1.24Bn is unreconciled with a phantom receivable pattern. Immediate escalation required.
-              </div>
+              
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>143 suspense and nostro accounts (100%)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 + 90-day aging window</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>All balances aged >30 days; CBSL breach threshold >90 days</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Intraday clearing cycles not captured; weekend entries may show artificial aging</div>
+                </div></div>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>

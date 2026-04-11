@@ -5,7 +5,7 @@ import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
 import FeatureContribution, { DetectionSteps } from '../../components/shared/FeatureContribution.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import { VisualFindingCard, InsightBox, StatCard } from '../../components/shared/VisualComponents.jsx';
-import { demoData } from '../../data/demoData.js';
+import { demoData, peerBenchmarks } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
 import { ChevronDown, ChevronUp, Zap, AlertTriangle } from 'lucide-react';
@@ -225,7 +225,7 @@ export default function CreditAgent() {
           {/* Key findings */}
           <div className="agent-panel">
             <div className="agent-panel-header">
-              {/* Audit Opinion Banner */}
+              {/* ── AUDIT OPINION — WITH METHODOLOGY ── */}
             <div style={{ padding:'10px 16px', background:'#185FA508', border:`1px solid #185FA525`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
               <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#185FA5', color:'white', flexShrink:0, marginTop:1 }}>
                 QUALIFIED
@@ -415,6 +415,102 @@ export default function CreditAgent() {
               </div>
             </div>
           </div>
+
+          {/* ── MANAGEMENT STAGING POLICY CONFLICTS ── */}
+          <div className="agent-panel">
+            <div className="agent-panel-header" style={{ background:'#FEF8F8' }}>
+              <span className="agent-panel-title" style={{ color:'#DC2626' }}>Management Staging Policy Conflicts</span>
+              <InfoTooltip text="Compares AI-predicted stage against NTB's own documented staging policy (v4.1, Oct 2025). Where the assigned stage conflicts with the bank's OWN written rules — not just the AI model — the override is indefensible on its own terms." position="left" width={320} />
+            </div>
+            <div style={{ padding:'10px 16px', background:'#FEF0F0', borderBottom:'1px solid var(--color-border)', fontSize:12, color:'#DC2626', lineHeight:1.5 }}>
+              <strong>Policy:</strong> NTB Credit Staging Policy v4.1 (Oct 2025) — Board Credit Committee approved. All conflicts below were authorised by STF-1847 in violation of the bank's own written policy.
+            </div>
+            {(data.fli_overlays?.agent_vs_policy_conflicts || []).map((conflict, i) => (
+              <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)' }}>
+                <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
+                  <code style={{ fontSize:12, fontWeight:700 }}>{conflict.loan_id}</code>
+                  <span style={{ fontSize:11, padding:'2px 8px', background:'#185FA5', color:'white', borderRadius:4, fontWeight:700 }}>Stage {conflict.assigned_stage} assigned</span>
+                  <span style={{ fontSize:13 }}>→</span>
+                  <span style={{ fontSize:11, padding:'2px 8px', background:'#DC2626', color:'white', borderRadius:4, fontWeight:700 }}>Stage {conflict.policy_required_stage} per policy</span>
+                  <span style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>Auth: <strong>{conflict.override_authorised_by}</strong> · {conflict.policy_ref}</span>
+                </div>
+                <div style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>
+                  {conflict.conflict_reason}
+                </div>
+              </div>
+            ))}
+            <div style={{ padding:'10px 16px', background:'var(--color-surface-2)', fontSize:11, color:'var(--color-text-3)' }}>
+              Macro overlay applied: <strong>LKR {((data.fli_overlays?.macro_overlay_applied_lkr||0)/1e6).toFixed(0)}M</strong> — {data.fli_overlays?.overlay_basis}
+            </div>
+          </div>
+
+          {/* ── REGULATORY CAPITAL IMPACT ── */}
+          <div className="agent-panel">
+            <div className="agent-panel-header">
+              <span className="agent-panel-title">Regulatory Capital Impact — If Staging Corrected</span>
+              <InfoTooltip text="Reclassifying loans from Stage 1/2 to Stage 3 increases risk-weighted assets and required provisions, both reducing Tier 1 CAR. CBSL requires Board notification when a restatement causes CAR to fall by more than 50 basis points." position="left" width={300} />
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:1, background:'var(--color-border)' }}>
+              {[
+                { label:'Current Tier 1 CAR', value:`${data.capital_impact?.current_tier1_car}%`, color:'#16A34A', sub:'As reported to CBSL' },
+                { label:'If Staging Corrected', value:`${data.capital_impact?.corrected_tier1_car}%`, color:'#D97706', sub:`−${data.capital_impact?.car_impact_bps} basis points` },
+                { label:'Additional RWA', value:`LKR ${((data.capital_impact?.rwa_increase_lkr||0)/1e9).toFixed(1)}Bn`, color:'#DC2626', sub:'Risk-weighted asset increase' },
+                { label:'CBSL Notification', value:data.capital_impact?.aggregate_notification_required ? 'REQUIRED' : 'Not required', color:data.capital_impact?.aggregate_notification_required ? '#DC2626' : '#16A34A', sub:`Aggregate: ${data.capital_impact?.aggregate_impact_with_sus017_bps}bps incl. SUS-017` },
+              ].map((m,i) => (
+                <div key={i} style={{ padding:'16px', background:'var(--color-surface)', borderTop:`3px solid ${m.color}` }}>
+                  <div style={{ fontSize:10, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:5 }}>{m.label}</div>
+                  <div style={{ fontSize:24, fontWeight:900, color:m.color, lineHeight:1, marginBottom:4 }}>{m.value}</div>
+                  <div style={{ fontSize:11, color:'var(--color-text-2)' }}>{m.sub}</div>
+                </div>
+              ))}
+            </div>
+            {data.capital_impact?.aggregate_notification_required && (
+              <div style={{ padding:'10px 16px', background:'#FEF0F0', fontSize:12, color:'#DC2626', lineHeight:1.6 }}>
+                ⚠ <strong>CBSL Notification Required:</strong> {data.capital_impact?.notification_threshold_note}
+              </div>
+            )}
+          </div>
+
+          {/* ── PEER BENCHMARKS ── */}
+          <div className="agent-panel">
+            <div className="agent-panel-header">
+              <span className="agent-panel-title">Peer Benchmarking — Sri Lankan Licensed Commercial Banks</span>
+              <InfoTooltip text="NTB vs industry peers. Source: CBSL Banking Sector Report Q3 2025 and published financials. Green = NTB outperforms sector median." position="left" width={300} />
+            </div>
+            <div style={{ overflowX:'auto' }}>
+              <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
+                <thead>
+                  <tr style={{ background:'var(--color-surface-2)', borderBottom:'2px solid var(--color-border)' }}>
+                    {['Metric','NTB','Peer Median','Sector Best','Sector Worst','vs Median'].map(h => (
+                      <th key={h} style={{ padding:'9px 12px', textAlign:'left', fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'var(--color-text-3)' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(peerBenchmarks.credit).map(([key, b], i) => {
+                    const labels = { stage3_ratio:'Stage 3 Ratio (%)', override_rate:'Override Rate (%)', ecl_coverage:'ECL Coverage (%)', loan_growth_yoy:'Loan Growth YoY (%)' };
+                    const lowerBetter = ['stage3_ratio','override_rate','loan_growth_yoy'].includes(key);
+                    const better = lowerBetter ? b.ntb <= b.peer_median : b.ntb >= b.peer_median;
+                    const col = better ? '#16A34A' : '#DC2626';
+                    return (
+                      <tr key={key} style={{ borderBottom:'1px solid var(--color-border)', background:i%2===0?'transparent':'var(--color-surface-2)' }}>
+                        <td style={{ padding:'10px 12px', fontWeight:600 }}>{labels[key]||key}</td>
+                        <td style={{ padding:'10px 12px', fontWeight:800, color:col }}>{b.ntb}</td>
+                        <td style={{ padding:'10px 12px', color:'var(--color-text-2)' }}>{b.peer_median}</td>
+                        <td style={{ padding:'10px 12px', color:'#16A34A', fontWeight:600 }}>{b.peer_best}</td>
+                        <td style={{ padding:'10px 12px', color:'#DC2626' }}>{b.peer_worst}</td>
+                        <td style={{ padding:'10px 12px' }}>
+                          <span style={{ fontSize:11, fontWeight:700, padding:'2px 8px', borderRadius:4, background:`${col}14`, color:col }}>{better ? '✓ Better than median' : '✗ Weaker than median'}</span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div style={{ padding:'8px 12px', fontSize:10, color:'var(--color-text-3)' }}>Source: {peerBenchmarks.credit.stage3_ratio.source}</div>
+            </div>
+          </div>
+
         </>
       )}
       </AgentModule>

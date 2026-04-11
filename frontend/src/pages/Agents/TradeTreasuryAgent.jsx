@@ -67,7 +67,13 @@ export default function TradeTreasuryAgent() {
 
           {/* Audit Opinion */}
           <div style={{ padding:'10px 16px', background:'#3B6D1108', border:'1px solid #3B6D1125', borderRadius:10, display:'flex', gap:10, alignItems:'flex-start' }}>
-            <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#3B6D11', color:'white', flexShrink:0, marginTop:1 }}>QUALIFIED</div>
+            <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#3B6D11', color:'white', flexShrink:0, marginTop:1 }}>QUALIFIED
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(59,109,17,0.2)', fontSize:11, color:'#3B6D11' }}>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Population tested</div>All LCs and FX transactions in period; 6,230 NOP positions</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Materiality threshold</div>Invoice deviations >25% from UN COMTRADE; NOP breaches at any intraday point</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.7, marginBottom:2 }}>Model limitations</div>UN COMTRADE benchmark updated semi-annually; HS benchmarks are median-based and may not capture specific commodity price movements</div>
+                </div></div>
             <div style={{ fontSize:12, color:'#3B6D11', lineHeight:1.65 }}>In our opinion, trade finance controls are PARTIALLY EFFECTIVE. NTB-CORP-0887 exhibits confirmed TBML pattern with 91% invoice deviation. 2 FX positions breach approved limits intraday. LCR declining — ALCO action in progress. Gold under-invoicing (HS 7108) requires immediate STR assessment.</div>
           </div>
 
@@ -229,6 +235,191 @@ export default function TradeTreasuryAgent() {
               </div>
             )}
           </div>
+
+          {/* Counterparty Network Tab */}
+          {activeTab === 'counterparty' && (
+            <div style={{ padding:16, display:'flex', flexDirection:'column', gap:20 }}>
+
+              {/* UBO Conflicts */}
+              <div>
+                <div style={{ fontSize:12, fontWeight:700, marginBottom:10, display:'flex', alignItems:'center', gap:8 }}>
+                  Ultimate Beneficial Owner (UBO) Conflicts
+                  <InfoTooltip text="Cross-referencing declared UBO across all NTB corporate accounts. The same beneficial owner declaring different ownership structures across multiple accounts is a FATF red flag for TBML or sanctions evasion. CBSL requires banks to maintain accurate UBO records for all corporate customers." width={300} position="right" />
+                  <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>
+                    {(data.counterparty_network?.ubo_conflicts||[]).length} conflicts
+                  </span>
+                </div>
+                {(data.counterparty_network?.ubo_conflicts||[]).map((conflict, i) => (
+                  <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:`4px solid ${conflict.risk==='critical'?'#DC2626':'#D97706'}`, borderRadius:8, marginBottom:10 }}>
+                    <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
+                      <code style={{ fontSize:12, fontWeight:700 }}>{conflict.customer_id}</code>
+                      <span style={{ fontSize:10, color:'var(--color-text-3)' }}>links to: {conflict.linked_accounts.join(', ')}</span>
+                      <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#DC2626' }}>LKR {(conflict.combined_exposure_lkr/1e6).toFixed(0)}M</span>
+                    </div>
+                    <div style={{ fontSize:11, fontWeight:600, color:'var(--color-text-2)', marginBottom:6 }}>Declared: {conflict.ubo_declared}</div>
+                    <div style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>{conflict.ubo_linked}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Round-trip LC */}
+              <div>
+                <div style={{ fontSize:12, fontWeight:700, marginBottom:10, display:'flex', alignItems:'center', gap:8 }}>
+                  Round-Trip Letter of Credit Detection
+                  <InfoTooltip text="An LC issued by NTB backed by a fixed deposit of the same customer has no legitimate trade purpose. The goods cycle in and out with zero net trade value — the LC financing is used to generate artificial turnover and create a paper trail for KYC / sanctions purposes." width={300} position="right" />
+                </div>
+                {(data.counterparty_network?.roundtrip_lc||[]).map((lc, i) => (
+                  <div key={i} style={{ padding:'14px 16px', background:'#FEF8F8', border:'1px solid #F5C2C2', borderLeft:'4px solid #DC2626', borderRadius:8, marginBottom:10 }}>
+                    <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
+                      <code style={{ fontSize:12, fontWeight:700 }}>{lc.lc_reference}</code>
+                      <span style={{ fontSize:11, fontWeight:700, color:'#DC2626' }}>LKR {(lc.amount_lkr/1e6).toFixed(0)}M</span>
+                      <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 7px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>Score: {(lc.risk_score*100).toFixed(0)}/100</span>
+                    </div>
+                    <div style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.65, padding:'8px 12px', background:'white', borderRadius:6 }}>{lc.finding}</div>
+                    <div style={{ marginTop:6, fontSize:11, color:'var(--color-text-3)' }}>Backing deposit: {lc.supporting_deposit_id} · Customer: {lc.customer_id}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Multi-bank structuring */}
+              <div>
+                <div style={{ fontSize:12, fontWeight:700, marginBottom:10, display:'flex', alignItems:'center', gap:8 }}>
+                  Multi-Bank Trade Finance Structuring
+                  <InfoTooltip text="The same shipment financed across multiple banks simultaneously constitutes fraudulent double-financing — a criminal offence under the Banking Act. Cross-referenced against Sri Lanka Customs import manifests to identify duplicate shipment financing." width={300} position="right" />
+                </div>
+                {(data.counterparty_network?.multi_bank_structuring||[]).map((mb, i) => (
+                  <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:'4px solid #854F0B', borderRadius:8, marginBottom:10 }}>
+                    <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
+                      <code style={{ fontSize:12, fontWeight:700 }}>{mb.customer_id}</code>
+                      <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#854F0B' }}>Est. double-financing: LKR {(mb.estimated_double_financing_lkr/1e6).toFixed(0)}M</span>
+                    </div>
+                    <div style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>{mb.finding}</div>
+                    <div style={{ marginTop:6, fontSize:11, color:'var(--color-text-3)' }}>Evidence: {mb.evidence} · Score: {(mb.risk_score*100).toFixed(0)}/100</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ALCO / Liquidity Tab */}
+          {activeTab === 'alco' && (
+            <div style={{ padding:16, display:'flex', flexDirection:'column', gap:20 }}>
+
+              {/* HQLA Breakdown */}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+                <div>
+                  <div style={{ fontSize:12, fontWeight:700, marginBottom:10, display:'flex', alignItems:'center', gap:8 }}>
+                    HQLA Composition
+                    <InfoTooltip text="High Quality Liquid Assets (HQLA) are the assets banks can sell quickly in a stress scenario. Level 1 (government securities, CBSL reserves) count at 100%. Level 2A count at 85% after haircut. A declining HQLA trend is an early warning of LCR pressure." width={280} position="right" />
+                  </div>
+                  {[
+                    { label:'L1 — Govt Securities', val:data.hqla_breakdown?.level1_govt_securities||0, color:'#16A34A' },
+                    { label:'L1 — CBSL Reserves', val:data.hqla_breakdown?.level1_cbsl_reserves||0, color:'#0F6E56' },
+                    { label:'L2A Assets', val:data.hqla_breakdown?.level2a_assets||0, color:'#D97706' },
+                  ].map((row, i) => {
+                    const total = data.hqla_breakdown?.total_hqla_lkr||1;
+                    const pct = Math.round((row.val/total)*100);
+                    return (
+                      <div key={i} style={{ marginBottom:10 }}>
+                        <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, marginBottom:4 }}>
+                          <span style={{ fontWeight:600 }}>{row.label}</span>
+                          <span style={{ color:row.color, fontWeight:700 }}>LKR {(row.val/1e9).toFixed(1)}Bn ({pct}%)</span>
+                        </div>
+                        <div style={{ height:8, background:'var(--color-border)', borderRadius:4, overflow:'hidden' }}>
+                          <div style={{ width:`${pct}%`, height:'100%', background:row.color, borderRadius:4 }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <div style={{ padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6, fontSize:11, color:'var(--color-text-2)', lineHeight:1.5, marginTop:8 }}>
+                    ⚠ {data.hqla_breakdown?.concentration_risk}
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize:12, fontWeight:700, marginBottom:10, display:'flex', alignItems:'center', gap:8 }}>
+                    30-Day Stress Test
+                    <InfoTooltip text="Simulates whether NTB's HQLA is sufficient to cover net cash outflows over a 30-day stress scenario (Basel III standard). Stressed LCR below 100% means the bank would exhaust liquid assets before covering all outflows." width={280} position="right" />
+                  </div>
+                  {[
+                    { label:'30d Net Outflow (Stressed)', val:`LKR ${((data.liquidity_stress?.scenario_30d_outflow_lkr||0)/1e9).toFixed(1)}Bn`, color:'#DC2626' },
+                    { label:'HQLA Available', val:`LKR ${((data.liquidity_stress?.hqla_coverage||0)/1e9).toFixed(1)}Bn`, color:'#185FA5' },
+                    { label:'Stressed LCR', val:`${data.liquidity_stress?.stress_lcr?.toFixed(1)}%`, color:data.liquidity_stress?.stress_lcr_passes_minimum?'#16A34A':'#DC2626' },
+                    { label:'Minimum Requirement', val:'100%', color:'var(--color-text-3)' },
+                  ].map((row,i) => (
+                    <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'8px 0', borderBottom:'1px solid var(--color-border)', fontSize:12 }}>
+                      <span>{row.label}</span>
+                      <span style={{ fontWeight:700, color:row.color }}>{row.val}</span>
+                    </div>
+                  ))}
+                  {!data.liquidity_stress?.stress_lcr_passes_minimum && (
+                    <div style={{ marginTop:10, padding:'8px 12px', background:'#FEF0F0', borderRadius:6, fontSize:11, color:'#DC2626', lineHeight:1.5 }}>
+                      ⚠ Stressed LCR <strong>fails</strong> the 100% minimum. NTB would exhaust liquid assets before covering all 30-day outflows in this scenario.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Early Warning Indicators */}
+              <div>
+                <div style={{ fontSize:12, fontWeight:700, marginBottom:10, display:'flex', alignItems:'center', gap:8 }}>
+                  Liquidity Early Warning Indicators
+                  <InfoTooltip text="Leading indicators that CBSL supervisors monitor before an LCR breach materialises. Multiple simultaneous breaches indicate systemic liquidity stress requiring ALCO escalation." width={280} position="right" />
+                  <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>
+                    {(data.liquidity_stress?.early_warning_indicators||[]).filter(e=>e.status==='breached').length} of {(data.liquidity_stress?.early_warning_indicators||[]).length} breached
+                  </span>
+                </div>
+                <table style={{ width:'100%', borderCollapse:'collapse', fontSize:11 }}>
+                  <thead>
+                    <tr style={{ background:'var(--color-surface-2)', borderBottom:'2px solid var(--color-border)' }}>
+                      {['Indicator','Current','Threshold','Status','Trend'].map(h => (
+                        <th key={h} style={{ padding:'8px 10px', textAlign:'left', fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', color:'var(--color-text-3)' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(data.liquidity_stress?.early_warning_indicators||[]).map((ewi, i) => {
+                      const sc = ewi.status==='breached'?'#DC2626':'#16A34A';
+                      return (
+                        <tr key={i} style={{ borderBottom:'1px solid var(--color-border)', background:ewi.status==='breached'?'#FEF8F8':'transparent' }}>
+                          <td style={{ padding:'8px 10px', fontSize:11, maxWidth:200 }}>{ewi.indicator}</td>
+                          <td style={{ padding:'8px 10px', fontWeight:700, color:sc }}>{ewi.current}</td>
+                          <td style={{ padding:'8px 10px', color:'var(--color-text-2)' }}>{ewi.threshold}</td>
+                          <td style={{ padding:'8px 10px' }}>
+                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', borderRadius:4, background:`${sc}14`, color:sc }}>{ewi.status}</span>
+                          </td>
+                          <td style={{ padding:'8px 10px', fontSize:11, color:'var(--color-text-2)' }}>{ewi.trend}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Funding Concentration */}
+              <div>
+                <div style={{ fontSize:12, fontWeight:700, marginBottom:10, display:'flex', alignItems:'center', gap:8 }}>
+                  Funding Concentration — Top 10 Depositors
+                  <InfoTooltip text="Concentration of funding in a small number of depositors creates cliff-edge liquidity risk. CBSL monitors whether top 10 depositors represent more than 30% of total funding. Withdrawal by any single top depositor triggers immediate LCR stress." width={300} position="right" />
+                </div>
+                {(data.liquidity_stress?.funding_concentration||[]).map((dep, i) => (
+                  <div key={i} style={{ padding:'12px 14px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderRadius:8, marginBottom:8 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
+                      <span style={{ fontSize:12, fontWeight:600 }}>{dep.depositor}</span>
+                      <span style={{ fontSize:13, fontWeight:800, color:'#DC2626' }}>LKR {(dep.amount_lkr/1e9).toFixed(1)}Bn</span>
+                    </div>
+                    <div style={{ height:6, background:'var(--color-border)', borderRadius:3, overflow:'hidden', marginBottom:6 }}>
+                      <div style={{ width:`${Math.min(dep.pct_of_funding*3, 100)}%`, height:'100%', background:dep.pct_of_funding>8?'#DC2626':'#D97706', borderRadius:3 }} />
+                    </div>
+                    <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'var(--color-text-2)' }}>
+                      <span>{dep.pct_of_funding}% of funding · {dep.type} · Due: {dep.maturity}</span>
+                      <span style={{ color:'#D97706' }}>{dep.risk}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Pricing anomalies detail */}
           <PanelWithMethod

@@ -171,7 +171,13 @@ function StaffDetailPanel({ profile }) {
               </div>
               <div style={{ fontSize:12, color:'#7C3AED', lineHeight:1.65 }}>
                 In our opinion, insider fraud prevention controls are NOT EFFECTIVE at Branch BR-14. STF-1847 scores 94/100 — the highest in the 2,462-staff network. All 6 insider fraud dimensions are confirmed simultaneously.
-              </div>
+              
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:10, marginTop:12, paddingTop:12, borderTop:'1px solid rgba(255,255,255,0.1)' }}>
+                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Population tested</div><div style={{ fontSize:11, lineHeight:1.5 }}>2,462 staff members across 90 branches + corporate office</div></div>
+                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Period covered</div><div style={{ fontSize:11, lineHeight:1.5 }}>FY 2025 (Jan–Dec)</div></div>
+                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Materiality threshold</div><div style={{ fontSize:11, lineHeight:1.5 }}>All staff with composite risk score >40/100; any SoD violation</div></div>
+                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Model limitations</div><div style={{ fontSize:11, lineHeight:1.5 }}>Collusion detection requires minimum 5 co-occurrences for statistical validity; staff active &lt;6 months have reduced baseline confidence</div></div>
+              </div></div>
             </div>
 
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 }}>
@@ -432,6 +438,77 @@ export default function InsiderRiskAgent() {
             </div>
           </>
         );
+
+          {/* ── COLLUSION DETECTION ── */}
+          <div className="agent-panel">
+            <div className="agent-panel-header" style={{ background:'#F5F0FF' }}>
+              <span className="agent-panel-title" style={{ color:'#7C3AED' }}>Collusion Detection — Staff Pair Analysis</span>
+              <InfoTooltip text="Individual risk scores miss coordinated fraud between two or more staff. This computes co-occurrence ratios: how many times two staff appear on the same transaction vs expected by chance. Ratio > 3× is a collusion flag. Probability of 14 co-occurrences vs 1.2 expected: p<0.0001." width={320} position="left" />
+            </div>
+            {(data.collusion_pairs||[]).map((pair, i) => (
+              <div key={i} style={{ padding:'16px', borderBottom:'1px solid var(--color-border)' }}>
+                <div style={{ display:'flex', gap:12, alignItems:'flex-start', marginBottom:12 }}>
+                  <div style={{ flex:1 }}>
+                    <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
+                      <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:'rgba(124,58,237,0.12)', color:'#7C3AED', borderRadius:6 }}>{pair.staff_a}</span>
+                      <span style={{ fontSize:11, color:'var(--color-text-3)' }}>{pair.role_a} · {pair.branch_a}</span>
+                      <span style={{ fontSize:14, color:'var(--color-text-3)' }}>⟷</span>
+                      <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:'rgba(124,58,237,0.12)', color:'#7C3AED', borderRadius:6 }}>{pair.staff_b}</span>
+                      <span style={{ fontSize:11, color:'var(--color-text-3)' }}>{pair.role_b} · {pair.branch_b}</span>
+                    </div>
+                    <div style={{ display:'flex', gap:20, marginBottom:8 }}>
+                      {[
+                        { label:'Observed co-occurrences', val:pair.co_occurrences },
+                        { label:'Expected by chance', val:pair.expected_co_occurrences },
+                        { label:'Ratio', val:`${pair.co_occurrence_ratio}×`, hi:true },
+                        { label:'Exposure', val:`LKR ${(pair.financial_exposure_lkr/1e6).toFixed(0)}M`, red:true },
+                      ].map((m,j) => (
+                        <div key={j}>
+                          <div style={{ fontSize:10, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:2 }}>{m.label}</div>
+                          <div style={{ fontSize:18, fontWeight:800, color:m.red?'#DC2626':m.hi?'#7C3AED':'var(--color-text)' }}>{m.val}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:6, background:pair.severity==='critical'?'#FEF0F0':'#FFFBEB', color:pair.severity==='critical'?'#DC2626':'#D97706', flexShrink:0 }}>{pair.severity}</span>
+                </div>
+                <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.7, padding:'10px 14px', background:'var(--color-surface-2)', borderRadius:8, marginBottom:8 }}>
+                  <strong style={{ color:'var(--color-text)' }}>Pattern: </strong>{pair.pattern}
+                </div>
+                <div style={{ padding:'10px 14px', background:pair.severity==='critical'?'#FEF8F8':'#FEFBF0', borderRadius:8, fontSize:12, lineHeight:1.65, color:pair.severity==='critical'?'#DC2626':'#854F0B', border:`1px solid ${pair.severity==='critical'?'rgba(220,38,38,0.2)':'rgba(133,79,11,0.2)'}` }}>
+                  <strong>Statistical finding: </strong>{pair.finding}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── APPROVAL CHAIN ANOMALIES ── */}
+          <div className="agent-panel">
+            <div className="agent-panel-header">
+              <span className="agent-panel-title">Approval Chain Anomalies</span>
+              <InfoTooltip text="Detects whether staff members systematically route approvals through specific colleagues (bypassing senior approvers) or split transactions to stay below thresholds that trigger additional review — both indicate deliberate circumvention." width={300} position="left" />
+            </div>
+            {(data.approval_chain_anomalies||[]).map((anomaly, i) => (
+              <div key={i} style={{ padding:'16px', borderBottom:'1px solid var(--color-border)' }}>
+                <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:10 }}>
+                  <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:6, background:anomaly.severity==='critical'?'#FEF0F0':'#FFFBEB', color:anomaly.severity==='critical'?'#DC2626':'#D97706' }}>{anomaly.severity}</span>
+                  <span style={{ fontSize:13, fontWeight:700 }}>{anomaly.anomaly_type}</span>
+                  {anomaly.instances && <span style={{ marginLeft:'auto', fontSize:11, color:'var(--color-text-3)' }}>{anomaly.instances} instances</span>}
+                  {anomaly.p_value && <span style={{ fontSize:11, padding:'2px 7px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>p = {anomaly.p_value}</span>}
+                </div>
+                <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.7, padding:'10px 14px', background:'var(--color-surface-2)', borderRadius:8 }}>
+                  {anomaly.description}
+                </div>
+                {anomaly.affected_approver_bypassed && (
+                  <div style={{ marginTop:8, fontSize:11, color:'var(--color-text-3)' }}>Consistently bypassed: <strong>{anomaly.affected_approver_bypassed}</strong></div>
+                )}
+                {anomaly.combined_exposure_lkr && (
+                  <div style={{ marginTop:6, fontSize:11, fontWeight:700, color:'#DC2626' }}>Combined exposure: LKR {(anomaly.combined_exposure_lkr/1e6).toFixed(0)}M</div>
+                )}
+              </div>
+            ))}
+          </div>
+
       }}
       </AgentModule>
   );

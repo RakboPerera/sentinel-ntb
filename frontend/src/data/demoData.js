@@ -57,6 +57,34 @@ export const demoData = {
       { branch_code: 'BR-11', flagged_count: 6, flagged_exposure_lkr: 112000000, override_flagged_count: 1, risk_signal: 'MEDIUM: Batticaloa — Eastern Province exposure, post-event stress indicators.' },
       { branch_code: 'BR-41', flagged_count: 5, flagged_exposure_lkr: 98000000, override_flagged_count: 0, risk_signal: 'LOW: Kandy branch — vintage Q4 2025 cohort showing early stress indicators.' },
     ],
+
+    fli_overlays: {
+      gdp_growth_forecast: -1.2,
+      construction_sector_npl_trend: 'deteriorating',
+      macro_overlay_applied_lkr: 340000000,
+      overlay_basis: 'Q4 2025 CBSL sector NPL data — construction sector 3.2% vs 0.9% portfolio avg',
+      management_staging_policy: 'NTB Staging Policy v4.1 (Oct 2025) — DPD triggers supplemented by qualitative overlays for concentration risk',
+      agent_vs_policy_conflicts: [
+        { loan_id: 'NTB-CR-2025-0441', assigned_stage: 1, policy_required_stage: 3, conflict_reason: 'DPD 88 days, collateral ratio 0.34 — both breach Stage 3 triggers under policy v4.1', override_authorised_by: 'STF-1847', policy_ref: 'Section 4.2.1' },
+        { loan_id: 'NTB-CR-2025-0872', assigned_stage: 1, policy_required_stage: 3, conflict_reason: 'Restructured twice in 12 months — automatic Stage 3 trigger per Section 4.3', override_authorised_by: 'STF-1847', policy_ref: 'Section 4.3.0' },
+        { loan_id: 'NTB-CR-2025-1203', assigned_stage: 2, policy_required_stage: 3, conflict_reason: 'Guarantor defaulted on separate facility — cross-default clause triggers Stage 3', override_authorised_by: 'STF-1847', policy_ref: 'Section 4.4.2' },
+        { loan_id: 'NTB-CR-2025-3341', assigned_stage: 1, policy_required_stage: 2, conflict_reason: 'Construction sector exposure >LKR 50M requires minimum Stage 2 per Q4 overlay', override_authorised_by: 'STF-2341', policy_ref: 'ALCO Overlay Dec-2025' },
+      ],
+    },
+    capital_impact: {
+      current_tier1_car: 19.06,
+      current_stage3_ratio: 0.91,
+      if_corrected_stage3_ratio: 1.12,
+      ecl_restatement_lkr: 1100000000,
+      rwa_increase_lkr: 4200000000,
+      car_impact_bps: -47,
+      corrected_tier1_car: 18.59,
+      cbsl_notification_threshold_bps: 50,
+      notification_required: false,
+      notification_threshold_note: 'Impact of 47bps is below the 50bps CBSL notification threshold — however the combination with SUS-017 ECL exposure may breach threshold in aggregate',
+      aggregate_impact_with_sus017_bps: 61,
+      aggregate_notification_required: true,
+    },
     key_findings: [
       { finding: '34 loans totalling LKR 1.1 Bn are predicted to be misstaged under SLFRS 9 criteria. If corrected, Stage 3 ratio moves from 0.91% to 1.12% — a 23% deterioration.', severity: 'critical', affected_exposure_lkr: 1100000000, recommended_action: 'Convene emergency Staging Committee. Correct misstaging before next regulatory submission. Review ECL model parameters.' },
       { finding: 'Branch BR-14 (Ratnapura) has 11 override-approved loans in the flagged cohort — the highest concentration in the network. Combined with override rate of 14.3%, this pattern is consistent with insider-enabled loan fraud.', severity: 'critical', affected_exposure_lkr: 387000000, recommended_action: 'Immediate Internal Audit investigation of BR-14. Freeze new override approvals pending review. Engage Compliance and HR.' },
@@ -366,6 +394,57 @@ export const demoData = {
       nsfr_trend: 'declining',
       commentary: 'Both LCR and NSFR have declined materially in 2025 — LCR from 320.6% to 203.4% (-37%), NSFR from 154.7% to 138.3% (-11%). This is consistent with 50% loan growth outpacing stable funding base. Both metrics remain above regulatory minimums (100%) but headroom is contracting. Continued aggressive lending without commensurate deposit growth will pressure LCR below 200% in Q2 2026.',
     },
+
+    counterparty_network: {
+      ubo_conflicts: [
+        { customer_id: 'NTB-CORP-0887', linked_accounts: ['NTB-CORP-2341', 'NTB-CORP-4490'], ubo_declared: 'Abdul R. Mansoor (100%)', ubo_linked: 'Same UBO across 3 corporate accounts with different beneficial ownership declarations', risk: 'critical', combined_exposure_lkr: 892000000 },
+        { customer_id: 'NTB-CORP-4412', linked_accounts: ['NTB-CORP-5512'], ubo_declared: 'Sunrise Holdings (BVI)', ubo_linked: 'BVI shell company — same registered agent as NTB-CORP-0887. Potential common ownership.', risk: 'high', combined_exposure_lkr: 341000000 },
+      ],
+      roundtrip_lc: [
+        { lc_reference: 'LC-2025-3341', customer_id: 'NTB-CORP-0887', amount_lkr: 234000000, finding: 'LC issued by NTB backed by a fixed deposit of the same customer. Goods imported, re-exported, and re-imported within 90 days. Net trade value: zero. LC financing used to generate artificial turnover and KYC activity.', supporting_deposit_id: 'FD-NTB-0887-2025', risk_score: 0.92 },
+      ],
+      multi_bank_structuring: [
+        { customer_id: 'NTB-CORP-2341', finding: 'Same HS code (0901 coffee) invoiced through NTB, Sampath Bank, and Commercial Bank within same quarter. Combined LC values suggest single shipment financed three times at three institutions.', evidence: 'SL Customs import manifest cross-reference', risk_score: 0.87, estimated_double_financing_lkr: 378000000 },
+      ],
+    },
+    hqla_breakdown: {
+      total_hqla_lkr: 41200000000,
+      level1_govt_securities: 28400000000,
+      level1_cbsl_reserves: 7800000000,
+      level2a_assets: 5000000000,
+      level2b_assets: 0,
+      concentration_risk: 'Level 1 government securities concentrated in 3-5 year maturity band — duration mismatch risk in rising rate environment',
+      hqla_trend: [
+        { q: 'Q1 25', hqla: 52100000000 },
+        { q: 'Q2 25', hqla: 49800000000 },
+        { q: 'Q3 25', hqla: 46300000000 },
+        { q: 'Q4 25', hqla: 41200000000 },
+      ],
+    },
+    liquidity_stress: {
+      scenario_30d_outflow_lkr: 48600000000,
+      hqla_coverage: 41200000000,
+      stress_lcr: 84.8,
+      stress_lcr_passes_minimum: false,
+      key_assumptions: [
+        { item: 'Retail deposit runoff rate', stressed: '10% (Basel III standard)', actual_used: '12% given HSBC migration uncertainty' },
+        { item: 'Corporate deposit runoff', stressed: '25% (Basel III)', actual_used: '40% (3 top 10 depositors at risk)' },
+        { item: 'LC drawdown probability', stressed: '100% of committed undrawn', actual_used: '100%' },
+        { item: 'HQLA haircut', stressed: '0% L1, 15% L2A', actual_used: 'Standard applied' },
+      ],
+      early_warning_indicators: [
+        { indicator: 'Wholesale funding >20% of total funding', current: '23.4%', threshold: '20%', status: 'breached', trend: 'Increasing' },
+        { indicator: 'Top 10 depositor concentration', current: '31.2%', threshold: '30%', status: 'breached', trend: 'Stable' },
+        { indicator: 'Loan-to-deposit ratio', current: '85.7%', threshold: '80%', status: 'breached', trend: 'Increasing' },
+        { indicator: 'HQLA as % of total assets', current: '5.9%', threshold: '8%', status: 'breached', trend: 'Declining' },
+        { indicator: 'Unencumbered HQLA coverage of next 30d net outflows', current: '84.8%', threshold: '100%', status: 'breached', trend: 'Declining' },
+      ],
+      funding_concentration: [
+        { depositor: 'Top depositor (concealed)', amount_lkr: 8200000000, pct_of_funding: 9.1, type: 'Corporate current', maturity: 'On demand', risk: 'Single depositor withdrawal could breach LCR minimum' },
+        { depositor: 'Depositors 2-5 (concealed)', amount_lkr: 12400000000, pct_of_funding: 13.8, type: 'Mixed', maturity: 'Mix 30-90d', risk: 'Rollover risk at current rate environment' },
+        { depositor: 'Depositors 6-10 (concealed)', amount_lkr: 7700000000, pct_of_funding: 8.6, type: 'Term', maturity: '90-180d', risk: 'Moderate' },
+      ],
+    },
     key_findings: [
       { finding: 'Customer NTB-CORP-0887 is flagged for both over-invoicing (HS 6203, 91% above benchmark) AND duplicate LC applications on overlapping shipments. Combined TBML exposure: LKR 421 Mn. This customer also appeared in Transaction Agent structuring cluster analysis.', severity: 'critical', affected_exposure_lkr: 421000000, recommended_action: 'Suspend LC processing for NTB-CORP-0887. Escalate to CBSL FIU for TBML investigation. File STR. Conduct customer exit assessment.' },
       { finding: 'Gold export under-invoicing (HS 7108) — declared price 55% below spot benchmark. LKR 147 Mn estimated illicit outflow through precious metal trade route. FATF-flagged corridor.', severity: 'high', affected_exposure_lkr: 147000000, recommended_action: 'Refer NTB-CORP-4412 for enhanced trade finance review. Require customs/export board certification before further gold export financing.' },
@@ -417,6 +496,85 @@ export const demoData = {
       { gl: '1200', name: 'Loans Receivable', gl_balance_lkr: 430400000000, sub_ledger_lkr: 430280000000, break_lkr: 120000000, aging: '28d', status: 'Investigating', priority: 'Critical' },
       { gl: '4200', name: 'Fee Income', gl_balance_lkr: 1240000000, sub_ledger_lkr: 1240000000, break_lkr: 0, aging: '0d', status: 'Matched', priority: 'Low' },
     ],
+
+    reversal_analysis: {
+      total_reversals_tested: 89,
+      unmatched_reversals: [
+        { entry_id: 'MJE-2025-3981', gl_account: 'SUS-044', amount_lkr: 9450000, reversal_date: '2025-12-31', original_entry_id: null, finding: 'Reversal posted with no traceable original entry — creates an unexplained credit to fee suspense', risk_score: 88, maker_id: 'STF-1847' },
+        { entry_id: 'MJE-2025-4112', gl_account: '3300-INT-INCOME', amount_lkr: 14200000, reversal_date: '2025-11-30', original_entry_id: null, finding: 'Month-end income reversal with no corresponding accrual — understates November interest income', risk_score: 76, maker_id: 'STF-0441' },
+      ],
+      net_zero_manipulations: [
+        { period: '2025-Q4', gl_account: '1200-LOANS', net_effect_lkr: 0, gross_entries_lkr: 240000000, entry_count: 6, finding: 'Six entries net to zero over the quarter but peak balance mid-period was LKR 120M — used to inflate loan book for quarter-end reporting, then reversed', manipulation_type: 'Window dressing', maker_id: 'STF-1847', severity: 'critical' },
+        { period: '2025-Q3', gl_account: '4100-PROV', net_effect_lkr: 0, gross_entries_lkr: 85000000, entry_count: 4, finding: 'Provision reversals and re-postings net to zero — but timing pattern suggests provision understatement during the quarter', manipulation_type: 'Provision smoothing', maker_id: 'STF-2210', severity: 'high' },
+      ],
+      intercompany_offsets: [
+        { entry_id: 'MJE-2025-7821', debit_account: 'IC-NTB-FINANCE', credit_account: 'SUS-001', amount_lkr: 45000000, finding: 'Intercompany receivable from NTB Finance used to offset CEFT suspense balance — masks unreconciled position', risk_score: 84 },
+        { entry_id: 'MJE-2025-8134', debit_account: 'IC-NTB-INSURANCE', credit_account: '1200-LOANS', amount_lkr: 28000000, finding: 'Loan balance supported by intercompany claim rather than customer obligation — inflates performing loan book', risk_score: 79 },
+      ],
+    },
+    key_findings: [
+      { finding: 'STF-1847 is responsible for 2 of the 5 escalated MJE entries, both after-hours, both SoD violations, both to suspense GL accounts. The MJE pattern is consistent with the insider fraud pattern already confirmed by the Internal Controls and Insider Risk agents.', severity: 'critical', recommended_action: 'Include MJE entries in the STF-1847 forensic investigation package. Freeze all pending journal entries initiated by STF-1847.' },
+      { finding: 'MJE-2026-4205 (midnight, month-end, round-number, LKR 120M, zero documents, SoD violation) is the highest-risk single entry in the population. The combination of 5 simultaneous high-risk flags is statistically improbable in legitimate accounting.', severity: 'critical', recommended_action: 'Immediate reversal pending investigation. Escalate to CFO. Preserve all system access logs for STF-4401.' },
+      { finding: "Benford's Law analysis on MJE amounts shows first digits '4' and '5' are over-represented at 14.2% and 12.6% vs expected 9.7% and 7.9%. This pattern in journal entries (rather than transactions) typically indicates deliberate amount selection to stay below internal materiality review thresholds.", severity: 'high', recommended_action: "Review all MJE amounts between LKR 9M and LKR 10M (sub-threshold structuring). Apply enhanced review to entries from frequent filers." },
+    ],
+    orchestrator_signals: [
+      { signal_type: 'mje_insider_link', target_agent: 'insider', shared_entity_id: 'STF-1847', description: 'MJE testing confirms 2 SoD violations by STF-1847 — consistent with insider fraud pattern. Include in forensic package.', severity: 'critical' },
+      { signal_type: 'mje_suspense_link', target_agent: 'suspense', shared_entity_id: 'SUS-001', description: 'MJE entries to SUS-001 are consistent with the phantom receivable pattern. Cross-reference MJE-2026-4201 with SUS-017 account activity.', severity: 'critical' },
+    ],
+  },
+  mje: {
+    mje_summary: {
+      total_entries_tested: 847,
+      flagged_count: 23,
+      escalated_count: 5,
+      benford_failures: 8,
+      sod_violations: 3,
+      after_hours_entries: 12,
+      avg_risk_score: 34,
+    },
+    mje_entries: [
+      { entry_id: 'MJE-2026-4201', gl_account: 'SUS-001', gl_name: 'CEFT Receivables Suspense', amount_lkr: 18700000, staff_id: 'STF-1847', department: 'Operations', timestamp: '2026-01-14T22:45:00Z', day_of_week: 'Tuesday', risk_score: 92, flags: ['After-hours','Round number','Suspense GL','Missing approval docs'], benford_result: 'Fail', status: 'Escalated', maker_id: 'STF-1847', checker_id: 'STF-1847', sod_violation: true, debit_account: 'SUS-001', credit_account: '2999-CLEARING', doc_completeness_pct: 33, fs_impact: 'Balance Sheet: Suspense balance artificially inflated', reversal_chain: 'Original → Reversal → Repost (3-step chain)', explanation: 'High-risk MJE: after-hours posting to suspense GL by same person who initiated and approved. Missing invoice and approval documents. Reversal chain detected — aging clock potentially reset.', recommended_action: 'Escalate to Head of Accounting. Obtain supporting documents within 48h. Investigate reversal chain and link to insider risk profile of STF-1847.' },
+      { entry_id: 'MJE-2026-4202', gl_account: 'SUS-044', gl_name: 'Fee Suspense BR-14', amount_lkr: 9450000, staff_id: 'STF-1847', department: 'Operations', timestamp: '2026-01-21T23:10:00Z', day_of_week: 'Wednesday', risk_score: 88, flags: ['After-hours','Suspense GL','SoD violation'], benford_result: 'Fail', status: 'Escalated', maker_id: 'STF-1847', checker_id: 'STF-1847', sod_violation: true, debit_account: 'SUS-044', credit_account: 'EXT-ACCT', doc_completeness_pct: 33, fs_impact: 'Balance Sheet: Fee suspense posting, external credit', reversal_chain: null, explanation: 'Second after-hours SoD violation by STF-1847 within 7 days. Amount to external account. Both maker and approver ID identical.', recommended_action: 'Immediate escalation. Freeze SUS-044 pending investigation. Cross-reference with STF-1847 insider risk profile.' },
+      { entry_id: 'MJE-2026-4203', gl_account: '3200', gl_name: 'Provision for Loan Losses', amount_lkr: 45000000, staff_id: 'STF-2341', department: 'Finance', timestamp: '2026-02-10T23:58:00Z', day_of_week: 'Monday', risk_score: 85, flags: ['After-hours','Round number','High amount','Provision account'], benford_result: 'Fail', status: 'Flagged', maker_id: 'STF-2341', checker_id: 'STF-3102', sod_violation: false, debit_account: '3200', credit_account: '1999-CONTRA', doc_completeness_pct: 67, fs_impact: 'P&L: Provision charge impacts profitability reporting', reversal_chain: null, explanation: 'Round-number after-hours posting to provision account. Approval turnaround 3 minutes — insufficient for LKR 45M provision review. Missing IFRS 9 ECL calculation backing document.', recommended_action: 'Obtain ECL calculation document. Review Board approval for provision above materiality threshold of LKR 10M.' },
+      { entry_id: 'MJE-2026-4205', gl_account: '1200', gl_name: 'Loans Receivable', amount_lkr: 120000000, staff_id: 'STF-4401', department: 'Finance', timestamp: '2026-02-28T00:15:00Z', day_of_week: 'Wednesday', risk_score: 97, flags: ['Midnight','Round number','Month-end','Capital account','Materiality breach'], benford_result: 'Fail', status: 'Escalated', maker_id: 'STF-4401', checker_id: 'STF-4401', sod_violation: true, debit_account: '1200', credit_account: '2999-CLEARING', doc_completeness_pct: 0, fs_impact: 'Balance Sheet: Loans receivable balance inflated at month-end', reversal_chain: 'Original → Reversal (2-step — reversal pending)', explanation: 'Highest risk MJE: midnight month-end round-number posting to loans receivable with no supporting documents. SoD violation. LKR 120M exceeds materiality threshold. No documents present.', recommended_action: 'IMMEDIATE ESCALATION to CFO and Head of Internal Audit. Reverse entry pending investigation. Preserve all system logs.' },
+      { entry_id: 'MJE-2026-4206', gl_account: '4200', gl_name: 'Fee Income', amount_lkr: 850000, staff_id: 'STF-1109', department: 'Operations', timestamp: '2026-03-05T09:15:00Z', day_of_week: 'Thursday', risk_score: 48, flags: ['Suspense GL link'], benford_result: 'Pass', status: 'Under Review', maker_id: 'STF-1109', checker_id: 'STF-3201', sod_violation: false, debit_account: 'SUS-ACC-017', credit_account: '4200', doc_completeness_pct: 100, fs_impact: 'P&L: Fee income recognition from SUS-017 account', reversal_chain: null, explanation: 'Business-hours entry with proper maker-checker. Flagged only because source account is SUS-017 which is under investigation. Documents complete.', recommended_action: 'Review in context of SUS-017 investigation. Entry itself appears procedurally correct.' },
+      { entry_id: 'MJE-2026-4207', gl_account: '1100', gl_name: 'Cash and Equivalents', amount_lkr: 2800000, staff_id: 'STF-3891', department: 'Treasury', timestamp: '2026-03-08T10:45:00Z', day_of_week: 'Saturday', risk_score: 72, flags: ['Weekend posting','Treasury GL'], benford_result: 'Pass', status: 'Under Review', maker_id: 'STF-3891', checker_id: 'STF-4120', sod_violation: false, debit_account: '1100', credit_account: 'NOSTRO-USD', doc_completeness_pct: 67, fs_impact: 'Balance Sheet: Cash balance adjustment', reversal_chain: null, explanation: 'Weekend posting to cash GL. Maker-checker intact. Missing FX conversion supporting document. Treasury entries on weekends require Head of Treasury sign-off.', recommended_action: 'Obtain Head of Treasury weekend approval email. Attach FX conversion document.' },
+      { entry_id: 'MJE-2026-4208', gl_account: '2400', gl_name: 'Accrued Expenses', amount_lkr: 89450, staff_id: 'STF-2201', department: 'Finance', timestamp: '2026-03-10T14:30:00Z', day_of_week: 'Monday', risk_score: 22, flags: [], benford_result: 'Pass', status: 'Cleared', maker_id: 'STF-2201', checker_id: 'STF-3310', sod_violation: false, debit_account: '2400', credit_account: '5100-STAFF-COSTS', doc_completeness_pct: 100, fs_impact: 'P&L: Staff cost accrual — routine', reversal_chain: null, explanation: 'Routine business-hours expense accrual. Full documentation. Proper maker-checker. No anomalies.', recommended_action: 'No action required. Auto-cleared.' },
+    ],
+    benford_distribution: [
+      { digit: '1', expected: 30.1, actual: 28.4 },
+      { digit: '2', expected: 17.6, actual: 16.8 },
+      { digit: '3', expected: 12.5, actual: 11.9 },
+      { digit: '4', expected: 9.7,  actual: 14.2 },
+      { digit: '5', expected: 7.9,  actual: 12.6 },
+      { digit: '6', expected: 6.7,  actual: 6.1 },
+      { digit: '7', expected: 5.8,  actual: 4.9 },
+      { digit: '8', expected: 5.1,  actual: 3.2 },
+      { digit: '9', expected: 4.6,  actual: 1.9 },
+    ],
+    gl_reconciliation: [
+      { gl: 'SUS-001', name: 'CEFT Receivables Suspense', gl_balance_lkr: 148000000, sub_ledger_lkr: 141200000, break_lkr: 6800000, aging: '94d', status: 'Investigating', priority: 'Critical' },
+      { gl: 'SUS-044', name: 'Fee Suspense BR-14', gl_balance_lkr: 8900000, sub_ledger_lkr: 8760000, break_lkr: 140000, aging: '67d', status: 'Investigating', priority: 'High' },
+      { gl: '3200', name: 'Provision for Loan Losses', gl_balance_lkr: 2840000000, sub_ledger_lkr: 2840000000, break_lkr: 0, aging: '0d', status: 'Matched', priority: 'Low' },
+      { gl: '1200', name: 'Loans Receivable', gl_balance_lkr: 430400000000, sub_ledger_lkr: 430280000000, break_lkr: 120000000, aging: '28d', status: 'Investigating', priority: 'Critical' },
+      { gl: '4200', name: 'Fee Income', gl_balance_lkr: 1240000000, sub_ledger_lkr: 1240000000, break_lkr: 0, aging: '0d', status: 'Matched', priority: 'Low' },
+    ],
+
+    reversal_analysis: {
+      total_reversals_tested: 89,
+      unmatched_reversals: [
+        { entry_id: 'MJE-2025-3981', gl_account: 'SUS-044', amount_lkr: 9450000, reversal_date: '2025-12-31', original_entry_id: null, finding: 'Reversal posted with no traceable original entry — creates an unexplained credit to fee suspense', risk_score: 88, maker_id: 'STF-1847' },
+        { entry_id: 'MJE-2025-4112', gl_account: '3300-INT-INCOME', amount_lkr: 14200000, reversal_date: '2025-11-30', original_entry_id: null, finding: 'Month-end income reversal with no corresponding accrual — understates November interest income', risk_score: 76, maker_id: 'STF-0441' },
+      ],
+      net_zero_manipulations: [
+        { period: '2025-Q4', gl_account: '1200-LOANS', net_effect_lkr: 0, gross_entries_lkr: 240000000, entry_count: 6, finding: 'Six entries net to zero over the quarter but peak balance mid-period was LKR 120M — used to inflate loan book for quarter-end reporting, then reversed', manipulation_type: 'Window dressing', maker_id: 'STF-1847', severity: 'critical' },
+        { period: '2025-Q3', gl_account: '4100-PROV', net_effect_lkr: 0, gross_entries_lkr: 85000000, entry_count: 4, finding: 'Provision reversals and re-postings net to zero — but timing pattern suggests provision understatement during the quarter', manipulation_type: 'Provision smoothing', maker_id: 'STF-2210', severity: 'high' },
+      ],
+      intercompany_offsets: [
+        { entry_id: 'MJE-2025-7821', debit_account: 'IC-NTB-FINANCE', credit_account: 'SUS-001', amount_lkr: 45000000, finding: 'Intercompany receivable from NTB Finance used to offset CEFT suspense balance — masks unreconciled position', risk_score: 84 },
+        { entry_id: 'MJE-2025-8134', debit_account: 'IC-NTB-INSURANCE', credit_account: '1200-LOANS', amount_lkr: 28000000, finding: 'Loan balance supported by intercompany claim rather than customer obligation — inflates performing loan book', risk_score: 79 },
+      ],
+    },
     key_findings: [
       { finding: 'STF-1847 is responsible for 2 of the 5 escalated MJE entries, both after-hours, both SoD violations, both to suspense GL accounts. The MJE pattern is consistent with the insider fraud pattern already confirmed by the Internal Controls and Insider Risk agents.', severity: 'critical', recommended_action: 'Include MJE entries in the STF-1847 forensic investigation package. Freeze all pending journal entries initiated by STF-1847.' },
       { finding: 'MJE-2026-4205 (midnight, month-end, round-number, LKR 120M, zero documents, SoD violation) is the highest-risk single entry in the population. The combination of 5 simultaneous high-risk flags is statistically improbable in legitimate accounting.', severity: 'critical', recommended_action: 'Immediate reversal pending investigation. Escalate to CFO. Preserve all system access logs for STF-4401.' },
@@ -539,6 +697,37 @@ export const demoData = {
         recommended_action: 'Watch monitoring for 30 days. No action required unless further signals emerge.',
       },
     ],
+    collusion_pairs: [
+      {
+        staff_a: 'STF-1847', role_a: 'Relationship Manager', branch_a: 'BR-14',
+        staff_b: 'INT-BR14-007', role_b: 'External Introducer', branch_b: 'External',
+        co_occurrences: 14, expected_co_occurrences: 1.2, co_occurrence_ratio: 11.7,
+        pattern: 'INT-BR14-007 introduced 14 borrowers approved by STF-1847. All 14 have KYC gaps. 11 of 14 loans flagged as anomalous by Credit Agent.',
+        severity: 'critical', risk_score: 0.97, financial_exposure_lkr: 387000000,
+        finding: 'Probability of 14 co-occurrences against 1.2 expected: p<0.0001. Coordinated pair: introducer brings fabricated borrowers, loan officer approves without genuine due diligence.',
+      },
+      {
+        staff_a: 'STF-2341', role_a: 'Senior Credit Officer', branch_a: 'BR-23',
+        staff_b: 'STF-0891', role_b: 'Branch Operations Manager', branch_b: 'BR-23',
+        co_occurrences: 8, expected_co_occurrences: 2.1, co_occurrence_ratio: 3.8,
+        pattern: 'STF-2341 initiates loan; STF-0891 approves — bypassing the credit committee pathway for amounts above LKR 5M. 8 instances. All off-hours.',
+        severity: 'high', risk_score: 0.74, financial_exposure_lkr: 143000000,
+        finding: 'Two staff members systematically bypassing dual-control on credit above threshold. Individually each appears within normal bounds; combined pattern is statistically anomalous.',
+      },
+    ],
+    approval_chain_anomalies: [
+      {
+        anomaly_type: 'Consistent bypassing of same approver',
+        description: 'STF-1847 routes all loan approvals to themselves (SoD violation) or STF-0091 — the approver with shortest avg turnaround (0.9 min). The remaining 6 eligible approvers are never used by STF-1847.',
+        affected_approver_bypassed: 'STF-4412 (Credit Manager — most experienced)',
+        instances: 23, p_value: 0.0003, severity: 'critical',
+      },
+      {
+        anomaly_type: 'Split-transaction approval to avoid committee review',
+        description: '4 corporate loan applications split into tranches of LKR 4.8M–4.9M each — just below the LKR 5M credit committee threshold — approved individually by STF-1847 within same day.',
+        instances: 4, combined_exposure_lkr: 87000000, severity: 'high',
+      },
+    ],
     key_findings: [
       { finding: 'STF-1847 (BR-14) matches all 6 insider fraud indicators simultaneously: SoD violations, override concentration, same-cluster approvals, off-hours activity, approval turnaround anomaly, and multi-agent corroboration from Credit, KYC, and Digital agents.', severity: 'critical', recommended_action: 'Immediate suspension. Forensic investigation. CBSL notification.' },
       { finding: '12 staff members across the 90-branch network have risk scores above the 40/100 watch threshold. 2 are in the critical band (above 80). Network average is 18/100 — the outliers are statistically significant.', severity: 'high', recommended_action: 'Deploy Compliance review for all 12 flagged staff. Monthly reporting to Head of Internal Audit.' },
@@ -604,6 +793,41 @@ export const kpiData = {
   fraudScores: { value: '23', label: 'Active Fraud Scores >0.8', status: 'amber', trend: '4 STR-eligible cases', note: 'SUS-017 critical' },
   branchesRisk: { value: '4', label: 'Branches Below Threshold', status: 'amber', trend: 'BR-14 at 41/100', note: 'Field audit required' },
 };
+
+
+export const peerBenchmarks = {
+  credit: {
+    stage3_ratio:        { ntb: 0.91, peer_median: 2.84, peer_best: 0.71, peer_worst: 5.12, source: 'CBSL Banking Sector Report Q3 2025' },
+    override_rate:       { ntb: 4.8,  peer_median: 2.1,  peer_best: 0.8,  peer_worst: 6.3,  source: 'CBSL Supervisory Review 2025' },
+    ecl_coverage:        { ntb: 68.2, peer_median: 74.1, peer_best: 82.3, peer_worst: 61.0, source: 'Published financials Q3 2025' },
+    loan_growth_yoy:     { ntb: 50.1, peer_median: 18.3, peer_best: 12.1, peer_worst: 54.2, source: 'CBSL Monthly Bulletin Nov 2025' },
+  },
+  kyc: {
+    kyc_gap_rate:        { ntb: 4.7,  peer_median: 2.9,  peer_best: 1.2,  peer_worst: 7.8,  source: 'CBSL AML Compliance Review 2025' },
+    pep_edd_overdue_pct: { ntb: 14.2, peer_median: 8.1,  peer_best: 2.3,  peer_worst: 22.4, source: 'CBSL FIU Industry Survey 2025' },
+    str_filing_rate:     { ntb: 0.031,peer_median: 0.044,peer_best: 0.089,peer_worst: 0.011,source: 'CBSL FIU Annual Report 2024' },
+  },
+  controls: {
+    override_rate_branch:{ ntb: 14.3, peer_median: 3.2,  peer_best: 0.9,  peer_worst: 18.1, source: 'CBSL Supervisory Review 2025 — branch-level' },
+    sod_violation_rate:  { ntb: 0.021,peer_median: 0.003,peer_best: 0.000,peer_worst: 0.041,source: 'Internal audit industry benchmarking 2025' },
+    avg_approval_minutes:{ ntb: 1.4,  peer_median: 18.4, peer_best: 12.1, peer_worst: 2.1,  source: 'CBSL Credit Process Review 2024' },
+  },
+  liquidity: {
+    lcr:                 { ntb: 203.4,peer_median: 248.1,peer_best: 312.4,peer_worst: 128.4,source: 'CBSL Liquidity Report Q4 2025' },
+    nsfr:                { ntb: 138.3,peer_median: 149.8,peer_best: 168.2,peer_worst: 112.1,source: 'CBSL Liquidity Report Q4 2025' },
+    wholesale_funding_pct:{ ntb:23.4, peer_median:16.8,  peer_best:11.2,  peer_worst:31.4,  source: 'CBSL Funding Structure Report 2025' },
+    ld_ratio:            { ntb: 85.7, peer_median: 78.3, peer_best: 68.1, peer_worst: 91.2, source: 'CBSL Banking Sector Report Q3 2025' },
+  },
+  mje: {
+    mje_sod_rate:        { ntb: 0.47, peer_median: 0.12, peer_best: 0.00, peer_worst: 0.93, source: 'Internal audit benchmarking — SL banking 2025' },
+    after_hours_mje_pct: { ntb: 8.3,  peer_median: 3.1,  peer_best: 0.9,  peer_worst: 12.4, source: 'Internal audit benchmarking — SL banking 2025' },
+  },
+  insider: {
+    avg_network_risk_score:{ ntb:18,  peer_median: 14,   peer_best: 9,    peer_worst: 24,   source: 'ACFE South Asia Fraud Survey 2024' },
+    insider_fraud_losses:  { ntb: null,peer_median:0.08, peer_best:0.02,  peer_worst:0.31,  source: 'ACFE — % of revenue lost to insider fraud, financial services' },
+  },
+};
+
 
 export const executiveData = {
   regulatory_trend: [

@@ -399,16 +399,129 @@ function CaseDetail({ c, status, onStatusChange, onClose }) {
         </>)}
 
         {tab === 'str' && (<>
+
+          {/* STR Status banner */}
           <div style={{ padding:'12px 14px', background:strInfo.bg, border:`1px solid ${strInfo.color}30`, borderRadius:10 }}>
-            <div style={{ display:'flex', gap:7, alignItems:'center', marginBottom:6 }}><Shield size={13} style={{ color:strInfo.color }}/><span style={{ fontSize:13, fontWeight:700, color:strInfo.color }}>{strInfo.label}</span></div>
-            {d.strStatus==='eligible'&&!d.strFiled&&<><div style={{ fontSize:12, color:strInfo.color, marginBottom:8 }}>FTRA deadline: 5 working days from case creation.</div><button style={{ padding:'7px 14px', background:'#DC2626', color:'white', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer' }}>Initiate STR Filing</button></>}
-          </div>
-          {[{ label:'CBSL Notification', value:d.cbslNotified?'Filed':'Not filed', color:d.cbslNotified?'#16A34A':'#DC2626' },{ label:'Fraud Register Ref', value:d.fraudRegisterRef||'— Not assigned', color:d.fraudRegisterRef?'var(--color-text)':'var(--color-text-3)' },{ label:'STR Filed', value:d.strFiled?'Yes':'Not yet filed', color:d.strFiled?'#16A34A':d.strStatus==='eligible'?'#DC2626':'var(--color-text-3)' }].map((f,i) => (
-            <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'9px 12px', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:8 }}>
-              <span style={{ fontSize:12, color:'var(--color-text-2)' }}>{f.label}</span>
-              <span style={{ fontSize:12, fontWeight:700, color:f.color }}>{f.value}</span>
+            <div style={{ display:'flex', gap:7, alignItems:'center', marginBottom:4 }}>
+              <Shield size={13} style={{ color:strInfo.color }}/>
+              <span style={{ fontSize:13, fontWeight:700, color:strInfo.color }}>{strInfo.label}</span>
+              {d.strStatus==='eligible' && !d.strFiled && (
+                <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#DC2626' }}>
+                  ⏱ FTRA deadline: 5 working days from case creation
+                </span>
+              )}
             </div>
-          ))}
+            {d.strFiled && d.strReference && (
+              <div style={{ fontSize:12, color:strInfo.color }}>
+                Filed reference: <strong>{d.strReference}</strong>
+              </div>
+            )}
+          </div>
+
+          {/* Key regulatory fields */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10 }}>
+            {[
+              { label:'STR Filed', value:d.strFiled?'Yes':'Not yet filed', color:d.strFiled?'#16A34A':d.strStatus==='eligible'?'#DC2626':'var(--color-text-3)' },
+              { label:'CBSL Notification', value:d.cbslNotified?'Filed':'Not filed', color:d.cbslNotified?'#16A34A':'#DC2626' },
+              { label:'Fraud Register Ref', value:d.fraudRegisterRef||'— Not assigned', color:d.fraudRegisterRef?'var(--color-text)':'var(--color-text-3)' },
+            ].map((f,i) => (
+              <div key={i} style={{ padding:'10px 12px', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:8 }}>
+                <div style={{ fontSize:10, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:3 }}>{f.label}</div>
+                <div style={{ fontSize:13, fontWeight:700, color:f.color }}>{f.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* STR Draft Generator */}
+          {(d.strStatus === 'eligible' || d.strStatus === 'filed') && (() => {
+            const strDraft = [
+              `TO: Director General, Financial Intelligence Unit`,
+              `FROM: Nations Trust Bank PLC — Compliance Division`,
+              `DATE: ${new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' })}`,
+              `SUBJECT: Suspicious Transaction Report — ${d.id} — ${d.title}`,
+              ``,
+              `1. REPORTING ENTITY`,
+              `   Bank: Nations Trust Bank PLC | BIC: NTBKLKLX`,
+              `   Licence No: CBSL/LCB/2024/NTB | Branch: ${d.branches?.[0] || 'Multiple branches'}`,
+              `   Compliance Officer: [Name] | Tel: [Tel]`,
+              ``,
+              `2. SUSPECT / ENTITY DETAILS`,
+              `   Entity: ${d.entities?.join(', ') || d.id}`,
+              `   Relationship: ${d.domain === 'credit' ? 'Borrower' : d.domain === 'suspense' ? 'Internal account holder' : d.domain === 'trade' ? 'Corporate customer' : 'Account holder / Staff member'}`,
+              `   Account(s): [See attached transaction schedule]`,
+              ``,
+              `3. GROUNDS FOR SUSPICION`,
+              `   ${d.description || 'Multiple agents flagged anomalous patterns — see evidence tab.'}`,
+              ``,
+              `4. SUSPICIOUS TRANSACTIONS`,
+              `   Total flagged exposure: LKR ${((d.exposure||0)/1e6).toFixed(1)} million`,
+              `   Period: ${d.period || 'FY 2025 (January — December)'}`,
+              `   Transaction types: ${d.domain === 'transaction' ? 'CEFT transfers below LKR 5M threshold (structuring)' : d.domain === 'suspense' ? 'CEFT receivables with no corresponding outflow' : d.domain === 'trade' ? 'Documentary credit — suspected over-invoicing TBML' : d.domain === 'credit' ? 'Loan approvals — suspected fictitious/inflated borrowers' : 'Mixed transaction types — see evidence schedule'}`,
+              ``,
+              `5. AGENT DETECTION SUMMARY`,
+              `   This STR is supported by multi-agent AI analysis:`,
+              ...((d.agents||[]).map(a => `   • ${a} — confirmed anomaly signals`)),
+              `   Combined Orchestrator severity score: ${d.severity >= 0.95 ? '0.98/1.00 (CRITICAL)' : (d.severity||0.85).toFixed(2) + '/1.00'}`,
+              ``,
+              `6. ACTIONS TAKEN`,
+              `   [ ] Account(s) frozen pending investigation`,
+              `   [ ] Evidence package preserved`,
+              `   [ ] Senior management notified`,
+              `   [ ] Legal counsel engaged`,
+              ``,
+              `7. REGULATORY OBLIGATIONS`,
+              `   This report is submitted pursuant to Section 7 of the Financial`,
+              `   Transactions Reporting Act No. 6 of 2006 (FTRA) and CBSL`,
+              `   Direction on AML/CFT.`,
+              ``,
+              `8. ATTACHMENTS`,
+              `   A — Transaction schedule with timestamps`,
+              `   B — Agent detection evidence package`,
+              `   C — Account statements (3 months)`,
+              `   D — KYC documentation`,
+              ``,
+              `Signed: _____________________ Date: ___________________`,
+              `Chief Compliance Officer / MLCO, Nations Trust Bank PLC`,
+            ].join('\n');
+
+            return (
+              <div>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                    <FileText size={14} style={{ color:'var(--color-text-2)' }} />
+                    <span style={{ fontSize:13, fontWeight:700 }}>STR Draft — CBSL FIU Format</span>
+                    <InfoTooltip text="This draft is auto-generated from case evidence and follows CBSL Financial Intelligence Unit reporting requirements under FTRA Section 7. Review and complete bracketed fields before submission. The draft must be reviewed by the MLCO before filing." position="right" width={300} />
+                  </div>
+                  <div style={{ display:'flex', gap:8 }}>
+                    <button
+                      onClick={() => {
+                        const blob = new Blob([strDraft], { type:'text/plain' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `STR-DRAFT-${d.id}-${new Date().toISOString().slice(0,10)}.txt`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }}
+                      style={{ padding:'6px 14px', background:'var(--color-blue)', color:'white', border:'none', borderRadius:7, fontSize:12, fontWeight:600, cursor:'pointer', display:'flex', alignItems:'center', gap:5 }}>
+                      ↓ Download Draft
+                    </button>
+                    <button
+                      onClick={() => navigator.clipboard?.writeText(strDraft)}
+                      style={{ padding:'6px 14px', background:'var(--color-surface-2)', color:'var(--color-text)', border:'1px solid var(--color-border)', borderRadius:7, fontSize:12, fontWeight:600, cursor:'pointer' }}>
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                <div style={{ background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:10, padding:'16px 18px', fontFamily:'monospace', fontSize:11, lineHeight:1.85, color:'var(--color-text)', whiteSpace:'pre-wrap', maxHeight:480, overflowY:'auto' }}>
+                  {strDraft}
+                </div>
+                <div style={{ marginTop:10, padding:'8px 12px', background:'#FFFBEB', border:'1px solid rgba(133,79,11,0.25)', borderRadius:8, fontSize:11, color:'#854F0B', lineHeight:1.55 }}>
+                  ⚠ <strong>Review required:</strong> Complete all bracketed fields. Compliance Officer and MLCO must sign before submission to CBSL FIU. FIU reference number will be issued upon acknowledgement. Retain copy in case file.
+                </div>
+              </div>
+            );
+          })()}
         </>)}
 
         {tab === 'rem' && (<>

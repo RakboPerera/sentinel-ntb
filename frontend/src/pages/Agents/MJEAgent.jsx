@@ -156,7 +156,13 @@ function MJEExpandedRow({ entry }) {
             <div style={{ fontSize: 10, fontWeight: 700, color: entry.status === 'Escalated' ? 'var(--color-red)' : 'var(--color-amber)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
               <Zap size={10} style={{ display: 'inline', marginRight: 4 }} />Recommended action
             </div>
-            <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.6 }}>{entry.recommended_action}</div>
+            <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.6 }}>{entry.recommended_action}
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>847 manual journal entries (100% — full population)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>All entries >LKR 1M; all SoD violations regardless of amount</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Automated system journals excluded; Benford's Law reduced for accounts with &lt;50 entries</div>
+                </div></div>
           </div>
         </div>
       </div>
@@ -280,7 +286,7 @@ export default function MJEAgent() {
             {/* Tabs */}
             <div className="agent-panel">
               <div className="agent-panel-header" style={{ padding: 0 }}>
-                {[['population', 'MJE Population'], ["benford", "Benford Analysis"], ['gl', 'GL Reconciliation']].map(([tab, label]) => (
+                {[['population', 'MJE Population'], ["benford", "Benford Analysis"], ['gl', 'GL Reconciliation'], ['reversals', 'Reversal Detection']].map(([tab, label]) => (
                   <button key={tab} onClick={() => setActiveTab(tab)}
                     style={{ padding: '12px 18px', fontSize: 12, fontWeight: activeTab === tab ? 600 : 400, color: activeTab === tab ? COLOR : 'var(--color-text-2)', background: activeTab === tab ? `${COLOR}08` : 'transparent', borderBottom: `2px solid ${activeTab === tab ? COLOR : 'transparent'}`, border: 'none', cursor: 'pointer', flex: 1, transition: 'all 0.12s' }}>
                     {label}
@@ -434,6 +440,87 @@ export default function MJEAgent() {
                 </div>
               )}
             </div>
+
+              {activeTab === 'reversals' && (
+                <div style={{ display:'flex', flexDirection:'column', gap:20, padding:'4px 0' }}>
+
+                  {/* Unmatched reversals */}
+                  <div>
+                    <div style={{ fontSize:12, fontWeight:700, color:'var(--color-text)', marginBottom:12, display:'flex', alignItems:'center', gap:8 }}>
+                      Unmatched Reversal Entries
+                      <InfoTooltip text="A reversal posted with no traceable original entry creates an unexplained balance movement. Legitimate reversals always reference the original entry ID. Reversals with no original entry are either errors or deliberate manipulations." width={280} position="right" />
+                      <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>
+                        {(data.reversal_analysis?.unmatched_reversals||[]).length} unmatched
+                      </span>
+                    </div>
+                    {(data.reversal_analysis?.unmatched_reversals||[]).map((entry, i) => (
+                      <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:'4px solid #DC2626', borderRadius:8, marginBottom:10 }}>
+                        <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
+                          <code style={{ fontSize:12, fontWeight:700 }}>{entry.entry_id}</code>
+                          <span style={{ fontSize:11, color:'var(--color-text-3)' }}>GL: <strong>{entry.gl_account}</strong></span>
+                          <span style={{ fontSize:11, fontWeight:700, color:'#DC2626' }}>LKR {(entry.amount_lkr/1e6).toFixed(1)}M</span>
+                          <span style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>Maker: {entry.maker_id} · Risk: {entry.risk_score}/100</span>
+                        </div>
+                        <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>
+                          {entry.finding}
+                        </div>
+                        <div style={{ marginTop:8, fontSize:11, color:'#DC2626' }}>
+                          ⚠ Original entry ID: <code>null</code> — no corresponding original found in GL
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Net-zero period manipulations */}
+                  <div>
+                    <div style={{ fontSize:12, fontWeight:700, color:'var(--color-text)', marginBottom:12, display:'flex', alignItems:'center', gap:8 }}>
+                      Net-Zero Period Manipulations
+                      <InfoTooltip text="Multiple entries that net to zero over a reporting period can conceal a temporary balance manipulation used for window dressing or income smoothing. The net effect is zero but peak mid-period balances reveal the manipulation." width={300} position="right" />
+                      <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>
+                        {(data.reversal_analysis?.net_zero_manipulations||[]).length} patterns
+                      </span>
+                    </div>
+                    {(data.reversal_analysis?.net_zero_manipulations||[]).map((entry, i) => (
+                      <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:`4px solid ${entry.severity==='critical'?'#DC2626':'#D97706'}`, borderRadius:8, marginBottom:10 }}>
+                        <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
+                          <span style={{ fontSize:11, fontWeight:700 }}>{entry.period}</span>
+                          <span style={{ fontSize:11, color:'var(--color-text-3)' }}>GL: <strong>{entry.gl_account}</strong></span>
+                          <span style={{ fontSize:11, padding:'2px 7px', background:`${entry.severity==='critical'?'#FEF0F0':'#FFFBEB'}`, color:`${entry.severity==='critical'?'#DC2626':'#D97706'}`, borderRadius:4, fontWeight:700 }}>{entry.manipulation_type}</span>
+                          <span style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>Gross: LKR {(entry.gross_entries_lkr/1e6).toFixed(0)}M across {entry.entry_count} entries · Net: 0</span>
+                        </div>
+                        <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>
+                          {entry.finding}
+                        </div>
+                        <div style={{ marginTop:6, fontSize:11, color:'var(--color-text-3)' }}>Maker: {entry.maker_id}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Intercompany offsets */}
+                  <div>
+                    <div style={{ fontSize:12, fontWeight:700, color:'var(--color-text)', marginBottom:12, display:'flex', alignItems:'center', gap:8 }}>
+                      Intercompany / Suspense Offset Entries
+                      <InfoTooltip text="Using intercompany receivables or related-party claims to offset genuine liabilities masks unreconciled positions and inflates asset quality. These entries should be reviewed against actual intercompany agreements and settlement records." width={300} position="right" />
+                    </div>
+                    {(data.reversal_analysis?.intercompany_offsets||[]).map((entry, i) => (
+                      <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:'4px solid #854F0B', borderRadius:8, marginBottom:10 }}>
+                        <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
+                          <code style={{ fontSize:12, fontWeight:700 }}>{entry.entry_id}</code>
+                          <span style={{ fontSize:11, color:'var(--color-text-3)' }}>DR: <strong>{entry.debit_account}</strong></span>
+                          <span style={{ fontSize:11 }}>→</span>
+                          <span style={{ fontSize:11, color:'var(--color-text-3)' }}>CR: <strong>{entry.credit_account}</strong></span>
+                          <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#854F0B' }}>LKR {(entry.amount_lkr/1e6).toFixed(0)}M</span>
+                        </div>
+                        <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>
+                          {entry.finding}
+                        </div>
+                        <div style={{ marginTop:6, fontSize:11, color:'var(--color-text-3)' }}>Risk score: {entry.risk_score}/100</div>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+              )}
           </>
         );
       }}

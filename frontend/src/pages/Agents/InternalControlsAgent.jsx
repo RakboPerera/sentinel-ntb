@@ -3,7 +3,7 @@ import AgentModule from '../../components/shared/AgentModule.jsx';
 import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
 import { VisualFindingCard, InsightBox, ScoreBar, StatCard, PanelWithMethod } from '../../components/shared/VisualComponents.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
-import { demoData } from '../../data/demoData.js';
+import { demoData, peerBenchmarks } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 
@@ -76,7 +76,13 @@ export default function InternalControlsAgent() {
               </div>
               <div style={{ fontSize:12, color:'#854F0B', lineHeight:1.65 }}>
                 In our opinion, the internal control environment at Branch BR-14 is NOT EFFECTIVE. 4 SoD violations confirmed. STF-1847 matches all 6 insider fraud indicators simultaneously. Immediate suspension and field audit required.
-              </div>
+              
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>18,743 approval transactions across 90 branches</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>All SoD violations; branches with override rate >5% or composite &lt;65</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Manual overrides outside system not captured; delegated authority limits sourced from HR records Q3 2025</div>
+                </div></div>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
@@ -194,6 +200,42 @@ export default function InternalControlsAgent() {
             </PanelWithMethod>
           </>
         );
+
+          <div className="agent-panel">
+            <div className="agent-panel-header">
+              <span className="agent-panel-title">Peer Benchmarking — Internal Controls</span>
+              <InfoTooltip text="NTB vs licensed commercial bank peers on key controls metrics. Source: CBSL Supervisory Review 2025 and internal audit industry benchmarking." position="left" width={300} />
+            </div>
+            <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
+              <thead>
+                <tr style={{ background:'var(--color-surface-2)', borderBottom:'2px solid var(--color-border)' }}>
+                  {['Metric','NTB','Peer Median','Best','Worst','vs Median'].map(h => (
+                    <th key={h} style={{ padding:'9px 12px', textAlign:'left', fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'var(--color-text-3)' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(peerBenchmarks.controls).map(([key, b], i) => {
+                  const labels = { override_rate_branch:'BR-14 Override Rate (%)', sod_violation_rate:'SoD Violation Rate (%)', avg_approval_minutes:'Avg Approval Turnaround (min)' };
+                  const lowerBetter = true;
+                  const better = b.ntb <= b.peer_median;
+                  const col = better ? '#16A34A' : '#DC2626';
+                  return (
+                    <tr key={key} style={{ borderBottom:'1px solid var(--color-border)', background:i%2===0?'transparent':'var(--color-surface-2)' }}>
+                      <td style={{ padding:'9px 12px', fontWeight:600 }}>{labels[key]||key}</td>
+                      <td style={{ padding:'9px 12px', fontWeight:800, color:col }}>{b.ntb}</td>
+                      <td style={{ padding:'9px 12px', color:'var(--color-text-2)' }}>{b.peer_median}</td>
+                      <td style={{ padding:'9px 12px', color:'#16A34A', fontWeight:600 }}>{b.peer_best}</td>
+                      <td style={{ padding:'9px 12px', color:'#DC2626' }}>{b.peer_worst}</td>
+                      <td style={{ padding:'9px 12px' }}><span style={{ fontSize:11, fontWeight:700, padding:'2px 8px', borderRadius:4, background:`${col}14`, color:col }}>{better ? '✓ Better' : '✗ Weaker'}</span></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div style={{ padding:'8px 12px', fontSize:10, color:'var(--color-text-3)' }}>Source: {peerBenchmarks.controls.override_rate_branch.source}</div>
+          </div>
+
       }}
       </AgentModule>
   );

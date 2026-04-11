@@ -115,7 +115,13 @@ export default function TransactionAgent() {
               </div>
               <div style={{ fontSize:12, color:'#A32D2D', lineHeight:1.65 }}>
                 In our opinion, the AML transaction monitoring control environment is NOT EFFECTIVE. Structuring activity is confirmed at 4 accounts. 4 STR-eligible cases must be filed within 5 working days under FTRA.
-              </div>
+              
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>284,719 transactions (100%)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>LKR 5M STR threshold; velocity anomalies ≥3× 90-day baseline</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Benford's Law requires sufficient volume per account; new accounts (&lt;90 days) excluded from velocity baseline</div>
+                </div></div>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>

@@ -3,7 +3,7 @@ import AgentModule from '../../components/shared/AgentModule.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
 import { VisualFindingCard, InsightBox, StatCard, PanelWithMethod, MetricComparison } from '../../components/shared/VisualComponents.jsx';
-import { demoData } from '../../data/demoData.js';
+import { demoData, peerBenchmarks } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -37,7 +37,13 @@ export default function KYCAgent() {
               </div>
               <div style={{ fontSize:12, color:'#0F6E56', lineHeight:1.65 }}>
                 In our opinion, KYC compliance controls are PARTIALLY EFFECTIVE. Gap rate of 4.7% exceeds the CBSL 2% threshold. 34 PEP accounts have overdue Enhanced Due Diligence. A formal remediation programme is required.
-              </div>
+              
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>835,944 customer accounts (100%)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>As at 31 December 2025</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>All PEP accounts; KYC gaps on accounts with transactions >LKR 1M in period</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Third-party PEP database updated quarterly; real-time sanctions screening not within scope</div>
+                </div></div>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
@@ -179,6 +185,43 @@ export default function KYCAgent() {
             </div>
           </>
         );
+
+          <div className="agent-panel">
+            <div className="agent-panel-header">
+              <span className="agent-panel-title">Peer Benchmarking — KYC / AML Compliance</span>
+              <InfoTooltip text="NTB KYC/AML metrics vs licensed commercial bank peers. Source: CBSL AML Compliance Review 2025 and CBSL FIU Industry Survey." position="left" width={300} />
+            </div>
+            <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
+              <thead>
+                <tr style={{ background:'var(--color-surface-2)', borderBottom:'2px solid var(--color-border)' }}>
+                  {['Metric','NTB','Peer Median','Best','Worst','vs Median'].map(h => (
+                    <th key={h} style={{ padding:'9px 12px', textAlign:'left', fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'var(--color-text-3)' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(peerBenchmarks.kyc).map(([key, b], i) => {
+                  const labels = { kyc_gap_rate:'KYC Gap Rate (%)', pep_edd_overdue_pct:'PEP EDD Overdue (%)', str_filing_rate:'STR Filing Rate (per acct)' };
+                  const lowerBetter = ['kyc_gap_rate','pep_edd_overdue_pct'].includes(key);
+                  const strKey = key === 'str_filing_rate';
+                  const better = strKey ? b.ntb >= b.peer_median : lowerBetter ? b.ntb <= b.peer_median : b.ntb >= b.peer_median;
+                  const col = better ? '#16A34A' : '#DC2626';
+                  return (
+                    <tr key={key} style={{ borderBottom:'1px solid var(--color-border)', background:i%2===0?'transparent':'var(--color-surface-2)' }}>
+                      <td style={{ padding:'9px 12px', fontWeight:600 }}>{labels[key]||key}</td>
+                      <td style={{ padding:'9px 12px', fontWeight:800, color:col }}>{b.ntb}</td>
+                      <td style={{ padding:'9px 12px', color:'var(--color-text-2)' }}>{b.peer_median}</td>
+                      <td style={{ padding:'9px 12px', color:'#16A34A', fontWeight:600 }}>{b.peer_best}</td>
+                      <td style={{ padding:'9px 12px', color:'#DC2626' }}>{b.peer_worst}</td>
+                      <td style={{ padding:'9px 12px' }}><span style={{ fontSize:11, fontWeight:700, padding:'2px 8px', borderRadius:4, background:`${col}14`, color:col }}>{better ? '✓ Better' : '✗ Weaker'}</span></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div style={{ padding:'8px 12px', fontSize:10, color:'var(--color-text-3)' }}>Source: {peerBenchmarks.kyc.kyc_gap_rate.source}</div>
+          </div>
+
       }}
       </AgentModule>
   );

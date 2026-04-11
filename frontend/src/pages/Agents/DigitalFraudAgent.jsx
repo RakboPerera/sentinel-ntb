@@ -208,7 +208,13 @@ export default function DigitalFraudAgent() {
                           </div>
                           <div style={{ padding:'8px 14px', background: sess.risk_score>=0.9?'var(--color-red-light)':'var(--color-amber-light)', borderRadius:8, fontSize:12, color: sess.risk_score>=0.9?'var(--color-red)':'var(--color-amber)', fontWeight:500 }}>
                             → {sess.recommended_action}
-                          </div>
+                          
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>148,247 authenticated sessions (100%)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>Sessions with behavioral score &lt;50/100; impossible travel within same day</div>
+                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Behavioral baseline requires 90-day history; HSBC migrated accounts have reduced confidence</div>
+                </div></div>
                         </div>
                       )}
                     </div>
