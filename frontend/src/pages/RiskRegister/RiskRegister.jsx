@@ -20,7 +20,7 @@ const RISK_REGISTER = [
     description: '6-dimension composite: SoD violations, 87% override concentration, same-cluster approvals, 12 off-hours, 1.4min turnaround, session anomalies.',
     exposure: 387000000, owner: 'Chief Internal Auditor', dueDate: '2025-12-21',
     status: 'complete', caseRef: 'CASE-001', strRequired: false, cbslRequired: true,
-    agentPath: '/agents/insider-risk', color: '#2D2D2B' },
+    agentPath: '/agents/insider-risk', color: '#1F2937' },
   { id: 'RR-003', domain: 'Credit Intelligence', agent: 'credit', severity: 'critical', category: 'Credit / ECL',
     title: '11 override-approved loans — anomaly scores >0.85 — BR-14',
     description: 'LKR 387M in loans with Stage 1 assignment but predicted Stage 2-3. All override-approved by STF-1847. ECL understatement: LKR 310M.',
@@ -38,7 +38,7 @@ const RISK_REGISTER = [
     description: 'Structuring score 0.94. 15 transactions in 22 minutes, LKR 4.6M–4.95M. Round-trip: LKR 71.25M returned within 5 days.',
     exposure: 71250000, owner: 'MLCO', dueDate: '2025-12-27',
     status: 'pending', caseRef: 'CASE-004', strRequired: true, cbslRequired: false,
-    agentPath: '/agents/transaction', color: '#3D3C38' },
+    agentPath: '/agents/transaction', color: '#4A6070' },
   { id: 'RR-006', domain: 'Trade Finance & Treasury', agent: 'trade', severity: 'critical', category: 'TBML',
     title: 'NTB-CORP-0887 — over-invoicing 91% above benchmark (HS 6203)',
     description: 'TBML score 0.91. Duplicate LC applications. Beneficial ownership not disclosed. Estimated illicit flow: LKR 421M.',
@@ -88,7 +88,7 @@ const RISK_REGISTER = [
     description: "First digit '4' at 18.3% vs expected 9.7% across full transaction population. Indicates systematic amount manipulation. 7 structuring clusters identified.",
     exposure: 0, owner: 'MLCO', dueDate: '2026-01-15',
     status: 'pending', caseRef: null, strRequired: false, cbslRequired: false,
-    agentPath: '/agents/transaction', color: '#3D3C38' },
+    agentPath: '/agents/transaction', color: '#4A6070' },
 ];
 
 const CATEGORIES = ['All', 'Insider Fraud', 'Credit / ECL', 'Payment Fraud', 'AML / Structuring', 'TBML', 'AML', 'Financial Reporting', 'Regulatory Compliance', 'Cyber Fraud', 'Liquidity Risk'];
@@ -96,8 +96,8 @@ const SEVERITIES = ['All', 'critical', 'high', 'medium', 'low'];
 const STATUSES = ['All', 'pending', 'in_progress', 'complete'];
 const DOMAINS = ['All', 'Credit Intelligence', 'Transaction Surveillance', 'Suspense & Reconciliation', 'Identity & KYC / AML', 'Internal Controls', 'Digital Fraud & Identity', 'Trade Finance & Treasury', 'Insider Risk', 'MJE Testing'];
 
-const SEV_COLORS = { critical: '#C41E3A', high: '#4A6070', medium: '#185FA5', low: '#16A34A' };
-const SEV_BG = { critical: '#FEF0F0', high: '#F3F3F1', medium: '#E8FDF4', low: '#F0FDF4' };
+const SEV_COLORS = { critical: '#C41E3A', high: '#4A6070', medium: '#0BBF7A', low: '#16A34A' };
+const SEV_BG = { critical: '#FCEEF1', high: '#F3F3F1', medium: '#E8FDF4', low: '#F0FDF4' };
 const STATUS_COLORS = { pending: '#9ca3af', in_progress: '#4A6070', complete: '#16A34A' };
 const STATUS_LABELS = { pending: 'Pending', in_progress: 'In Progress', complete: 'Closed' };
 
@@ -227,9 +227,9 @@ export default function RiskRegister() {
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
                     <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.7 }}>{r.description}</div>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      {r.strRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#C41E3A', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ STR filing required</span>}
-                      {r.cbslRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FEF0F0', color: '#C41E3A', borderRadius: 6, border: '1px solid rgba(220,38,38,0.2)' }}>⚠ CBSL notification</span>}
-                      {r.caseRef && <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', background: '#F0F0EE', color: '#3D3C38', borderRadius: 6 }}>Case: {r.caseRef}</span>}
+                      {r.strRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FCEEF1', color: '#C41E3A', borderRadius: 6, border: '1px solid rgba(196,30,58,0.2)' }}>⚠ STR filing required</span>}
+                      {r.cbslRequired && <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', background: '#FCEEF1', color: '#C41E3A', borderRadius: 6, border: '1px solid rgba(196,30,58,0.2)' }}>⚠ CBSL notification</span>}
+                      {r.caseRef && <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', background: '#F0F0EE', color: '#4A6070', borderRadius: 6 }}>Case: {r.caseRef}</span>}
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0, minWidth: 180 }}>

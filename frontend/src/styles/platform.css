@@ -83,7 +83,7 @@
 .kri-tile:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
 .kri-tile::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
 .kri-tile.green::before { background: var(--octave-turquoise); }
-.kri-tile.amber::before { background: #F59E0B; }
+.kri-tile.amber::before { background: #4A6070; }
 .kri-tile.red::before { background: var(--octave-pink); }
 .kri-label { font-size: 10px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.04em; color: var(--color-text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
 .kri-value { font-size: 24px; font-weight: 700; color: var(--color-text); line-height: 1; margin-bottom: 6px; }

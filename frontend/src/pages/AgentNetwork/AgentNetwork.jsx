@@ -402,6 +402,11 @@ export default function AgentNetwork() {
                       <div style={{ flex: 1, padding: '10px 14px', borderRight: '1px solid var(--color-border)' }}>
                         <div style={{ fontSize: 16, fontWeight: 800, color: agent.metricColor, lineHeight: 1 }}>{agent.metric}</div>
                         <div style={{ fontSize: 10, color: 'var(--color-text-3)', marginTop: 3 }}>{agent.metricSub}</div>
+                        {agent.findings > 0 && (
+                          <div style={{ marginTop: 10 }}>
+                            <HeatStrip value={agent.critical > 0 ? agent.critical : Math.min(agent.findings, 20)} max={Math.max(agent.findings, 1)} color={agent.critical > 0 ? '#C41E3A' : agent.color} label={`${agent.findings} finding${agent.findings !== 1 ? 's' : ''}`} sublabel={agent.critical > 0 ? `${agent.critical} critical` : 'No critical findings'} format={v => `${Math.round(v)}`} />
+                          </div>
+                        )}
                         {(() => {
                           const agentCases = getCasesForDomain(agent.id).filter(cas => cas.status !== 'resolved');
                           if (agentCases.length === 0) return null;
