@@ -183,7 +183,7 @@ const liveAlerts = [
     accountStatus: 'Active',
   },
   {
-    id: 'alert-006', agent: 'Digital Agent', agentId: 'digital', agentColor: '#993556',
+    id: 'alert-006', caseId: 'CASE-007', agent: 'Digital Agent', agentId: 'digital', agentColor: '#993556',
     text: 'Impossible travel: NTB-3312-B — Jaffna → Colombo in 18 minutes. SIM swap suspected.',
     severity: 'high', time: '24m ago',
     title: 'Impossible Travel Detected — NTB-3312-B',
@@ -217,7 +217,7 @@ const liveAlerts = [
     accountStatus: 'Active',
   },
   {
-    id: 'alert-007', agent: 'Trade Agent', agentId: 'trade', agentColor: '#3B6D11',
+    id: 'alert-007', caseId: 'CASE-008', agent: 'Trade Agent', agentId: 'trade', agentColor: '#3B6D11',
     text: 'NTB-CORP-0887 — Invoice price 91% above HS code benchmark. Over-invoicing / TBML risk.',
     severity: 'high', time: '31m ago',
     title: 'Over-Invoicing Detected — NTB-CORP-0887 (HS 6203)',
@@ -251,7 +251,7 @@ const liveAlerts = [
     accountStatus: 'Suspended',
   },
   {
-    id: 'alert-008', agent: 'Orchestrator', agentId: 'orchestrator', agentColor: '#534AB7',
+    id: 'alert-008', caseId: 'CASE-010', agent: 'Orchestrator', agentId: 'orchestrator', agentColor: '#534AB7',
     text: 'CORRELATION: BR-14 flagged by 4 agents simultaneously. Combined severity 0.98. Case opened.',
     severity: 'critical', time: '35m ago',
     title: 'Cross-Agent Correlation — BR-14 Insider Fraud (Severity 0.98)',

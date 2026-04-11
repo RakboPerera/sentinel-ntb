@@ -101,3 +101,8 @@
 .intro-nav-btn:hover { transform: scale(1.08); }
 
 @media (max-width: 900px) { .act1-split { grid-template-columns: 1fr; } .act2-grid { grid-template-columns: repeat(2,1fr); } .act4-grid { grid-template-columns: 1fr; } .act3-layout { grid-template-columns: 1fr; } }
+
+/* White mode for Overview page */
+.intro-root.light { background: #FFFFFF; color: #1a1917; }
+.intro-root.light .intro-nav { background: rgba(255,255,255,0.96); border-bottom-color: #E8E6DF; }
+.intro-root.light .intro-nav-logo { color: #0A0A0B; }

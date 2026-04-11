@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import * as d3 from 'd3';
 import { useApp } from '../../context/AppContext.jsx';
 import { demoData } from '../../data/demoData.js';
+import { getCasesForDomain, CASE_SEV_COLOR } from '../../data/caseRegistry.js';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import { ChevronRight, AlertTriangle, CheckCircle, Activity, Network } from 'lucide-react';
 
@@ -400,6 +401,16 @@ export default function AgentNetwork() {
                       <div style={{ flex: 1, padding: '10px 14px', borderRight: '1px solid var(--color-border)' }}>
                         <div style={{ fontSize: 16, fontWeight: 800, color: agent.metricColor, lineHeight: 1 }}>{agent.metric}</div>
                         <div style={{ fontSize: 10, color: 'var(--color-text-3)', marginTop: 3 }}>{agent.metricSub}</div>
+                        {(() => {
+                          const agentCases = getCasesForDomain(agent.id).filter(cas => cas.status !== 'resolved');
+                          if (agentCases.length === 0) return null;
+                          return (
+                            <div onClick={e => { e.stopPropagation(); navigate('/cases', { state: { domain: agent.id } }); }}
+                              style={{ marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', background: '#FEF0F0', border: '1px solid rgba(220,38,38,0.2)', borderRadius: 4, fontSize: 10, fontWeight: 700, color: '#DC2626', cursor: 'pointer' }}>
+                              🗂 {agentCases.length} open case{agentCases.length > 1 ? 's' : ''} →
+                            </div>
+                          );
+                        })()}
                       </div>
                       <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center' }}>
                         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
