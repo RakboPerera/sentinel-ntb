@@ -567,3 +567,174 @@ export function CoverageStatement({ agentId }) {
   );
 }
 
+
+// ─── METRIC SPOTLIGHT ─────────────────────────────────────────────────────────
+// Large hero number with animated bar — replaces plain text stat
+export function MetricSpotlight({ value, label, sub, color, icon, trend, trendDir, width = '100%' }) {
+  return (
+    <div style={{ background:`${color}08`, border:`1px solid ${color}20`, borderRadius:12, padding:'18px 20px', position:'relative', overflow:'hidden', width }}>
+      <div style={{ position:'absolute', top:0, right:0, width:80, height:80, background:`${color}10`, borderRadius:'0 12px 0 80px' }} />
+      {icon && <div style={{ fontSize:22, marginBottom:8, position:'relative' }}>{icon}</div>}
+      <div style={{ fontSize:36, fontWeight:900, color, lineHeight:1, fontFamily:'var(--font-display)', position:'relative' }}>{value}</div>
+      <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-2)', marginTop:6, marginBottom:trend?4:0 }}>{label}</div>
+      {sub && <div style={{ fontSize:11, color:'var(--color-text-3)', lineHeight:1.4 }}>{sub}</div>}
+      {trend && (
+        <div style={{ marginTop:6, fontSize:11, fontWeight:600, color: trendDir==='up'?'#E82AAE':trendDir==='down'?'#0BBF7A':'var(--color-text-3)', display:'flex', alignItems:'center', gap:3 }}>
+          {trendDir==='up'?'↑':trendDir==='down'?'↓':'→'} {trend}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── RISK TIMELINE ────────────────────────────────────────────────────────────
+// Horizontal timeline of events — replaces bullet list
+export function RiskTimeline({ events, color }) {
+  return (
+    <div style={{ position:'relative', paddingLeft:24 }}>
+      <div style={{ position:'absolute', left:8, top:6, bottom:6, width:2, background:`${color}20`, borderRadius:2 }} />
+      {(events||[]).map((ev,i) => (
+        <div key={i} style={{ position:'relative', marginBottom:16, paddingLeft:12 }}>
+          <div style={{ position:'absolute', left:-18, top:4, width:10, height:10, borderRadius:'50%', background: ev.severity==='critical'?'var(--octave-pink)':ev.severity==='high'?color:'var(--color-text-3)', border:'2px solid white', boxShadow:'0 0 0 2px currentColor' }} />
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:3 }}>
+            <span style={{ fontSize:10, color:'var(--color-text-3)', fontFamily:'var(--font-display)', letterSpacing:'0.05em' }}>{ev.time || ev.date}</span>
+            {ev.severity && <span style={{ fontSize:9, fontWeight:800, textTransform:'uppercase', padding:'1px 6px', borderRadius:4, background: ev.severity==='critical'?'var(--octave-pink-light)':'var(--color-surface-2)', color: ev.severity==='critical'?'var(--octave-pink)':'var(--color-text-2)' }}>{ev.severity}</span>}
+          </div>
+          <div style={{ fontSize:12, fontWeight:600, color:'var(--color-text)', marginBottom:2 }}>{ev.title || ev.event}</div>
+          {ev.detail && <div style={{ fontSize:11, color:'var(--color-text-2)', lineHeight:1.55 }}>{ev.detail}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── ENTITY BADGE ROW ─────────────────────────────────────────────────────────
+// Chips for accounts/branches/staff — replaces inline code dumps
+export function EntityBadgeRow({ entities, color, label }) {
+  if (!entities || entities.length === 0) return null;
+  return (
+    <div style={{ marginBottom:8 }}>
+      {label && <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-3)', marginBottom:5 }}>{label}</div>}
+      <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
+        {entities.map((e,i) => (
+          <code key={i} style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:`${color}10`, color, borderRadius:6, border:`1px solid ${color}25` }}>{e}</code>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── HEAT STRIP ───────────────────────────────────────────────────────────────
+// Horizontal heat-bar showing intensity — replaces percentage text
+export function HeatStrip({ value, max, color, label, sublabel, format }) {
+  const pct = Math.min(100, (value / (max||100)) * 100);
+  const displayVal = format ? format(value) : value;
+  return (
+    <div style={{ marginBottom:12 }}>
+      <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+        <span style={{ fontSize:12, fontWeight:600, color:'var(--color-text)' }}>{label}</span>
+        <span style={{ fontSize:12, fontWeight:800, color }}>{displayVal}</span>
+      </div>
+      <div style={{ height:6, background:'var(--color-border)', borderRadius:3, overflow:'hidden' }}>
+        <div style={{ width:`${pct}%`, height:'100%', background:`linear-gradient(90deg, ${color}88, ${color})`, borderRadius:3, transition:'width 0.6s ease' }} />
+      </div>
+      {sublabel && <div style={{ fontSize:10, color:'var(--color-text-3)', marginTop:3 }}>{sublabel}</div>}
+    </div>
+  );
+}
+
+// ─── VERDICT CARD ─────────────────────────────────────────────────────────────
+// Full-width card with a clear verdict + supporting evidence
+export function VerdictCard({ verdict, confidence, finding, evidence, color, action }) {
+  const confPct = typeof confidence === 'number' ? (confidence > 1 ? confidence : Math.round(confidence * 100)) : 0;
+  return (
+    <div style={{ background:`${color}06`, border:`1px solid ${color}22`, borderLeft:`4px solid ${color}`, borderRadius:12, padding:'18px 20px', marginBottom:12 }}>
+      <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+        <span style={{ fontSize:11, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 10px', background:color, color:'white', borderRadius:6 }}>{verdict}</span>
+        {confPct > 0 && (
+          <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+            <div style={{ width:60, height:5, background:'var(--color-border)', borderRadius:3, overflow:'hidden' }}>
+              <div style={{ width:`${confPct}%`, height:'100%', background:color, borderRadius:3 }} />
+            </div>
+            <span style={{ fontSize:10, fontWeight:700, color }}>{confPct}% confidence</span>
+          </div>
+        )}
+      </div>
+      <div style={{ fontSize:13, color:'var(--color-text)', lineHeight:1.7, marginBottom:evidence?10:0 }}>{finding}</div>
+      {evidence && (
+        <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+          {evidence.map((ev,i) => (
+            <span key={i} style={{ fontSize:11, padding:'3px 10px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderRadius:6, color:'var(--color-text-2)' }}>
+              {ev}
+            </span>
+          ))}
+        </div>
+      )}
+      {action && (
+        <div style={{ marginTop:10, paddingTop:10, borderTop:`1px solid ${color}18`, fontSize:12, fontWeight:600, color }}>→ {action}</div>
+      )}
+    </div>
+  );
+}
+
+// ─── COMPARISON SPLIT ─────────────────────────────────────────────────────────
+// Side-by-side comparison — replaces two-column text
+export function ComparisonSplit({ leftLabel, leftValue, leftSub, rightLabel, rightValue, rightSub, leftColor, rightColor, note }) {
+  return (
+    <div style={{ display:'grid', gridTemplateColumns:'1fr auto 1fr', gap:0, background:'var(--color-surface)', border:'1px solid var(--color-border)', borderRadius:10, overflow:'hidden', marginBottom:10 }}>
+      <div style={{ padding:'14px 16px', background:`${leftColor||'var(--color-surface-2)'}10` }}>
+        <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'var(--color-text-3)', marginBottom:4 }}>{leftLabel}</div>
+        <div style={{ fontSize:22, fontWeight:900, color:leftColor||'var(--color-text)', fontFamily:'var(--font-display)' }}>{leftValue}</div>
+        {leftSub && <div style={{ fontSize:11, color:'var(--color-text-2)', marginTop:3 }}>{leftSub}</div>}
+      </div>
+      <div style={{ width:1, background:'var(--color-border)', alignSelf:'stretch' }} />
+      <div style={{ padding:'14px 16px', background:`${rightColor||'var(--color-surface-2)'}10` }}>
+        <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'var(--color-text-3)', marginBottom:4 }}>{rightLabel}</div>
+        <div style={{ fontSize:22, fontWeight:900, color:rightColor||'var(--color-text)', fontFamily:'var(--font-display)' }}>{rightValue}</div>
+        {rightSub && <div style={{ fontSize:11, color:'var(--color-text-2)', marginTop:3 }}>{rightSub}</div>}
+      </div>
+      {note && <div style={{ gridColumn:'1/-1', padding:'8px 16px', background:'var(--color-surface-2)', borderTop:'1px solid var(--color-border)', fontSize:11, color:'var(--color-text-3)', fontStyle:'italic' }}>{note}</div>}
+    </div>
+  );
+}
+
+// ─── SIGNAL MATRIX ────────────────────────────────────────────────────────────
+// Grid of detection signals — replaces bulleted lists of checks
+export function SignalMatrix({ signals, color }) {
+  return (
+    <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8 }}>
+      {(signals||[]).map((sig,i) => {
+        const active = sig.triggered || sig.active || sig.detected;
+        return (
+          <div key={i} style={{ padding:'10px 12px', background: active?`${color}08`:'var(--color-surface-2)', border:`1px solid ${active?color+'30':'var(--color-border)'}`, borderRadius:8, display:'flex', alignItems:'flex-start', gap:8 }}>
+            <div style={{ width:18, height:18, borderRadius:'50%', background: active?color:'var(--color-border)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:1 }}>
+              <span style={{ fontSize:9, color:'white', fontWeight:800 }}>{active?'✓':'·'}</span>
+            </div>
+            <div>
+              <div style={{ fontSize:11, fontWeight:active?700:500, color: active?'var(--color-text)':'var(--color-text-3)' }}>{sig.label || sig.name}</div>
+              {sig.value && <div style={{ fontSize:11, fontWeight:800, color: active?color:'var(--color-text-3)', marginTop:1 }}>{sig.value}</div>}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── ANOMALY HEATROW ──────────────────────────────────────────────────────────
+// A row with heatmap-style coloring — replaces plain table rows
+export function AnomalyHeatRow({ label, value, benchmark, deviation, risk, color, formatter }) {
+  const riskColors = { critical:'var(--octave-pink)', high:color||'#4A6070', medium:'#0BBF7A', low:'var(--color-text-3)' };
+  const rc = riskColors[risk] || riskColors.medium;
+  const pct = benchmark > 0 ? Math.min(200, (value/benchmark)*100) : 0;
+  return (
+    <div style={{ display:'grid', gridTemplateColumns:'1fr 80px 80px 60px', gap:8, padding:'10px 14px', borderBottom:'1px solid var(--color-border)', alignItems:'center' }}>
+      <span style={{ fontSize:12, fontWeight:500, color:'var(--color-text)' }}>{label}</span>
+      <span style={{ fontSize:12, fontWeight:700, color:rc, textAlign:'right' }}>{formatter ? formatter(value) : value}</span>
+      <span style={{ fontSize:11, color:'var(--color-text-3)', textAlign:'right' }}>{formatter ? formatter(benchmark) : benchmark}</span>
+      <span style={{ fontSize:10, fontWeight:800, textAlign:'center', padding:'2px 6px', borderRadius:5, background:`${rc}18`, color:rc }}>
+        {deviation != null ? `${deviation>0?'+':''}${deviation}%` : risk?.toUpperCase()}
+      </span>
+    </div>
+  );
+}

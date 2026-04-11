@@ -1,243 +1,41 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, ReferenceLine, ScatterChart, Scatter, LineChart, Line } from 'recharts';
 import AgentModule from '../../components/shared/AgentModule.jsx';
-import AnomalyScoreMeter from '../../components/shared/AnomalyScoreMeter.jsx';
+import { StatCard, VisualFindingCard, InsightBox, PanelWithMethod, MetricSpotlight, VerdictCard, HeatStrip, ComparisonSplit, AnomalyHeatRow } from '../../components/shared/VisualComponents.jsx';
 import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
-import FeatureContribution, { DetectionSteps } from '../../components/shared/FeatureContribution.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
-import { VisualFindingCard, InsightBox, StatCard } from '../../components/shared/VisualComponents.jsx';
-import { demoData, peerBenchmarks } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
-import { ChevronDown, ChevronUp, Zap, AlertTriangle } from 'lucide-react';
+import { demoData, peerBenchmarks } from '../../data/demoData.js';
 
 const COLOR = '#185FA5';
-
-const SCHEMA = {
-  agentName: 'Credit Intelligence',
-  required: ['loan_id', 'exposure_lkr', 'assigned_stage', 'dpd_days', 'collateral_ratio'],
-  optional: ['restructure_count', 'sector', 'branch_code', 'override_flag', 'origination_quarter', 'customer_risk_rating'],
-};
-
-const DETECTION_STEPS = [
-  { title: 'Feature extraction', text: 'For each loan: extract 8 features — DPD days, collateral ratio, restructure count, sector NPL rate, exposure vs cohort median, override flag, origination quarter, customer risk rating.', result: '16,631 loans × 8 features = 133,048 data points' },
-  { title: 'Isolation Forest scoring', text: 'The algorithm builds random decision trees. Anomalous points are isolated quickly (short tree paths) because their feature combination deviates from stage-peers. This catches multivariate patterns invisible to simple rules.', result: 'Each loan receives an anomaly score 0.0–1.0' },
-  { title: 'SLFRS 9 staging validation', text: 'The model\'s predicted stage (from the feature combination) is compared to the assigned stage. A predicted stage higher than assigned means the loan\'s feature profile matches a higher-risk stage — flagged for Staging Committee review.', result: '34 loans predicted at a higher stage than currently assigned' },
-  { title: 'Vintage cohort analysis', text: 'Loans grouped by origination quarter. Within each cohort, default rate at equivalent maturity is compared against historical cohorts. Detects underwriting quality deterioration during high-growth periods.', result: 'Q3–Q4 2025 cohorts defaulting at 1.7–1.8× prior year rate at same maturity' },
-];
-
-const LOAN_FEATURES = {
-  'NTB-CR-2025-0441': [
-    { name: 'DPD 67d — approaching Stage 3 boundary of 90d', contribution: 0.31 },
-    { name: 'Collateral ratio 0.38 — below Stage 3 threshold 0.40', contribution: 0.28 },
-    { name: 'Restructure count 2 — Stage 3 trigger under SLFRS 9', contribution: 0.22 },
-    { name: 'Construction NPL 3.2% — 3.5× portfolio average', contribution: 0.12 },
-    { name: 'Override-approved (elevated scrutiny flag)', contribution: 0.07 },
-  ],
-  'NTB-CR-2025-0872': [
-    { name: 'DPD 88d — 2 days from Stage 3 threshold', contribution: 0.38 },
-    { name: 'Agriculture off-harvest seasonal risk', contribution: 0.28 },
-    { name: 'Collateral is crop inventory (seasonal decline)', contribution: 0.22 },
-    { name: 'Provision cover insufficient at Stage 2', contribution: 0.12 },
-  ],
-  'NTB-CR-2025-1203': [
-    { name: 'Construction sector NPL 3.2% (sector risk)', contribution: 0.34 },
-    { name: 'LTV 81% — approaching Stage 2 boundary', contribution: 0.29 },
-    { name: 'Property market cooling — valuation at risk', contribution: 0.24 },
-    { name: 'Override-approved without independent valuation', contribution: 0.13 },
-  ],
-};
-
-// Stage badge definitions
-const STAGE_META = {
-  1: { label: 'S1', bg: '#E6F1FB', color: COLOR, tooltip: 'Stage 1 — Performing. No significant increase in credit risk since origination. DPD < 30 days, collateral ratio ≥ 0.70, restructure count = 0. ECL provision is 12-month expected loss only.' },
-  2: { label: 'S2', bg: '#E8FDF4', color: '#3A5A3A', tooltip: 'Stage 2 — Significant increase in credit risk. DPD 30–89 days, OR collateral ratio 0.40–0.70, OR 1 restructuring. ECL provision expands to lifetime expected loss — materially higher than Stage 1.' },
-  3: { label: 'S3', bg: '#FCEBEB', color: '#A32D2D', tooltip: 'Stage 3 — Credit-impaired. DPD ≥ 90 days, OR collateral ratio < 0.40, OR restructure count ≥ 2, OR legal action served. Maximum ECL provision — typically 66.7%+ of exposure.' },
-};
-
-function StageBadge({ stage }) {
-  const meta = STAGE_META[stage] || STAGE_META[1];
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 700, background: meta.bg, color: meta.color }}>
-      {meta.label}
-      <InfoTooltip text={meta.tooltip} position="right" width={280} />
-    </span>
-  );
-}
-
-function OvrBadge() {
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#E8FDF4', color: '#3A5A3A', borderRadius: 3 }}>
-      OVR
-      <InfoTooltip text="Override-approved — this loan bypassed standard approval controls and was approved via a management override. Override-approved loans receive elevated scrutiny because they fall outside standard underwriting parameters." position="right" width={260} />
-    </span>
-  );
-}
-
-function LoanDetailExpanded({ loan }) {
-  const features = LOAN_FEATURES[loan.loan_id] || [
-    { name: loan.primary_driver, contribution: 0.45 },
-    { name: loan.secondary_driver, contribution: 0.30 },
-    { name: 'Sector risk profile', contribution: 0.15 },
-    { name: 'Origination period quality', contribution: 0.10 },
-  ];
-
-  return (
-    <div className="animate-fade-in" style={{ background: 'var(--color-surface-2)', borderTop: '1px solid var(--color-border)' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0 }}>
-        {/* Col 1 — Score breakdown */}
-        <div style={{ padding: '16px 20px', borderRight: '1px solid var(--color-border)' }}>
-          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-3)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-            Anomaly Score Breakdown
-            <InfoTooltip text="The anomaly score reflects how statistically unusual this loan's feature combination is within its stage-peer group. Computed by Isolation Forest across 8 features." position="right" width={260} />
-          </div>
-          <AnomalyScoreMeter score={loan.anomaly_score} color={COLOR} />
-          <div style={{ marginTop: 16 }}>
-            <FeatureContribution features={features} color={COLOR} />
-          </div>
-        </div>
-
-        {/* Col 2 — Agent reasoning */}
-        <div style={{ padding: '16px 20px', borderRight: '1px solid var(--color-border)' }}>
-          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-3)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-            Agent Reasoning
-            <InfoTooltip text="The agent's natural-language explanation of why this loan was flagged. It describes which specific feature values deviate from the expected range for loans in this stage." position="right" width={240} />
-          </div>
-          <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.8, padding: '12px 14px', background: 'white', borderRadius: 8, border: '1px solid var(--color-border)' }}>
-            {loan.explanation}
-          </div>
-          <div style={{ marginTop: 10, padding: '8px 12px', background: `${COLOR}08`, borderRadius: 6, fontSize: 11, color: 'var(--color-text-2)' }}>
-            <strong style={{ color: COLOR }}>Secondary driver:</strong> {loan.secondary_driver}
-          </div>
-        </div>
-
-        {/* Col 3 — Action */}
-        <div style={{ padding: '16px 20px' }}>
-          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--color-text-3)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-            Staging Decision
-            <InfoTooltip text="Based on the feature combination, the model's predicted stage and the recommended action. The Staging Committee must review and either confirm or correct the classification." position="left" width={260} />
-          </div>
-          {/* Stage comparison */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14, padding: '12px', background: 'white', borderRadius: 8, border: '1px solid var(--color-border)' }}>
-            <div style={{ textAlign: 'center', flex: 1 }}>
-              <div style={{ fontSize: 10, color: 'var(--color-text-3)', marginBottom: 4 }}>ASSIGNED</div>
-              <StageBadge stage={loan.assigned_stage} />
-            </div>
-            <div style={{ fontSize: 18, color: 'var(--color-red)', fontWeight: 700 }}>→</div>
-            <div style={{ textAlign: 'center', flex: 1 }}>
-              <div style={{ fontSize: 10, color: 'var(--color-text-3)', marginBottom: 4 }}>PREDICTED</div>
-              <StageBadge stage={loan.predicted_stage} />
-            </div>
-          </div>
-          <div style={{ padding: '12px 14px', background: loan.predicted_stage === 3 ? 'var(--color-red-light)' : '#E8FDF4', borderRadius: 8, borderLeft: `3px solid ${loan.predicted_stage === 3 ? 'var(--color-red)' : '#3A5A3A'}` }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: loan.predicted_stage === 3 ? 'var(--color-red)' : '#3A5A3A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>
-              <Zap size={11} style={{ display: 'inline', marginRight: 4 }} />Recommended action
-            </div>
-            <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.6 }}>{loan.recommended_action}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function LoanRow({ loan }) {
-  const [expanded, setExpanded] = useState(false);
-  const isMisstaged = loan.predicted_stage !== loan.assigned_stage;
-  const isCritical = loan.anomaly_score >= 0.85;
-  const rowBg = expanded ? `${COLOR}06` : isCritical ? '#FDFAFA' : 'transparent';
-
-  return (
-    <>
-      <tr style={{ cursor: 'pointer', background: rowBg, transition: 'background 0.12s', borderLeft: isCritical ? '3px solid var(--color-red)' : '3px solid transparent' }}
-        onClick={() => setExpanded(e => !e)}>
-        <td>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            {expanded ? <ChevronUp size={13} style={{ color: COLOR }} /> : <ChevronDown size={13} style={{ color: 'var(--color-text-3)' }} />}
-            <code style={{ fontSize: 12 }}>{loan.loan_id}</code>
-            {loan.override_flag && <OvrBadge />}
-          </div>
-        </td>
-        <td style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, fontWeight: 500 }}>
-          LKR {(loan.exposure_lkr / 1e6).toFixed(0)}M
-        </td>
-        <td>
-          <StageBadge stage={loan.assigned_stage} />
-        </td>
-        <td>
-          {isMisstaged ? (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '2px 9px', borderRadius: 4, fontSize: 11, fontWeight: 700, background: '#FCEBEB', color: '#A32D2D', border: '1px solid rgba(163,45,45,0.2)' }}>
-              <AlertTriangle size={10} />→ S{loan.predicted_stage}
-            </span>
-          ) : (
-            <span style={{ fontSize: 11, color: 'var(--color-text-3)' }}>—</span>
-          )}
-        </td>
-        <td style={{ width: 160 }}>
-          <AnomalyScoreMeter score={loan.anomaly_score} color={COLOR} size="sm" showZones={false} />
-        </td>
-        <td style={{ fontSize: 11, color: 'var(--color-text-2)', maxWidth: 240 }}>
-          <span title={loan.primary_driver}>{loan.primary_driver.length > 48 ? loan.primary_driver.substring(0, 48) + '…' : loan.primary_driver}</span>
-        </td>
-      </tr>
-      {expanded && (
-        <tr>
-          <td colSpan={6} style={{ padding: 0 }}>
-            <LoanDetailExpanded loan={loan} />
-          </td>
-        </tr>
-      )}
-    </>
-  );
-}
+const SCHEMA = [{ field:'loan_id',type:'string' },{ field:'stage',type:'string' },{ field:'dpd',type:'number' },{ field:'collateral_ratio',type:'number' },{ field:'restructured',type:'boolean' },{ field:'override_flag',type:'boolean' },{ field:'exposure_lkr',type:'number' },{ field:'sector',type:'string' }];
+const SECTOR_COLORS = { 'Real Estate':'#E82AAE','Construction':'#4A6070','Tourism':'#0BBF7A','Manufacturing':'#1F2937','Consumer':'#26EA9F','Other':'#8A8A85' };
 
 export default function CreditAgent() {
   const openFinding = useOpenFinding('credit');
+  const navigate = useNavigate();
   return (
     <AgentModule agentId="credit" agentName="Credit Intelligence Agent" agentColor={COLOR} demoData={demoData.credit} schema={SCHEMA}>
-      {(data) => (
-        <>
-          {/* Detection methodology */}
-          <ExplainerBox color={COLOR} icon="◈"
-            title="How this agent detects SLFRS 9 staging anomalies"
-            summary="Isolation Forest identifies loans where the combination of DPD, collateral ratio, sector risk, and restructuring history is statistically inconsistent with their assigned SLFRS 9 stage. No single rule triggers a flag — it's the multivariate combination."
-            detail={<DetectionSteps steps={DETECTION_STEPS} color={COLOR} />}
-            collapsible defaultExpanded={false}
-          />
+      {(data) => {
+        const ps = data.portfolio_summary || {};
+        const ci = data.capital_impact || {};
+        return (
+          <>
+            <ExplainerBox color={COLOR} icon="◈"
+              title="How this agent detects SLFRS 9 staging manipulation"
+              summary="Isolation Forest runs across 16,631 loans simultaneously — scoring each on DPD, collateral coverage, restructure history, sector risk, and override flags to find combinations that cannot be explained by legitimate credit risk."
+              detail="Stage misclassification is the mechanism: a Stage 3 loan assigned Stage 1 requires 3× less provision. The agent compares each loan's predicted stage (from feature combination) against its assigned stage. Where they diverge with high confidence, the gap is a regulatory provision shortfall."
+              collapsible />
 
-          {/* KPI strip */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-            <StatCard label="Loans Analysed" value={data.portfolio_summary.total_loans_analyzed.toLocaleString()}
-              sub={`LKR ${(data.portfolio_summary.total_exposure_lkr / 1e9).toFixed(1)} Bn total exposure`}
-              color={COLOR} tooltip="Full NTB loan portfolio scanned. Each loan is scored on 8 features using Isolation Forest. Only loans with anomaly score > 0.65 are flagged for review." />
-            <StatCard label="Flagged Loans" value={data.portfolio_summary.flagged_count}
-              sub={`LKR ${(data.portfolio_summary.flagged_exposure_lkr / 1e9).toFixed(2)} Bn exposure`}
-              color="#26EA9F" tooltip="Loans with anomaly score above 0.65. These loans show feature combinations statistically inconsistent with their assigned SLFRS 9 stage — they deviate significantly from their stage-peers." />
-            <StatCard label="Critical" value={data.portfolio_summary.critical_count}
-              sub="Anomaly score > 0.85"
-              color="#A32D2D" tooltip="Loans scoring above 0.85 — the highest anomaly tier. These require immediate Staging Committee attention. Multiple Stage 3 trigger criteria are present simultaneously." alert="Immediate action required" />
-            <StatCard label="Misstaged" value={data.portfolio_summary.misstaged_count}
-              sub={`LKR ${(data.portfolio_summary.misstaged_exposure_lkr / 1e9).toFixed(2)} Bn ECL impact`}
-              color="#A32D2D"
-              tooltip="Loans predicted at a higher SLFRS 9 stage than currently assigned. Correcting these reclassifications increases the Expected Credit Loss (ECL) provision — a regulatory reporting requirement."
-              alert={`ECL understated by ~LKR ${(data.portfolio_summary.misstaged_exposure_lkr / 1e9).toFixed(2)} Bn`} />
-          </div>
-
-          {/* Key findings */}
-          <div className="agent-panel">
-            <div className="agent-panel-header">
-              {/* ── AUDIT OPINION — WITH METHODOLOGY ── */}
-            <div style={{ padding:'10px 16px', background:'#185FA508', border:`1px solid #185FA525`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ background:'#185FA506', border:'1px solid #185FA522', borderRadius:10, overflow:'hidden' }}>
+            {/* Audit Opinion */}
+            <div style={{ background:'#185FA506', border:'1px solid #185FA522', borderRadius:10, overflow:'hidden' }}>
               <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
-                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#185FA5', color:'white', flexShrink:0, marginTop:2 }}>
-                  QUALIFIED
-                </div>
-                <div style={{ fontSize:12, color:'#185FA5', lineHeight:1.7 }}>
-                  Staging anomalies identified across LKR 1.41Bn of loans. In our opinion, SLFRS 9 staging controls are NOT EFFECTIVE at Branch BR-14. 11 loans are misclassified; ECL is understated by approximately LKR 310M.
-                </div>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#185FA5', color:'white', flexShrink:0, marginTop:2 }}>QUALIFIED</div>
+                <div style={{ fontSize:12, color:'#185FA5', lineHeight:1.7 }}>Staging anomalies identified across LKR 1.41Bn of loans. In our opinion, SLFRS 9 staging controls are NOT EFFECTIVE at Branch BR-14. 11 loans are misclassified; ECL is understated by approximately LKR 310M.</div>
               </div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:'1px solid #185FA518' }}>
-                {[['Population tested','16,631 loans (100% of portfolio)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','LKR 50M per loan; all loans with override flag'],['Model limitations','Isolation Forest assumes linear feature relationships; management FLI overlays require separate staging committee review']].map(([k,v],i)=>(
+                {[['Population tested','16,631 loans (100% of portfolio)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','LKR 50M per loan; all loans with override flag'],['Model limitations','Isolation Forest assumes linear feature relationships; FLI overlays require separate staging committee review']].map(([k,v],i)=>(
                   <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?'1px solid #185FA512':'none', borderBottom:i<2?'1px solid #185FA512':'none' }}>
                     <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#185FA5', opacity:0.65, marginBottom:2 }}>{k}</div>
                     <div style={{ fontSize:11, color:'#185FA5', lineHeight:1.5 }}>{v}</div>
@@ -245,289 +43,116 @@ export default function CreditAgent() {
                 ))}
               </div>
             </div>
-              <div style={{ fontSize:12, color:'#185FA5', lineHeight:1.65 }}>
-                Staging anomalies identified across LKR 1.41Bn of loans. In our opinion, SLFRS 9 staging controls are NOT EFFECTIVE at Branch BR-14. 11 loans are misclassified; ECL is understated by approximately LKR 310M.
-              </div>
+
+            {/* Hero metrics */}
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
+              <MetricSpotlight value={`LKR ${((ps.total_flagged_exposure_lkr||0)/1e9).toFixed(2)}Bn`} label="Flagged Exposure" sub={`${ps.flagged_loans||0} of ${ps.total_loans||0} loans`} color={COLOR} icon="◈" />
+              <MetricSpotlight value={`LKR ${((ps.estimated_ecl_understatement_lkr||0)/1e6).toFixed(0)}M`} label="ECL Understatement" sub="Stage misclassification" color="var(--octave-pink)" trend="Provision gap" trendDir="up" />
+              <MetricSpotlight value={`${ps.stage_3_ratio_corrected||0}%`} label="Corrected Stage 3" sub={`Was ${ps.stage_3_ratio_reported||0}% reported`} color="#0BBF7A" trend={`+${((ps.stage_3_ratio_corrected||0)-(ps.stage_3_ratio_reported||0)).toFixed(2)}% delta`} trendDir="up" />
+              <MetricSpotlight value={`LKR ${((ps.override_approved_exposure_lkr||0)/1e6).toFixed(0)}M`} label="Override-Approved" sub="All by STF-1847, BR-14" color="#4A6070" />
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span className="agent-panel-title">Key Findings</span>
-                <InfoTooltip text="Systemic findings derived from collective analysis of all flagged loans — not individual loan alerts. These represent patterns requiring management or regulatory action at the portfolio level." width={280} position="bottom" />
-              </div>
+            {/* Key Findings */}
+            <div className="agent-panel">
+              <div className="agent-panel-header"><span className="agent-panel-title">Key Findings</span><InfoTooltip text="Systemic findings derived from collective anomaly analysis. Each represents a pattern the agent found statistically significant across the loan population — not an individual judgment call." position="left" /></div>
+              <div className="agent-panel-body">{(data.key_findings||[]).map((f,i) => <VisualFindingCard key={i} finding={f} agentColor={COLOR} index={i} agentId="credit" agentData={data} openFinding={openFinding} />)}</div>
             </div>
-            <div className="agent-panel-body">
-              {(data.key_findings || []).map((f, i) => <VisualFindingCard key={i} finding={f} agentColor={COLOR} index={i} agentId="credit" agentData={data} openFinding={openFinding} />)}
-            </div>
-          </div>
 
-          {/* Main two-column grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: 16 }}>
-            {/* LEFT — analytics panels */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-
-              {/* Vintage chart */}
-              <div className="agent-panel">
-                <div className="agent-panel-header">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span className="agent-panel-title">Vintage Cohort Analysis</span>
-                    <InfoTooltip text="Loans grouped by the quarter they were originated. Each bar = the projected Stage 3 migration rate for that cohort (% of loans expected to become credit-impaired). Bars are compared at equivalent maturity points — so 2024-Q3 and 2025-Q3 are compared at the same number of months after origination." width={300} position="bottom" />
+            <div className="agent-grid">
+              {/* Left: Loan anomaly scatter */}
+              <PanelWithMethod title="Loan Anomaly Scores" tooltip="Each dot is a loan. X-axis = anomaly score (0=normal, 1=extreme outlier). Y-axis = exposure. Colour = stage. Dots above the threshold line are flagged." methodology="Isolation Forest trains on 8 features across the full loan population. Each loan gets an anomaly score — how many standard deviations its feature combination sits from the population centroid." agentColor={COLOR}>
+                <div style={{ padding:'16px' }}>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <ScatterChart margin={{ top:10, right:20, bottom:10, left:10 }}>
+                      <XAxis dataKey="score" name="Anomaly" domain={[0,1]} tick={{ fontSize:10 }} label={{ value:'Anomaly score', position:'insideBottom', offset:-2, fontSize:10 }} />
+                      <YAxis dataKey="exposure" name="Exposure (LKR M)" tick={{ fontSize:10 }} tickFormatter={v=>`${(v/1e6).toFixed(0)}M`} />
+                      <Tooltip formatter={(v,n)=>n==='Anomaly'?v.toFixed(3):`LKR ${(v/1e6).toFixed(1)}M`} />
+                      <ReferenceLine x={0.65} stroke="var(--octave-pink)" strokeDasharray="4 3" label={{ value:'Flag', fontSize:9, fill:'var(--octave-pink)' }} />
+                      <Scatter data={(data.flagged_loans||[]).map(l=>({ score:l.anomaly_score, exposure:l.exposure_lkr, stage:l.predicted_stage }))}
+                        fill={COLOR} opacity={0.7} r={4} />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                  <div style={{ marginTop:12, display:'flex', gap:8, flexWrap:'wrap' }}>
+                    {[['0.65–0.80','High anomaly',COLOR,'12'],['0.80–1.00','Critical outlier','var(--octave-pink)','4']].map(([r,l,c,n])=>(
+                      <div key={r} style={{ padding:'5px 10px', background:`${c}10`, border:`1px solid ${c}30`, borderRadius:6, fontSize:11 }}>
+                        <span style={{ fontWeight:700, color:c }}>{n} loans</span> <span style={{ color:'var(--color-text-2)' }}>{l}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div style={{ padding: '12px 8px 0' }}>
-                  <ResponsiveContainer width="100%" height={200}>
-                    <BarChart data={data.vintage_analysis} margin={{ top: 4, right: 8, bottom: 22, left: -18 }}>
-                      <XAxis dataKey="cohort" tick={{ fontSize: 10 }} angle={-35} textAnchor="end" interval={0} />
-                      <YAxis tick={{ fontSize: 10 }} unit="%" tickFormatter={v => v.toFixed(1)} />
-                      <Tooltip formatter={(v) => [`${v}%`, 'Projected S3 migration']} labelFormatter={l => `Cohort: ${l}`} />
-                      <ReferenceLine y={1.0} stroke="#26EA9F" strokeDasharray="4 3"
-                        label={{ value: 'Historic avg 1.0%', fontSize: 9, fill: '#3A5A3A', position: 'insideTopRight' }} />
-                      <Bar dataKey="projected_stage3_migration_pct" radius={[3, 3, 0, 0]}>
-                        {(data.vintage_analysis || []).map((v, i) => (
-                          <Cell key={i} fill={v.risk_flag === 'red' ? '#A32D2D' : v.risk_flag === 'amber' ? '#26EA9F' : '#3B6D11'} />
-                        ))}
+              </PanelWithMethod>
+
+              {/* Right: top panel stack */}
+              <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+
+                {/* Capital impact */}
+                <div className="agent-panel">
+                  <div className="agent-panel-header"><span className="agent-panel-title">Regulatory Capital Impact</span><InfoTooltip text="Under Basel III, misclassified loans carry incorrect Risk Weights. Correcting the stage reclassifications increases RWA and reduces CAR. If aggregate impact exceeds 50bps, CBSL notification is mandatory." position="left" width={300} /></div>
+                  <div style={{ padding:'16px' }}>
+                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:14 }}>
+                      <ComparisonSplit leftLabel="Current Tier 1 CAR" leftValue={`${ci.current_tier1_car||19.06}%`} leftColor="#0BBF7A" rightLabel="Corrected CAR" rightValue={`${ci.corrected_tier1_car||18.59}%`} rightColor="var(--octave-pink)" note={`−${ci.car_impact_bps||47}bps · ${(ci.car_impact_bps||47)>=50?'⚠ Exceeds CBSL 50bps notification threshold':'Below notification threshold'}`} />
+                    </div>
+                    <HeatStrip value={ci.additional_rwa_lkr||4.2e9} max={20e9} color="var(--octave-pink)" label="Additional RWA" sublabel="Basel III risk-weighted impact of corrected staging" format={v=>`LKR ${(v/1e9).toFixed(1)}Bn`} />
+                  </div>
+                </div>
+
+                {/* Staging policy conflicts */}
+                <div className="agent-panel">
+                  <div className="agent-panel-header"><span className="agent-panel-title">Management Staging Policy Conflicts</span><InfoTooltip text="These loans are assigned a stage that conflicts not with the AI model but with NTB's own documented staging policy (v4.1, Oct 2025). Each entry is indefensible without explanatory documentation." position="left" width={300} /></div>
+                  <div style={{ maxHeight:240, overflowY:'auto' }}>
+                    <div style={{ display:'grid', gridTemplateColumns:'80px 60px 60px 1fr', padding:'6px 14px', borderBottom:'1px solid var(--color-border)', background:'var(--color-surface-2)' }}>
+                      {['Loan ID','Assigned','Required','Authoriser'].map(h=><span key={h} style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'var(--color-text-3)' }}>{h}</span>)}
+                    </div>
+                    {(data.flagged_loans||[]).filter(l=>l.management_staging_conflict).slice(0,6).map((l,i)=>(
+                      <div key={i} style={{ display:'grid', gridTemplateColumns:'80px 60px 60px 1fr', padding:'9px 14px', borderBottom:'1px solid var(--color-border)', background: i%2===0?'transparent':'var(--color-surface-2)', alignItems:'center' }}>
+                        <code style={{ fontSize:11, fontWeight:700 }}>{l.loan_id}</code>
+                        <span style={{ fontSize:11, padding:'2px 7px', background:'#E8FDF4', color:'#0BBF7A', borderRadius:4, fontWeight:700, width:'fit-content' }}>S{l.assigned_stage}</span>
+                        <span style={{ fontSize:11, padding:'2px 7px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:4, fontWeight:700, width:'fit-content' }}>S{l.required_stage}</span>
+                        <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{l.override_authoriser||'STF-1847'}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sector concentration */}
+            <div className="agent-grid">
+              <PanelWithMethod title="Sector Concentration Risk" tooltip="Concentration of flagged loans by sector. Tourism and Real Estate are correlated with economic cycle — simultaneous stress across both amplifies ECL." methodology="Exposure-weighted concentration. Herfindahl index computed across 6 sectors. Above 0.18 = moderately concentrated (this portfolio: 0.31)." agentColor={COLOR}>
+                <div style={{ padding:'16px' }}>
+                  <ResponsiveContainer width="100%" height={180}>
+                    <BarChart data={(data.sector_concentration||[]).slice(0,6)} layout="vertical" margin={{ left:10, right:60, top:0, bottom:0 }}>
+                      <XAxis type="number" tick={{ fontSize:10 }} tickFormatter={v=>`LKR ${(v/1e9).toFixed(1)}Bn`} />
+                      <YAxis type="category" dataKey="sector" tick={{ fontSize:11 }} width={90} />
+                      <Tooltip formatter={(v)=>`LKR ${(v/1e9).toFixed(2)}Bn`} />
+                      <Bar dataKey="flagged_exposure_lkr" radius={[0,4,4,0]} label={{ position:'right', fontSize:10, formatter:v=>`${(v/1e9).toFixed(1)}Bn` }}>
+                        {(data.sector_concentration||[]).map((s,i)=><Cell key={i} fill={SECTOR_COLORS[s.sector]||COLOR} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
-                  <InsightBox type="warning"
-                    body="Q3–Q4 2025 cohorts (red bars) are defaulting at 1.7–1.8× the rate of equivalent 2024 cohorts at the same loan maturity — a direct consequence of rapid loan growth outpacing underwriting quality controls."
-                    compact
-                  />
-                  <div style={{ display: 'flex', gap: 10, justifyContent: 'center', margin: '10px 0 6px', fontSize: 10, color: 'var(--color-text-2)', flexWrap: 'wrap' }}>
-                    {[['#3B6D11','On track'],['#26EA9F','Elevated risk'],['#A32D2D','Deteriorating']].map(([c,l]) => (
-                      <span key={l} style={{ display:'flex', alignItems:'center', gap:4 }}><span style={{ width:10,height:10,borderRadius:2,background:c,display:'inline-block' }}/>{l}</span>
-                    ))}
-                  </div>
                 </div>
-              </div>
+              </PanelWithMethod>
 
-              {/* Sector concentration */}
+              {/* Peer benchmarks */}
               <div className="agent-panel">
-                <div className="agent-panel-header">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span className="agent-panel-title">Sector Concentration</span>
-                    <InfoTooltip text="Industry sectors with the highest share of flagged loans. The bar under each sector name shows the average anomaly score (longer = more anomalous). NPL rate = current non-performing loan rate for this sector in the Sri Lankan banking environment." width={300} position="bottom" />
-                  </div>
-                </div>
+                <div className="agent-panel-header"><span className="agent-panel-title">Peer Benchmarking</span><InfoTooltip text="NTB vs licensed commercial bank peers. Source: CBSL Banking Sector Report Q3 2025." position="left" /></div>
                 <div>
-                  {(data.sector_concentration || []).map((s, i) => (
-                    <div key={i} style={{ padding: '11px 16px', borderBottom: '1px solid var(--color-border)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ fontSize: 13, fontWeight: 600 }}>{s.sector}</span>
-                          <span style={{ fontSize: 10, padding: '1px 6px', background: s.npl_rate_pct >= 2.5 ? 'var(--color-red-light)' : '#E8FDF4', color: s.npl_rate_pct >= 2.5 ? 'var(--color-red)' : '#3A5A3A', borderRadius: 4, fontWeight: 700 }}>
-                            {s.npl_rate_pct}% NPL
-                            <InfoTooltip text={`NPL (Non-Performing Loan) rate for the ${s.sector} sector across the Sri Lankan banking industry. A high sector NPL rate elevates the risk of all loans in that sector — SLFRS 9 requires banks to factor in sector-level deterioration when computing expected credit loss.`} position="right" width={280} />
-                          </span>
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                          <span style={{ fontSize: 12, fontWeight: 700 }}>LKR {(s.flagged_exposure_lkr / 1e6).toFixed(0)}M</span>
-                          <span style={{ fontSize: 10, color: 'var(--color-text-3)', marginLeft: 6 }}>{s.flagged_count} loans</span>
-                        </div>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'var(--color-surface-2)', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${s.avg_anomaly_score * 100}%`, background: s.avg_anomaly_score >= 0.75 ? '#A32D2D' : '#26EA9F', borderRadius: 3 }} />
-                        </div>
-                        <span style={{ fontSize: 10, color: 'var(--color-text-3)', minWidth: 60, textAlign: 'right' }}>
-                          score {s.avg_anomaly_score.toFixed(2)}
-                          <InfoTooltip text="Average anomaly score for all flagged loans in this sector. A higher average score means the flagged loans are more anomalous relative to their stage-peers." position="left" width={220} />
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Branch concentration */}
-              <div className="agent-panel">
-                <div className="agent-panel-header">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span className="agent-panel-title">Branch Concentration</span>
-                    <InfoTooltip text="Branches with the highest count of flagged loans. A branch appearing here with many override-approved flagged loans is a strong insider fraud indicator — it means the branch's override mechanism is being used to approve anomalous loans that wouldn't pass standard controls." width={300} position="bottom" />
-                  </div>
-                </div>
-                <div>
-                  {(data.branch_concentration || []).map((b, i) => (
-                    <div key={i} style={{ padding: '12px 16px', borderBottom: '1px solid var(--color-border)', background: b.override_flagged_count >= 8 ? '#FEF9F0' : 'transparent' }}>
-                      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 6 }}>
-                        <code style={{ fontSize: 13, fontWeight: 800, color: b.override_flagged_count >= 8 ? '#A32D2D' : COLOR }}>{b.branch_code}</code>
-                        <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'var(--color-surface-2)', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${(b.flagged_count / 14) * 100}%`, borderRadius: 3, background: b.override_flagged_count >= 8 ? '#A32D2D' : COLOR }} />
-                        </div>
-                        <span style={{ fontSize: 12, fontWeight: 600 }}>LKR {(b.flagged_exposure_lkr / 1e6).toFixed(0)}M</span>
-                        {b.override_flagged_count > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', background: '#E8FDF4', color: '#3A5A3A', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 3 }}>
-                            {b.override_flagged_count} overrides
-                            <InfoTooltip text="Number of flagged loans at this branch that were approved via management override. High override counts combined with anomalous loans are the primary signal of insider-enabled loan fraud." position="left" width={260} />
-                          </span>
-                        )}
-                      </div>
-                      <div style={{ fontSize: 11, lineHeight: 1.5, color: b.risk_signal.startsWith('CRITICAL') ? '#A32D2D' : 'var(--color-text-2)' }}>{b.risk_signal}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT — flagged loans table */}
-            <div className="agent-panel" style={{ display: 'flex', flexDirection: 'column' }}>
-              <div className="agent-panel-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span className="agent-panel-title">Flagged Loans</span>
-                  <InfoTooltip text="All loans with anomaly score > 0.65. Click any row to see the full anomaly breakdown: score gauge with zone context, SHAP-style feature contribution bars (what drove the score), the agent's natural-language reasoning, and the recommended action for the Staging Committee." width={300} position="bottom" />
-                </div>
-                <span style={{ fontSize: 11, color: 'var(--color-text-3)' }}>{data.flagged_loans.length} shown · click row to expand</span>
-              </div>
-
-              {/* Column header explainer strip */}
-              <div style={{ padding: '8px 16px', background: `${COLOR}06`, borderBottom: '1px solid var(--color-border)', display: 'flex', gap: 20, fontSize: 11, color: 'var(--color-text-2)', flexWrap: 'wrap' }}>
-                <span><strong style={{ color: COLOR }}>OVR</strong> = override-approved &nbsp;·&nbsp; <strong style={{ color: '#185FA5' }}>S1/S2/S3</strong> = SLFRS 9 stage &nbsp;·&nbsp; <strong style={{ color: '#A32D2D' }}>→ S3</strong> = model predicts reclassification</span>
-              </div>
-
-              <div style={{ overflowY: 'auto', flex: 1, maxHeight: 600 }}>
-                <table className="data-table" style={{ width: '100%' }}>
-                  <thead>
-                    <tr>
-                      <th>Loan ID</th>
-                      <th>Exposure</th>
-                      <th>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          Stage (assigned)
-                          <InfoTooltip text="The SLFRS 9 stage currently assigned to this loan in the bank's systems. Stage 1 = performing, Stage 2 = elevated risk, Stage 3 = credit-impaired. Staging determines how much Expected Credit Loss (ECL) provision must be held." width={280} position="bottom" />
-                        </span>
-                      </th>
-                      <th>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          Predicted
-                          <InfoTooltip text="The stage the model believes this loan should be in, based on its feature combination. If predicted stage > assigned stage, the loan may be understaged — meaning the bank is holding insufficient ECL provision. This requires Staging Committee review." width={300} position="bottom" />
-                        </span>
-                      </th>
-                      <th style={{ minWidth: 160 }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          Anomaly Score
-                          <InfoTooltip text="0.0 = fully normal. 0.65+ = flagged for review. 0.85+ = critical (immediate action). Score is computed by Isolation Forest across 8 features. A score of 0.90 means this loan's feature profile is in the top 10% most anomalous relative to its stage-peer group." width={280} position="bottom" />
-                        </span>
-                      </th>
-                      <th>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          Primary Driver
-                          <InfoTooltip text="The single feature that contributed most to the anomaly score. Click the row to see all features and their individual contribution percentages in a SHAP-style breakdown." width={260} position="bottom" />
-                        </span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(data.flagged_loans || []).map((loan, i) => (
-                      <LoanRow key={loan.loan_id} loan={loan} />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div style={{ padding: '10px 16px', borderTop: '1px solid var(--color-border)', background: 'var(--color-surface-2)', fontSize: 11, color: 'var(--color-text-3)', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-                <ChevronDown size={12} />
-                Click any row → anomaly score breakdown · feature contributions · agent reasoning · recommended action
-              </div>
-            </div>
-          </div>
-
-          {/* ── MANAGEMENT STAGING POLICY CONFLICTS ── */}
-          <div className="agent-panel">
-            <div className="agent-panel-header" style={{ background:'#FEF8F8' }}>
-              <span className="agent-panel-title" style={{ color:'#DC2626' }}>Management Staging Policy Conflicts</span>
-              <InfoTooltip text="Compares AI-predicted stage against NTB's own documented staging policy (v4.1, Oct 2025). Where the assigned stage conflicts with the bank's OWN written rules — not just the AI model — the override is indefensible on its own terms." position="left" width={320} />
-            </div>
-            <div style={{ padding:'10px 16px', background:'#FEF0F0', borderBottom:'1px solid var(--color-border)', fontSize:12, color:'#DC2626', lineHeight:1.5 }}>
-              <strong>Policy:</strong> NTB Credit Staging Policy v4.1 (Oct 2025) — Board Credit Committee approved. All conflicts below were authorised by STF-1847 in violation of the bank's own written policy.
-            </div>
-            {(data.fli_overlays?.agent_vs_policy_conflicts || []).map((conflict, i) => (
-              <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)' }}>
-                <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
-                  <code style={{ fontSize:12, fontWeight:700 }}>{conflict.loan_id}</code>
-                  <span style={{ fontSize:11, padding:'2px 8px', background:'#185FA5', color:'white', borderRadius:4, fontWeight:700 }}>Stage {conflict.assigned_stage} assigned</span>
-                  <span style={{ fontSize:13 }}>→</span>
-                  <span style={{ fontSize:11, padding:'2px 8px', background:'#DC2626', color:'white', borderRadius:4, fontWeight:700 }}>Stage {conflict.policy_required_stage} per policy</span>
-                  <span style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>Auth: <strong>{conflict.override_authorised_by}</strong> · {conflict.policy_ref}</span>
-                </div>
-                <div style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>
-                  {conflict.conflict_reason}
-                </div>
-              </div>
-            ))}
-            <div style={{ padding:'10px 16px', background:'var(--color-surface-2)', fontSize:11, color:'var(--color-text-3)' }}>
-              Macro overlay applied: <strong>LKR {((data.fli_overlays?.macro_overlay_applied_lkr||0)/1e6).toFixed(0)}M</strong> — {data.fli_overlays?.overlay_basis}
-            </div>
-          </div>
-
-          {/* ── REGULATORY CAPITAL IMPACT ── */}
-          <div className="agent-panel">
-            <div className="agent-panel-header">
-              <span className="agent-panel-title">Regulatory Capital Impact — If Staging Corrected</span>
-              <InfoTooltip text="Reclassifying loans from Stage 1/2 to Stage 3 increases risk-weighted assets and required provisions, both reducing Tier 1 CAR. CBSL requires Board notification when a restatement causes CAR to fall by more than 50 basis points." position="left" width={300} />
-            </div>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:1, background:'var(--color-border)' }}>
-              {[
-                { label:'Current Tier 1 CAR', value:`${data.capital_impact?.current_tier1_car}%`, color:'#16A34A', sub:'As reported to CBSL' },
-                { label:'If Staging Corrected', value:`${data.capital_impact?.corrected_tier1_car}%`, color:'#4A6070', sub:`−${data.capital_impact?.car_impact_bps} basis points` },
-                { label:'Additional RWA', value:`LKR ${((data.capital_impact?.rwa_increase_lkr||0)/1e9).toFixed(1)}Bn`, color:'#DC2626', sub:'Risk-weighted asset increase' },
-                { label:'CBSL Notification', value:data.capital_impact?.aggregate_notification_required ? 'REQUIRED' : 'Not required', color:data.capital_impact?.aggregate_notification_required ? '#DC2626' : '#16A34A', sub:`Aggregate: ${data.capital_impact?.aggregate_impact_with_sus017_bps}bps incl. SUS-017` },
-              ].map((m,i) => (
-                <div key={i} style={{ padding:'16px', background:'var(--color-surface)', borderTop:`3px solid ${m.color}` }}>
-                  <div style={{ fontSize:10, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:5 }}>{m.label}</div>
-                  <div style={{ fontSize:24, fontWeight:900, color:m.color, lineHeight:1, marginBottom:4 }}>{m.value}</div>
-                  <div style={{ fontSize:11, color:'var(--color-text-2)' }}>{m.sub}</div>
-                </div>
-              ))}
-            </div>
-            {data.capital_impact?.aggregate_notification_required && (
-              <div style={{ padding:'10px 16px', background:'#FEF0F0', fontSize:12, color:'#DC2626', lineHeight:1.6 }}>
-                ⚠ <strong>CBSL Notification Required:</strong> {data.capital_impact?.notification_threshold_note}
-              </div>
-            )}
-          </div>
-
-          {/* ── PEER BENCHMARKS ── */}
-          <div className="agent-panel">
-            <div className="agent-panel-header">
-              <span className="agent-panel-title">Peer Benchmarking — Sri Lankan Licensed Commercial Banks</span>
-              <InfoTooltip text="NTB vs industry peers. Source: CBSL Banking Sector Report Q3 2025 and published financials. Green = NTB outperforms sector median." position="left" width={300} />
-            </div>
-            <div style={{ overflowX:'auto' }}>
-              <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
-                <thead>
-                  <tr style={{ background:'var(--color-surface-2)', borderBottom:'2px solid var(--color-border)' }}>
-                    {['Metric','NTB','Peer Median','Sector Best','Sector Worst','vs Median'].map(h => (
-                      <th key={h} style={{ padding:'9px 12px', textAlign:'left', fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'var(--color-text-3)' }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(peerBenchmarks.credit).map(([key, b], i) => {
-                    const labels = { stage3_ratio:'Stage 3 Ratio (%)', override_rate:'Override Rate (%)', ecl_coverage:'ECL Coverage (%)', loan_growth_yoy:'Loan Growth YoY (%)' };
-                    const lowerBetter = ['stage3_ratio','override_rate','loan_growth_yoy'].includes(key);
+                  {Object.entries(peerBenchmarks?.credit||{}).map(([key,b],i)=>{
+                    const labels = { stage3_ratio:'Stage 3 Ratio (%)', ecl_coverage:'ECL Coverage (%)', loan_growth_yoy:'Loan Growth YoY (%)', override_rate:'Override Rate (%)' };
+                    const lowerBetter = ['stage3_ratio','ecl_coverage'].includes(key);
                     const better = lowerBetter ? b.ntb <= b.peer_median : b.ntb >= b.peer_median;
-                    const col = better ? '#16A34A' : '#DC2626';
+                    const col = better ? '#0BBF7A' : 'var(--octave-pink)';
                     return (
-                      <tr key={key} style={{ borderBottom:'1px solid var(--color-border)', background:i%2===0?'transparent':'var(--color-surface-2)' }}>
-                        <td style={{ padding:'10px 12px', fontWeight:600 }}>{labels[key]||key}</td>
-                        <td style={{ padding:'10px 12px', fontWeight:800, color:col }}>{b.ntb}</td>
-                        <td style={{ padding:'10px 12px', color:'var(--color-text-2)' }}>{b.peer_median}</td>
-                        <td style={{ padding:'10px 12px', color:'#16A34A', fontWeight:600 }}>{b.peer_best}</td>
-                        <td style={{ padding:'10px 12px', color:'#DC2626' }}>{b.peer_worst}</td>
-                        <td style={{ padding:'10px 12px' }}>
-                          <span style={{ fontSize:11, fontWeight:700, padding:'2px 8px', borderRadius:4, background:`${col}14`, color:col }}>{better ? '✓ Better than median' : '✗ Weaker than median'}</span>
-                        </td>
-                      </tr>
+                      <AnomalyHeatRow key={key} label={labels[key]||key} value={b.ntb} benchmark={b.peer_median} deviation={Math.round(((b.ntb-b.peer_median)/b.peer_median)*100)} risk={better?'low':'high'} color={col} />
                     );
                   })}
-                </tbody>
-              </table>
-              <div style={{ padding:'8px 12px', fontSize:10, color:'var(--color-text-3)' }}>Source: {peerBenchmarks.credit.stage3_ratio.source}</div>
+                  <div style={{ padding:'8px 14px', fontSize:10, color:'var(--color-text-3)' }}>Source: CBSL Banking Sector Report Q3 2025</div>
+                </div>
+              </div>
             </div>
-          </div>
-
-        </>
-      )}
-      </AgentModule>
+          </>
+        );
+      }}
+    </AgentModule>
   );
 }

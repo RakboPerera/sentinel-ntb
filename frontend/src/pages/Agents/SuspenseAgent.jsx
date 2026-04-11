@@ -1,291 +1,151 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, LineChart, Line, ReferenceLine } from 'recharts';
 import AgentModule from '../../components/shared/AgentModule.jsx';
+import { VisualFindingCard, InsightBox, PanelWithMethod, MetricSpotlight, VerdictCard, HeatStrip, ComparisonSplit, AnomalyHeatRow } from '../../components/shared/VisualComponents.jsx';
 import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
-import { VisualFindingCard, InsightBox, ScoreBar, StatCard, PanelWithMethod } from '../../components/shared/VisualComponents.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
-import { demoData } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { demoData } from '../../data/demoData.js';
 
 const COLOR = '#993C1D';
-const SCHEMA = {
-  agentName: 'Suspense & Reconciliation',
-  required: ['account_id','account_type','branch_code','current_balance_lkr','aging_days'],
-  optional: ['growth_rate_30d_pct','clearing_ratio','inflow_lkr_30d','outflow_lkr_30d','balance_30d_ago_lkr'],
-};
-const RISK_COLORS = { critical:'#E82AAE', red:'#CF4343', amber:'#26EA9F', watch:'#185FA5' };
-const RISK_BG = { critical:'#FEF8F8', red:'#FFF1F1', amber:'#F3F3F1', watch:'#E8FDF4' };
-
-function ClearingRatioBadge({ ratio }) {
-  const isHealthy = ratio >= 0.85;
-  const isWarning = ratio >= 0.5 && ratio < 0.85;
-  const color = isHealthy ? '#3B6D11' : isWarning ? '#3A5A3A' : '#E82AAE';
-  const bg = isHealthy ? '#EAF3DE' : isWarning ? '#E8FDF4' : '#FCEBEB';
-  return (
-    <span style={{ display:'inline-flex', alignItems:'center', gap:6, padding:'3px 9px', background:bg, borderRadius:6 }}>
-      <span style={{ fontSize:12, fontWeight:700, color }}>{ratio.toFixed(2)}</span>
-      <span style={{ fontSize:10, color }}>{isHealthy?'Healthy':isWarning?'Warning':'Critical'}</span>
-      <InfoTooltip text="Clearing ratio = outflows ÷ inflows in the period. A legitimate CEFT receivables account clears at 0.95+. A ratio near zero means entries are flowing IN but not being cleared OUT — the phantom receivable signature." position="left" width={240} />
-    </span>
-  );
-}
+const RISK_COLORS = { critical:'var(--octave-pink)', red:'#E82AAE', amber:'#4A6070', watch:'#0BBF7A' };
+const RISK_BG = { critical:'var(--octave-pink-light)', red:'#FCE7F6', amber:'#F3F3F1', watch:'#E8FDF4' };
 
 export default function SuspenseAgent() {
+  const [selected, setSelected] = useState(null);
   const openFinding = useOpenFinding('suspense');
+
   return (
-    <AgentModule agentId="suspense" agentName="Suspense & Reconciliation Agent" agentColor={COLOR} demoData={demoData.suspense} schema={SCHEMA}>
+    <AgentModule agentId="suspense" agentName="Suspense & Reconciliation Agent" agentColor={COLOR} demoData={demoData.suspense} schema={[]}>
       {(data) => {
-        const rs = data.reconciliation_summary;
-        const agingPie = [
-          { name:'Watch 0–30d', value:data.aging_distribution.watch_0_30.balance_lkr/1e9, count:data.aging_distribution.watch_0_30.count, color:'#185FA5' },
-          { name:'Amber 31–60d', value:data.aging_distribution.amber_31_60.balance_lkr/1e9, count:data.aging_distribution.amber_31_60.count, color:'#26EA9F' },
-          { name:'Red 61–90d', value:data.aging_distribution.red_61_90.balance_lkr/1e9, count:data.aging_distribution.red_61_90.count, color:'#CF4343' },
-          { name:'Critical >90d', value:data.aging_distribution.critical_90_plus.balance_lkr/1e9, count:data.aging_distribution.critical_90_plus.count, color:'#E82AAE' },
-        ];
+        const rs = data.reconciliation_summary || {};
+        const accounts = data.flagged_accounts || [];
+        const sel = selected ?? accounts[0];
+
         return (
           <>
-            <ExplainerBox
-              color={COLOR}
-              icon="⊟"
-              title="How this agent identifies phantom receivables"
-              summary="Legitimate CEFT receivables clear within 3–5 business days. An account growing rapidly in balance while its clearing ratio (outflows ÷ inflows) collapses toward zero is definitively accumulating phantom entries."
-              detail="The agent computes two metrics daily for every suspense account: (1) growth_rate_30d — how much the balance has grown in 30 days. Normal accounts grow <10% as entries flow through. (2) clearing_ratio — outflows divided by inflows. A healthy CEFT receivables account should clear at 0.95+. SUS-017's clearing ratio of 0.08 means 92% of inflows are never matched to outflows — they are phantom entries with no real transaction counterpart. The combination of high growth AND low clearing ratio is the definitive fraud signature."
-              collapsible={true}
-            />
-            {/* Audit Opinion Banner */}
-            <div style={{ background:'#993C1D06', border:`1px solid #993C1D22`, borderRadius:10, overflow:'hidden' }}>
+            <ExplainerBox color={COLOR} icon="⊟"
+              title="How this agent detects phantom receivables and CEFT fraud"
+              summary="Every suspense account is analysed on three daily signals: balance growth rate, clearing ratio, and aging. An account with high growth + low clearing + long aging is a phantom receivable indicator."
+              detail="The phantom score combines: growth rate (>50% in 30d = flag), clearing ratio (<0.30 = flag), aging (>90d = CBSL regulatory breach). SUS-017 scores critically on all three simultaneously."
+              collapsible />
+
+            {/* Audit Opinion */}
+            <div style={{ background:`${COLOR}06`, border:`1px solid ${COLOR}22`, borderRadius:10, overflow:'hidden' }}>
               <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
-                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#993C1D', color:'white', flexShrink:0, marginTop:2 }}>
-                  ADVERSE
-                </div>
-                <div style={{ fontSize:12, color:'#993C1D', lineHeight:1.7 }}>
-                  In our opinion, the suspense account reconciliation control environment is ADVERSE. SUS-017 constitutes a confirmed CBSL regulatory breach. The phantom receivable pattern is corroborated by multi-agent analysis.
-                </div>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:COLOR, color:'white', flexShrink:0, marginTop:2 }}>ADVERSE</div>
+                <div style={{ fontSize:12, color:COLOR, lineHeight:1.7 }}>In our opinion, the suspense account reconciliation control environment is ADVERSE. SUS-017 constitutes a confirmed CBSL regulatory breach. The phantom receivable pattern is corroborated by multi-agent analysis.</div>
               </div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #993C1D18` }}>
-                {[['Population tested','143 suspense and nostro accounts (100%)'],['Period covered','FY 2025 + 90-day aging window'],['Materiality threshold','All balances aged &gt;30 days; CBSL breach threshold &gt;90 days'],['Model limitations','Intraday clearing cycles not captured; weekend entries may show artificial aging']].map(([k,v],i)=>(
-                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #993C1D12`:'none', borderBottom:i<2?`1px solid #993C1D12`:'none' }}>
-                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#993C1D', opacity:0.65, marginBottom:2 }}>{k}</div>
-                    <div style={{ fontSize:11, color:'#993C1D', lineHeight:1.5 }}>{v}</div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid ${COLOR}18` }}>
+                {[['Population tested','143 suspense and nostro accounts (100%)'],['Period covered','FY 2025 + 90-day aging window'],['Materiality threshold','All balances aged >30 days; CBSL breach threshold >90 days'],['Model limitations','Intraday clearing cycles not captured; weekend entries may show artificial aging']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid ${COLOR}12`:'none', borderBottom:i<2?`1px solid ${COLOR}12`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:COLOR, opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:COLOR, lineHeight:1.5 }}>{v}</div>
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Hero metrics */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
-              <StatCard label="Accounts Analysed" value={rs.total_accounts_analyzed} sub={`LKR ${(rs.total_unreconciled_balance_lkr/1e9).toFixed(2)} Bn total unreconciled`} color={COLOR} tooltip="All suspense, NOSTRO, and clearing accounts in the NTB network. Each is scored daily on balance growth rate, clearing ratio, and aging." />
-              <StatCard label="Critical (>90 days)" value={rs.critical_accounts} sub="CBSL regulatory breach threshold" color="#A32D2D" tooltip="CBSL requires all suspense balances older than 90 days to be escalated to the Board Audit Committee. These accounts have breached that guideline." alert={`LKR ${(data.aging_distribution.critical_90_plus.balance_lkr/1e9).toFixed(2)} Bn at regulatory risk`} />
-              <StatCard label="Growth Anomalies" value={rs.growth_anomalies} sub="Balance grew >50% in 30 days" color="#854F0B" tooltip="Accounts where the 30-day balance growth rate exceeds 50%. Rapid growth combined with aging is the primary early indicator of phantom receivable fraud — before the aging breach even occurs." />
-              <StatCard label="Phantom Receivable Risk" value={rs.phantom_receivable_risk_accounts} sub="High growth + clearing ratio <0.3" color="#A32D2D" tooltip="Accounts meeting BOTH criteria: growth rate >50% in 30 days AND clearing ratio <0.30. This combination is the definitive phantom receivable signature — funds coming in but not being cleared out." alert="SUS-017 confirmed" />
+              <MetricSpotlight value={`LKR ${((rs.total_unreconciled_balance_lkr||0)/1e9).toFixed(1)}Bn`} label="Unreconciled Balance" sub={`${rs.total_accounts_analyzed||143} accounts analysed`} color={COLOR} icon="⊟" />
+              <MetricSpotlight value={rs.critical_accounts||3} label="Critical Accounts" sub="CBSL breach risk" color="var(--octave-pink)" trend="Immediate action" trendDir="up" />
+              <MetricSpotlight value={rs.phantom_receivable_risk_accounts||2} label="Phantom Receivable" sub="High growth + low clearing" color="var(--octave-pink)" />
+              <MetricSpotlight value={rs.growth_anomalies||5} label="Growth Anomalies" sub=">50% in 30 days" color="#4A6070" />
             </div>
-
-            <InsightBox type="critical" title="🚨 SUS-017 — Phantom receivable confirmed. CBSL regulatory breach." body="Account SUS-017 (Pettah Main Street CEFT Receivables) shows the definitive phantom receivable pattern: balance grew 312% in 30 days (inflows of LKR 939M) while only LKR 75M was cleared (clearing ratio 0.08). A legitimate CEFT receivables account should clear at 0.95+. After 94 days unreconciled, CBSL's guideline is formally breached. The Transaction Agent independently flagged this account for LKR 1.24 Bn in suspicious CEFT flows. Immediate freeze and forensic investigation required." />
 
             <div className="agent-panel">
               <div className="agent-panel-header"><span className="agent-panel-title">Key Findings</span></div>
-              <div className="agent-panel-body">
-                {(data.key_findings || []).map((f,i) => <VisualFindingCard key={i} finding={f} agentColor={COLOR} index={i} agentId="suspense" agentData={data} openFinding={openFinding} />)}
-              </div>
+              <div className="agent-panel-body">{accounts.length>0&&(data.key_findings||[]).map((f,i)=><VisualFindingCard key={i} finding={f} agentColor={COLOR} index={i} agentId="suspense" agentData={data} openFinding={openFinding} />)}</div>
             </div>
 
+            {/* Account risk grid */}
             <div className="agent-grid">
-              <PanelWithMethod
-                title="Aging Distribution — Unreconciled Balance by Tier"
-                methodology="CBSL aging tiers: 0–30 days (Watch — normal clearing time), 31–60 days (Amber — requires written explanation), 61–90 days (Red — escalation required), 90+ days (Critical — regulatory breach, Board Audit notification mandatory). The pie shows balance LKR allocated across tiers."
-                agentColor={COLOR}
-              >
-                <div style={{ padding:'12px 8px' }}>
-                  <InsightBox type="warning" title="47% of unreconciled balance is in Critical tier (>90 days)" body="LKR 3.98 Bn is in accounts aged beyond the CBSL 90-day guideline. This represents a systemic reconciliation control failure across the NTB network, not a single account issue." compact />
-                  <ResponsiveContainer width="100%" height={200}>
-                    <PieChart>
-                      <Pie data={agingPie} dataKey="value" cx="50%" cy="50%" outerRadius={80} label={({ name, value }) => `LKR ${value.toFixed(1)}Bn`}>
-                        {agingPie.map((d,i) => <Cell key={i} fill={d.color} />)}
-                      </Pie>
-                      <Tooltip formatter={(v) => [`LKR ${v.toFixed(2)} Bn`, 'Unreconciled balance']} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div style={{ display:'flex', flexDirection:'column', gap:5, marginTop:8 }}>
-                    {agingPie.map((d,i) => (
-                      <div key={i} style={{ display:'flex', alignItems:'center', gap:8, fontSize:12, padding:'6px 10px', background:d.color+'12', borderRadius:6 }}>
-                        <div style={{ width:10, height:10, borderRadius:2, background:d.color, flexShrink:0 }} />
-                        <span style={{ flex:1 }}>{d.name}</span>
-                        <span style={{ fontWeight:700, color:d.color }}>{d.count} accounts</span>
-                        <span style={{ color:'var(--color-text-2)' }}>LKR {d.value.toFixed(1)} Bn</span>
+              <div className="agent-panel">
+                <div className="agent-panel-header"><span className="agent-panel-title">Flagged Accounts</span><InfoTooltip text="Sorted by combined phantom receivable score. Click any account to see full diagnostic detail." position="left" /></div>
+                <div style={{ overflowY:'auto', maxHeight:520 }}>
+                  {accounts.map((acc,i) => {
+                    const isSel = sel?.account_id === acc.account_id;
+                    const rc = RISK_COLORS[acc.risk_tier] || '#4A6070';
+                    const rb = RISK_BG[acc.risk_tier] || '#F3F3F1';
+                    return (
+                      <div key={i} onClick={()=>setSelected(acc)}
+                        style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', cursor:'pointer', borderLeft:`3px solid ${isSel?rc:'transparent'}`, background:isSel?`${rc}06`:'transparent', transition:'all 0.12s' }}>
+                        <div style={{ display:'flex', gap:10, alignItems:'flex-start' }}>
+                          <div style={{ flex:1 }}>
+                            <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:6 }}>
+                              <code style={{ fontSize:13, fontWeight:800 }}>{acc.account_id}</code>
+                              <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:rb, color:rc, borderRadius:5 }}>{acc.risk_tier?.toUpperCase()}</span>
+                              <span style={{ marginLeft:'auto', fontSize:13, fontWeight:800, color:rc }}>LKR {((acc.current_balance_lkr||0)/1e9).toFixed(2)}Bn</span>
+                            </div>
+                            <div style={{ fontSize:11, color:'var(--color-text-2)', marginBottom:8 }}>{acc.account_type} · {acc.branch_code}</div>
+                            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:6 }}>
+                              {[
+                                { label:'Aging', val:`${acc.aging_days}d`, alert:acc.aging_days>90 },
+                                { label:'Growth 30d', val:`+${acc.growth_rate_30d_pct}%`, alert:acc.growth_rate_30d_pct>50 },
+                                { label:'Clearing', val:`${(acc.clearing_ratio*100).toFixed(0)}%`, alert:acc.clearing_ratio<0.3 },
+                              ].map((m,j)=>(
+                                <div key={j} style={{ textAlign:'center', padding:'6px 4px', background:m.alert?'var(--octave-pink-light)':'var(--color-surface-2)', borderRadius:6, border:`1px solid ${m.alert?'rgba(232,42,174,0.2)':'var(--color-border)'}` }}>
+                                  <div style={{ fontSize:14, fontWeight:900, color:m.alert?'var(--octave-pink)':'var(--color-text)', fontFamily:'var(--font-display)' }}>{m.val}</div>
+                                  <div style={{ fontSize:9, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.05em' }}>{m.label}</div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
-              </PanelWithMethod>
-
-              <PanelWithMethod
-                title="Flagged Account Detail"
-                methodology="Each account is assessed on 3 signals: (1) Aging tier against CBSL guidelines; (2) 30-day growth rate — >50% in a clearing account is anomalous; (3) Clearing ratio — outflows as a proportion of inflows. The phantom receivable score combines all three."
-                agentColor={COLOR}
-              >
-                <div style={{ maxHeight:420, overflowY:'auto' }}>
-                  {(data.flagged_accounts || []).map((acc,i) => (
-                    <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', background:RISK_BG[acc.risk_tier]||'transparent' }}>
-                      <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
-                        <code style={{ fontSize:13, fontWeight:800 }}>{acc.account_id}</code>
-                        <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', background:RISK_COLORS[acc.risk_tier], color:'white', borderRadius:4, textTransform:'uppercase' }}>{acc.risk_tier}</span>
-                        {acc.ceft_fraud_indicators && <span style={{ fontSize:10, fontWeight:600, padding:'2px 7px', background:'#E8FDF4', color:'#3A5A3A', borderRadius:4 }}>CEFT</span>}
-                        {acc.phantom_receivable_risk && <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'var(--color-red-light)', color:'var(--color-red)', borderRadius:4 }}>PHANTOM</span>}
-                        <span style={{ marginLeft:'auto', fontSize:15, fontWeight:800 }}>LKR {(acc.current_balance_lkr/1e6).toFixed(0)}M</span>
-                      </div>
-                      <div style={{ display:'flex', gap:16, fontSize:11, color:'var(--color-text-2)', marginBottom:10, flexWrap:'wrap' }}>
-                        <span>{acc.account_type} · {acc.branch_code}</span>
-                        <span style={{ color:acc.aging_days>=90?'var(--color-red)':acc.aging_days>=61?'#3A5A3A':'var(--color-text-2)', fontWeight:acc.aging_days>=61?700:400 }}>{acc.aging_days} days aged</span>
-                        <span>Growth: <strong style={{ color:acc.growth_rate_30d_pct>100?'var(--color-red)':'#3A5A3A' }}>+{acc.growth_rate_30d_pct}%</strong> in 30d</span>
-                      </div>
-                      <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
-                        <span style={{ fontSize:11, color:'var(--color-text-3)' }}>Clearing ratio:</span>
-                        <ClearingRatioBadge ratio={acc.clearing_ratio} />
-                      </div>
-                      {acc.regulatory_breach_risk && <InsightBox type="regulatory" body="CBSL regulatory breach — 90-day guideline exceeded. Board Audit Committee notification mandatory." compact />}
-                    </div>
-                  ))}
-                </div>
-              </PanelWithMethod>
-            </div>
-
-            {/* ── RECONCILIATION DEPTH ── */}
-            {data.reconciliation_depth && (
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-
-                {/* Source system sync */}
-                <PanelWithMethod
-                  title="Source System Sync Status"
-                  methodology="Each suspense account balance must reconcile to its source system feed (CEFT Switch, RTGS Switch, Core Banking, ATM Network). A 'Mismatch' status means the GL balance differs from the source system — indicating either an interface failure or deliberate manipulation of entries."
-                  agentColor={COLOR}
-                  tooltip="Mismatched source systems mean GL entries don't match the authoritative external feed. Interface failures are common but must be documented and resolved within 24 hours."
-                >
-                  <div>
-                    {(data.reconciliation_depth.source_system_sync || []).map((sys,i) => {
-                      const isMismatch = sys.status === 'Mismatch';
-                      return (
-                        <div key={i} style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', background: isMismatch ? '#E8FDF4' : 'transparent' }}>
-                          <div style={{ display:'flex', gap:10, alignItems:'center', marginBottom:6 }}>
-                            <span style={{ fontSize:12, fontWeight:600, flex:1 }}>{sys.system}</span>
-                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', borderRadius:4, background: isMismatch ? '#3A5A3A' : '#3B6D11', color:'white' }}>{sys.status}</span>
-                            {sys.breaks > 0 && <span style={{ fontSize:11, fontWeight:700, color:'var(--color-red)' }}>{sys.breaks} break{sys.breaks>1?'s':''}</span>}
-                          </div>
-                          <div style={{ fontSize:10, color:'var(--color-text-3)', marginBottom:4 }}>Last sync: {sys.last_sync}</div>
-                          <div style={{ fontSize:11, color: isMismatch ? '#3A5A3A' : 'var(--color-text-2)', lineHeight:1.5 }}>{sys.note}</div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </PanelWithMethod>
-
-                {/* Re-aging detection */}
-                <PanelWithMethod
-                  title="Re-aging Detection"
-                tooltip="Re-aging is a fraud technique where an old suspense balance is reversed and re-posted with a new date — resetting the aging clock to hide the true age of the liability. The agent detects this by tracking the original creation date versus the posted date."
-                  methodology="Re-aging occurs when aged entries are reversed and reposted to reset the aging clock — commonly used to avoid CBSL 90-day breach reporting. The agent detects this by tracking the original posting date vs re-entry date across the GL journal history. Any re-aging within 15 days of the CBSL threshold is flagged as potential concealment."
-                  agentColor={COLOR}
-                  tooltip="Re-aging via reversal-repost is one of the most common techniques used to conceal aged suspense balances from regulators and auditors."
-                >
-                  {(data.reconciliation_depth.reaging_detected || []).length > 0 ? (
-                    <div>
-                      {(data.reconciliation_depth.reaging_detected || []).map((r,i) => (
-                        <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', background:'#E8FDF4' }}>
-                          <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
-                            <code style={{ fontSize:12, fontWeight:700 }}>{r.account_id}</code>
-                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#3A5A3A', color:'white', borderRadius:4 }}>RE-AGING DETECTED</span>
-                            <code style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>{r.reset_by}</code>
-                          </div>
-                          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:10 }}>
-                            <div style={{ padding:'8px 10px', background:'rgba(255,255,255,0.6)', borderRadius:6, textAlign:'center' }}>
-                              <div style={{ fontSize:18, fontWeight:800, color:'#3A5A3A' }}>{r.original_age_days}d</div>
-                              <div style={{ fontSize:9, color:'var(--color-text-3)' }}>Original age before reset</div>
-                            </div>
-                            <div style={{ padding:'8px 10px', background:'rgba(255,255,255,0.6)', borderRadius:6, textAlign:'center' }}>
-                              <div style={{ fontSize:18, fontWeight:800, color:'#3B6D11' }}>{r.reset_to_days}d</div>
-                              <div style={{ fontSize:9, color:'var(--color-text-3)' }}>Age after reset</div>
-                            </div>
-                          </div>
-                          <div style={{ fontSize:11, color:'var(--color-text-2)', marginBottom:8 }}>Reset on {r.reset_date} via: {r.method}</div>
-                          <InsightBox type="warning" body={r.interpretation} compact />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div style={{ padding:24, textAlign:'center', color:'var(--color-text-3)', fontSize:12 }}>
-                      ✓ No re-aging patterns detected in this period.
-                    </div>
-                  )}
-                </PanelWithMethod>
-
-                {/* Auto-match rates */}
-                <PanelWithMethod
-                  title="Auto-Match Rates by Account"
-                  methodology="Auto-match rate = % of entries matched automatically to a source system record. A healthy CEFT receivables account should match at 90%+. Match rates below 50% indicate either a broken reconciliation process or deliberate entry of items with no matching counterpart (phantom entries)."
-                  agentColor={COLOR}
-                  tooltip="Low auto-match rates mean items are flowing IN but cannot be matched to a legitimate outgoing transaction — the phantom receivable signature."
-                >
-                  <div>
-                    {(data.reconciliation_depth.auto_match_rates || []).map((acc,i) => {
-                      const matchColor = acc.auto_match_pct >= 80 ? '#3B6D11' : acc.auto_match_pct >= 50 ? '#26EA9F' : '#DC2626';
-                      return (
-                        <div key={i} style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)' }}>
-                          <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:6 }}>
-                            <div style={{ flex:1 }}>
-                              <code style={{ fontSize:11, fontWeight:700 }}>{acc.account_id}</code>
-                              <div style={{ fontSize:10, color:'var(--color-text-3)' }}>{acc.account_name}</div>
-                            </div>
-                            <div style={{ textAlign:'right' }}>
-                              <div style={{ fontSize:18, fontWeight:800, color:matchColor }}>{acc.auto_match_pct}%</div>
-                              <div style={{ fontSize:9, color:'var(--color-text-3)' }}>auto-match</div>
-                            </div>
-                          </div>
-                          <div style={{ height:6, borderRadius:3, background:'var(--color-surface-2)', overflow:'hidden', marginBottom:6 }}>
-                            <div style={{ width:`${acc.auto_match_pct}%`, height:'100%', background:matchColor, borderRadius:3 }} />
-                          </div>
-                          <div style={{ display:'flex', gap:12, fontSize:11, color:'var(--color-text-2)' }}>
-                            <span>{acc.unmatched_items} unmatched items</span>
-                            <span style={{ color:acc.break_lkr>50e6?'var(--color-red)':'var(--color-text-2)', fontWeight:acc.break_lkr>50e6?700:400 }}>
-                              LKR {(acc.break_lkr/1e6).toFixed(1)}M break
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </PanelWithMethod>
-
-                {/* Cutoff analysis */}
-                <PanelWithMethod
-                  title="Clearing Cutoff Analysis"
-                  methodology="Tracks how quickly entries clear across the suspense population: T+0 (same day), T+1 (next business day), T+2+ (delayed). CBSL recommends <10% of entries remaining uncleared after T+1 for CEFT accounts. High T+2+ concentrations indicate either processing backlogs or deliberate delay in matching entries."
-                  agentColor={COLOR}
-                >
-                  <div style={{ padding:'16px' }}>
-                    {(data.reconciliation_depth.cutoff_analysis || []).map((tier,i) => {
-                      const color = tier.tier.includes('T+0') ? '#3B6D11' : tier.tier.includes('T+1') ? '#26EA9F' : '#DC2626';
-                      return (
-                        <div key={i} style={{ marginBottom:14 }}>
-                          <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
-                            <span style={{ fontSize:12, fontWeight:600 }}>{tier.tier}</span>
-                            <span style={{ fontSize:13, fontWeight:800, color }}>{tier.pct}%</span>
-                          </div>
-                          <div style={{ height:8, borderRadius:4, background:'var(--color-surface-2)', overflow:'hidden', marginBottom:4 }}>
-                            <div style={{ width:`${tier.pct}%`, height:'100%', background:color, borderRadius:4 }} />
-                          </div>
-                          <div style={{ fontSize:11, color:'var(--color-text-2)', lineHeight:1.5 }}>{tier.interpretation}</div>
-                        </div>
-                      );
-                    })}
-                    <InsightBox type="warning"
-                      body="17% of entries taking T+2+ is above the CBSL recommended threshold of 10%. Concentrated in SUS-ACC-017 — consistent with the phantom receivable pattern where entries flow in but are never cleared to a matching outflow."
-                      compact
-                    />
-                  </div>
-                </PanelWithMethod>
               </div>
-            )}
+
+              {/* Account detail */}
+              {sel && (
+                <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+                  <div className="agent-panel">
+                    <div style={{ padding:'14px 16px', background:`${RISK_COLORS[sel.risk_tier]||COLOR}08`, borderBottom:'1px solid var(--color-border)' }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:4 }}>
+                        <code style={{ fontSize:16, fontWeight:800 }}>{sel.account_id}</code>
+                        <span style={{ fontSize:22, fontWeight:900, color:RISK_COLORS[sel.risk_tier]||COLOR, fontFamily:'var(--font-display)' }}>LKR {((sel.current_balance_lkr||0)/1e9).toFixed(2)}Bn</span>
+                      </div>
+                      <div style={{ fontSize:12, color:'var(--color-text-2)' }}>{sel.account_type} · {sel.branch_code}</div>
+                    </div>
+                    <div style={{ padding:'16px', display:'flex', flexDirection:'column', gap:12 }}>
+                      <HeatStrip value={sel.aging_days||0} max={120} color={sel.aging_days>90?'var(--octave-pink)':'#4A6070'} label="Aging" sublabel="CBSL breach threshold: 90 days" format={v=>`${v} days`} />
+                      <HeatStrip value={sel.growth_rate_30d_pct||0} max={400} color={sel.growth_rate_30d_pct>50?'var(--octave-pink)':'#0BBF7A'} label="30-day Growth Rate" sublabel="Flag threshold: >50% in 30 days" format={v=>`+${v}%`} />
+                      <HeatStrip value={(1-sel.clearing_ratio)*100||0} max={100} color={sel.clearing_ratio<0.3?'var(--octave-pink)':'#0BBF7A'} label="Uncleared (inverse clearing ratio)" sublabel="Flag: clearing ratio < 30% of balance" format={v=>`${v.toFixed(0)}% uncleared`} />
+                      <VerdictCard verdict={sel.risk_tier?.toUpperCase()||'CRITICAL'} confidence={sel.phantom_score||0.94} finding={sel.pattern_detected||'Phantom receivable pattern detected'} color={RISK_COLORS[sel.risk_tier]||COLOR} action={sel.recommended_action} />
+                    </div>
+                  </div>
+
+                  {/* Aging chart */}
+                  <PanelWithMethod title="Balance Aging Distribution" tooltip="How the unreconciled balance is distributed by age bucket across all flagged accounts. Amounts in CBSL breach zone (>90d) require Board Audit Committee notification." methodology="Balance is attributed to an aging bucket based on the earliest unmatched entry date. CBSL requires Board notification for any amount >90 days." agentColor={COLOR}>
+                    <div style={{ padding:'16px' }}>
+                      <ResponsiveContainer width="100%" height={180}>
+                        <BarChart data={data.aging_distribution||[]} margin={{ top:0, right:10, bottom:0, left:0 }}>
+                          <XAxis dataKey="bucket" tick={{ fontSize:10 }} />
+                          <YAxis tickFormatter={v=>`${(v/1e9).toFixed(1)}Bn`} tick={{ fontSize:10 }} />
+                          <Tooltip formatter={v=>`LKR ${(v/1e9).toFixed(2)}Bn`} />
+                          <ReferenceLine x="91–120d" stroke="var(--octave-pink)" strokeDasharray="4 3" />
+                          <Bar dataKey="balance_lkr" radius={[4,4,0,0]}>
+                            {(data.aging_distribution||[]).map((d,i)=>{
+                              const isBreached = d.bucket?.includes('91') || d.bucket?.includes('120') || d.bucket?.includes('>');
+                              return <Cell key={i} fill={isBreached?'var(--octave-pink)':COLOR} opacity={isBreached?1:0.6} />;
+                            })}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                      <div style={{ marginTop:10, padding:'8px 12px', background:'var(--octave-pink-light)', borderRadius:8, fontSize:11, color:'var(--octave-pink)', fontWeight:600, border:'1px solid rgba(232,42,174,0.2)' }}>
+                        ⚠ Amounts in the 91d+ bucket constitute CBSL regulatory breaches requiring Board Audit Committee notification
+                      </div>
+                    </div>
+                  </PanelWithMethod>
+                </div>
+              )}
+            </div>
           </>
         );
       }}
-      </AgentModule>
+    </AgentModule>
   );
 }

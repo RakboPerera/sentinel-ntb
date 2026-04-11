@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AgentModule from '../../components/shared/AgentModule.jsx';
 import InfoTooltip from '../../components/shared/InfoTooltip.jsx';
 import ExplainerBox from '../../components/shared/ExplainerBox.jsx';
-import { VisualFindingCard, InsightBox, StatCard, PanelWithMethod, MetricComparison } from '../../components/shared/VisualComponents.jsx';
+import { StatCard, VisualFindingCard, InsightBox, PanelWithMethod, MetricSpotlight, VerdictCard, HeatStrip, SignalMatrix, ComparisonSplit, AnomalyHeatRow, EntityBadgeRow, RiskTimeline } from '../../components/shared/VisualComponents.jsx';
 import { demoData } from '../../data/demoData.js';
 import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { useNavigate } from 'react-router-dom';
