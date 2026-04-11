@@ -113,11 +113,11 @@ export default function CreditAgent() {
                       <YAxis type="category" dataKey="sector" width={100} tick={{ fontSize: 11 }} />
                       <Tooltip formatter={v => [`LKR ${(v / 1e9).toFixed(2)}Bn`, 'Flagged exposure']} />
                       <Bar dataKey="flagged_exposure_lkr" radius={[0, 6, 6, 0]} label={{ position: 'right', fontSize: 10, formatter: v => `LKR ${(v / 1e9).toFixed(1)}Bn` }}>
-                        {sectors.map((s, i) => <Cell key={i} fill={s.npl_rate_pct > 15 ? '#C41E3A' : s.npl_rate_pct > 8 ? COLOR : '#0BBF7A'} />)}
+                        {(sectors||[]).map((s, i) => <Cell key={i} fill={s.npl_rate_pct > 15 ? '#C41E3A' : s.npl_rate_pct > 8 ? COLOR : '#0BBF7A'} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
-                  {sectors.map((s, i) => (
+                  {(sectors||[]).map((s, i) => (
                     <DataRow key={i} even={i % 2 !== 0}
                       label={s.sector}
                       sub={`${s.flagged_count} flagged loans · avg anomaly ${((s.avg_anomaly_score || 0) * 100).toFixed(0)}/100`}

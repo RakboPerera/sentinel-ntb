@@ -176,7 +176,7 @@ export default function InsiderRiskAgent() {
             {/* Collusion detection */}
             {collusion.length > 0 && (
               <ChartPanel title="Collusion Detection — Staff Pair Analysis" subtitle="Co-occurrence ratios significantly above chance indicate coordinated fraud" noPad>
-                {collusion.map((pair, i) => (
+                {(collusion||[]).map((pair, i) => (
                   <div key={i} style={{ padding: '16px', borderBottom: '1px solid var(--color-border)', borderLeft: `3px solid ${pair.severity === 'critical' ? '#C41E3A' : '#4A6070'}` }}>
                     <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
                       <code style={{ fontSize: 12, fontWeight: 800, padding: '3px 10px', background: 'var(--color-surface-2)', borderRadius: 6 }}>{pair.staff_a}</code>

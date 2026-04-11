@@ -20,15 +20,15 @@ export default function useOpenFinding(agentId) {
 
   const AGENT_META = {
     credit:      { name: 'Credit Intelligence',       color: '#185FA5' },
-    transaction: { name: 'Transaction Surveillance',  color: '#534AB7' },
+    transaction: { name: 'Transaction Surveillance',  color: '#4A6070' },
     suspense:    { name: 'Suspense & Reconciliation', color: '#993C1D' },
     kyc:         { name: 'Identity & KYC / AML',      color: '#0F6E56' },
-    controls:    { name: 'Internal Controls',         color: '#854F0B' },
+    controls:    { name: 'Internal Controls',         color: '#3A5A3A' },
     digital:     { name: 'Digital Fraud & Identity',  color: '#993556' },
     trade:       { name: 'Trade Finance & Treasury',  color: '#3B6D11' },
-    insider:     { name: 'Insider Risk',              color: '#7C3AED' },
-    mje:         { name: 'MJE Testing',               color: '#0891B2' },
-    orchestrator:{ name: 'Orchestrator',              color: '#534AB7' },
+    insider:     { name: 'Insider Risk',              color: '#1F2937' },
+    mje:         { name: 'MJE Testing',               color: '#0BBF7A' },
+    orchestrator:{ name: 'Orchestrator',              color: '#111110' },
   };
 
   return function openFinding(finding, overrideAgentId, overrideColor, overrideData) {

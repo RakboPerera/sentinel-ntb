@@ -84,7 +84,7 @@ export default function InternalControlsAgent() {
                     </span>
                   ))}
                 </div>
-                {branches.map((br, i) => {
+                {(branches||[]).map((br, i) => {
                   const isSel = sel?.branch_code === br.branch_code;
                   const sc = scoreColor(br.composite_score || 0);
                   return (

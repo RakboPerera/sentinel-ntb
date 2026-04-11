@@ -138,7 +138,7 @@ export default function SuspenseAgent() {
                         <YAxis tickFormatter={v => `LKR ${(v / 1e9).toFixed(1)}Bn`} tick={{ fontSize: 10 }} />
                         <Tooltip formatter={v => `LKR ${(v / 1e9).toFixed(2)}Bn`} />
                         <Bar dataKey="balance_lkr" radius={[4, 4, 0, 0]}>
-                          {aging.map((d, i) => <Cell key={i} fill={d.bucket && (d.bucket.includes('91') || d.bucket.includes('>')) ? '#C41E3A' : d.bucket && d.bucket.includes('61') ? '#4A6070' : '#0BBF7A'} />)}
+                          {(aging||[]).map((d, i) => <Cell key={i} fill={d.bucket && (d.bucket.includes('91') || d.bucket.includes('>')) ? '#C41E3A' : d.bucket && d.bucket.includes('61') ? '#4A6070' : '#0BBF7A'} />)}
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>

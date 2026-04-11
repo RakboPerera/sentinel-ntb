@@ -76,18 +76,17 @@ export default function KYCAgent() {
 
               {tab === 'gaps' && (
                 <div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr 90px 80px 80px', padding: '8px 16px', background: 'var(--color-surface-2)', borderBottom: '1px solid var(--color-border)' }}>
-                    {['Customer','Gap type','Days overdue','Transaction vol','Risk'].map(h => (
+                  <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr 90px 80px', padding: '8px 16px', background: 'var(--color-surface-2)', borderBottom: '1px solid var(--color-border)' }}>
+                    {['Customer','Gap type','Days overdue','Risk'].map(h => (
                       <span key={h} style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-text-3)', fontFamily: 'var(--font-display)' }}>{h}</span>
                     ))}
                   </div>
                   {gaps.length === 0 && <EmptyState icon="✦" title="No KYC gaps found" />}
                   {gaps.map((g, i) => (
-                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '160px 1fr 90px 80px 80px', padding: '10px 16px', borderBottom: '1px solid var(--color-border)', alignItems: 'center', background: i % 2 === 0 ? 'white' : 'var(--color-surface-2)' }}>
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '160px 1fr 90px 80px', padding: '10px 16px', borderBottom: '1px solid var(--color-border)', alignItems: 'center', background: i % 2 === 0 ? 'white' : 'var(--color-surface-2)' }}>
                       <code style={{ fontSize: 11, fontWeight: 700, color: COLOR }}>{g.customer_id}</code>
                       <span style={{ fontSize: 11, color: 'var(--color-text-2)', paddingRight: 12 }}>{g.gap_type}</span>
                       <span style={{ fontSize: 12, fontWeight: 700, color: g.days_overdue > 180 ? '#C41E3A' : '#4A6070', fontFamily: 'var(--font-display)' }}>{g.days_overdue}d</span>
-                      <span style={{ fontSize: 11, color: 'var(--color-text-2)' }}>LKR {((g.transaction_volume_lkr || 0) / 1e6).toFixed(0)}M</span>
                       <SeverityPill level={g.risk_rating || 'medium'} />
                     </div>
                   ))}
@@ -97,7 +96,7 @@ export default function KYCAgent() {
               {tab === 'pep' && (
                 <div>
                   {pep.length === 0 && <EmptyState icon="✦" title="No PEP findings" />}
-                  {pep.map((p, i) => (
+                  {(pep||[]).map((p, i) => (
                     <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', borderLeft: `3px solid ${p.edd_current === 'overdue' ? '#C41E3A' : '#4A6070'}` }}>
                       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 10 }}>
                         <code style={{ fontSize: 12, fontWeight: 800 }}>{p.customer_id}</code>

@@ -125,7 +125,7 @@ export default function TradeTreasuryAgent() {
               {tab === 'lc' && (
                 <div>
                   {lcCases.length === 0 && <EmptyState icon="◎" title="No duplicate LCs detected" />}
-                  {lcCases.map((lc, i) => (
+                  {(lcCases||[]).map((lc, i) => (
                     <div key={i} style={{ padding: '16px', borderBottom: '1px solid var(--color-border)', borderLeft: '3px solid #C41E3A' }}>
                       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 10 }}>
                         <code style={{ fontSize: 12, fontWeight: 700 }}>{lc.customer_id}</code>
@@ -227,7 +227,7 @@ export default function TradeTreasuryAgent() {
                       <div style={{ padding: '10px 16px', background: 'var(--color-surface-2)', borderBottom: '1px solid var(--color-border)', fontSize: 11, fontWeight: 700, color: 'var(--color-text-2)', textTransform: 'uppercase', letterSpacing: '0.07em', fontFamily: 'var(--font-display)' }}>
                         UBO Conflicts ({uboConflicts.length})
                       </div>
-                      {uboConflicts.map((c, i) => (
+                      {(uboConflicts||[]).map((c, i) => (
                         <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', borderLeft: '3px solid #C41E3A' }}>
                           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
                             <code style={{ fontSize: 12, fontWeight: 700 }}>{c.customer_id}</code>
@@ -246,7 +246,7 @@ export default function TradeTreasuryAgent() {
                       <div style={{ padding: '10px 16px', background: 'var(--color-surface-2)', borderBottom: '1px solid var(--color-border)', fontSize: 11, fontWeight: 700, color: 'var(--color-text-2)', textTransform: 'uppercase', letterSpacing: '0.07em', fontFamily: 'var(--font-display)' }}>
                         Round-Trip LC ({roundtripLC.length})
                       </div>
-                      {roundtripLC.map((lc, i) => (
+                      {(roundtripLC||[]).map((lc, i) => (
                         <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', borderLeft: '3px solid #4A6070' }}>
                           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
                             <code style={{ fontSize: 12, fontWeight: 700 }}>{lc.lc_reference}</code>

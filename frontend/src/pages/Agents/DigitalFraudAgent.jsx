@@ -128,7 +128,7 @@ export default function DigitalFraudAgent() {
               {/* Impossible travel */}
               <ChartPanel title={`Impossible Travel Cases (${travel.length})`} noPad>
                 {travel.length === 0 && <EmptyState icon="✈" title="No impossible travel" />}
-                {travel.map((t, i) => (
+                {(travel||[]).map((t, i) => (
                   <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)' }}>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 10 }}>
                       <code style={{ fontSize: 12, fontWeight: 700 }}>{t.account_id}</code>
@@ -154,7 +154,7 @@ export default function DigitalFraudAgent() {
               {/* Device sharing */}
               <ChartPanel title={`Device Sharing Clusters (${devices.length})`} noPad>
                 {devices.length === 0 && <EmptyState icon="📱" title="No device sharing clusters" />}
-                {devices.map((d, i) => (
+                {(devices||[]).map((d, i) => (
                   <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', borderLeft: `3px solid ${d.risk === 'critical' ? '#C41E3A' : '#4A6070'}` }}>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
                       <code style={{ fontSize: 11, fontWeight: 700 }}>{d.device_id}</code>

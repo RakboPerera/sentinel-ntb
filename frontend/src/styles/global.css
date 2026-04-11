@@ -95,9 +95,9 @@ body.intro-mode { background: #0A0A0B; color: #e8e6e0; }
 .status-green { color: var(--color-green); background: var(--color-green-light); }
 .status-amber { color: var(--color-amber); background: var(--color-amber-light); }
 .status-red { color: var(--color-red); background: var(--color-red-light); }
-.status-critical { color: #9B1070; background: #FCE7F6; }
-.status-high { color: var(--color-amber); background: var(--color-amber-light); }
-.status-medium { color: var(--color-blue); background: var(--color-blue-light); }
+.status-critical { color: #C41E3A; background: #FCEEF1; }
+.status-high { color: #4A6070; background: #F3F3F1; }
+.status-medium { color: #0BBF7A; background: #E8FDF4; }
 
 /* ── Animations ── */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }

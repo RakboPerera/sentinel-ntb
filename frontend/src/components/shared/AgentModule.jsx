@@ -53,8 +53,8 @@ export function AgentStat({ label, value, sub, color }) {
 export function SeverityBadge({ severity }) {
   const map = {
     critical: { bg: '#FCEEF1', color: '#C41E3A', label: 'Critical' },
-    high: { bg: '#E8FDF4', color: '#3A5A3A', label: 'High' },
-    medium: { bg: 'var(--color-blue-light)', color: 'var(--color-blue)', label: 'Medium' },
+    high: { bg: '#F3F3F1', color: '#4A6070', label: 'High' },
+    medium: { bg: '#E8FDF4', color: '#0BBF7A', label: 'Medium' },
     low: { bg: 'var(--color-gray-light)', color: 'var(--color-gray)', label: 'Low' },
   };
   const s = map[severity] || map.medium;
@@ -66,7 +66,7 @@ export function SeverityBadge({ severity }) {
 export function KeyFindingCard({ finding }) {
   const isCrit = finding.severity === 'critical';
   return (
-    <div style={{ background: isCrit ? 'var(--color-red-light)' : finding.severity === 'high' ? '#FFF8F0' : 'var(--color-surface-2)', border: `1px solid ${isCrit ? 'rgba(163,45,45,0.2)' : 'var(--color-border)'}`, borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
+    <div style={{ background: isCrit ? 'var(--color-red-light)' : finding.severity === 'high' ? '#F3F3F1' : 'var(--color-surface-2)', border: `1px solid ${isCrit ? 'rgba(163,45,45,0.2)' : 'var(--color-border)'}`, borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
       <div style={{ display: 'flex', gap: 10, marginBottom: 8 }}>
         <SeverityBadge severity={finding.severity} />
         {(finding.affected_exposure_lkr > 0 || finding.affected_balance_lkr > 0) && (

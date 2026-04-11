@@ -118,9 +118,9 @@ export default function MJEAgent() {
                       <div>
                         <code style={{ fontSize: 11 }}>{e.staff_id}</code>
                         <div style={{ display: 'flex', gap: 4, marginTop: 3, flexWrap: 'wrap' }}>
-                          {e.after_hours && <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#F3F3F1', color: '#4A6070', borderRadius: 3 }}>AFTER-HOURS</span>}
+                          {(e.flags||[]).includes('After-hours') && <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#F3F3F1', color: '#4A6070', borderRadius: 3 }}>AFTER-HOURS</span>}
                           {e.sod_violation && <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#FCEEF1', color: '#C41E3A', borderRadius: 3 }}>SoD</span>}
-                          {e.round_number && <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#E8FDF4', color: '#0BBF7A', borderRadius: 3 }}>ROUND</span>}
+                          {(e.flags||[]).includes('Round number') && <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', background: '#E8FDF4', color: '#0BBF7A', borderRadius: 3 }}>ROUND</span>}
                         </div>
                       </div>
                       <span style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-text)', fontFamily: 'var(--font-display)' }}>LKR {((e.amount_lkr || 0) / 1e6).toFixed(1)}M</span>
@@ -135,7 +135,7 @@ export default function MJEAgent() {
               {tab === 'gl' && (
                 <div>
                   {gl.length === 0 && <EmptyState icon="⊞" title="No GL reconciliation data" />}
-                  {gl.map((g, i) => (
+                  {(gl||[]).map((g, i) => (
                     <div key={i} style={{ padding: '12px 16px', borderBottom: '1px solid var(--color-border)', background: i % 2 === 0 ? 'white' : 'var(--color-surface-2)' }}>
                       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}>
                         <code style={{ fontSize: 12, fontWeight: 700 }}>{g.gl}</code>
@@ -158,7 +158,7 @@ export default function MJEAgent() {
                     Total reversals tested: <strong>{rev.total_reversals_tested || 0}</strong> · Unmatched: <strong style={{ color: unmatched.length > 0 ? '#C41E3A' : '#0BBF7A' }}>{unmatched.length}</strong>
                   </div>
                   {unmatched.length === 0 && <EmptyState icon="⊞" title="No unmatched reversals" sub="All reversals traced to originating entries." />}
-                  {unmatched.map((r, i) => (
+                  {(unmatched||[]).map((r, i) => (
                     <div key={i} style={{ padding: '14px 16px', borderBottom: '1px solid var(--color-border)', borderLeft: '3px solid #C41E3A' }}>
                       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
                         <code style={{ fontSize: 12, fontWeight: 700 }}>{r.entry_id}</code>

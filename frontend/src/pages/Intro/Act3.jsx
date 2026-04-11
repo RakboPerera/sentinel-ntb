@@ -215,7 +215,7 @@ export default function Act3({ onNext }) {
       {activeConn && (
         <div className="animate-fade-in" style={{ margin: '0 0 24px', padding: '12px 20px', background: 'rgba(239,159,39,0.06)', border: '1px solid rgba(239,159,39,0.2)', borderRadius: 10 }}>
           <div style={{ fontSize: 12, color: 'rgba(232,230,224,0.6)', flex: 1 }}>
-            <strong style={{ color: '#26EA9F' }}>{activeConn.fraud}</strong> activates <strong style={{ color: '#f4f2ec' }}>{activeConn.agents.filter(a => a !== 'Orchestrator').length} domain agents</strong> — {activeConn.agents.filter(a => a !== 'Orchestrator').join(' · ')}. Each sees a fragment. The Orchestrator sees the whole.
+            <strong style={{ color: '#26EA9F' }}>{activeConn.fraud}</strong> activates <strong style={{ color: '#f4f2ec' }}>{(activeConn?.agents||[]).filter(a => a !== 'Orchestrator').length} domain agents</strong> — {(activeConn?.agents||[]).filter(a => a !== 'Orchestrator').join(' · ')}. Each sees a fragment. The Orchestrator sees the whole.
           </div>
         </div>
       )}
