@@ -54,8 +54,8 @@ export default function MJEAgent() {
             {/* Hero metrics */}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
               <MetricSpotlight value={ms.total_mjes||847} label="MJEs Tested" sub="100% full population" color={COLOR} icon="⊞" />
-              <MetricSpotlight value={ms.critical_mjes||3} label="Critical MJEs" sub="Score > 80/100" color="var(--octave-pink)" trend="Immediate review" trendDir="up" />
-              <MetricSpotlight value={ms.sod_violations||4} label="SoD Violations" sub="Same maker & checker" color="var(--octave-pink)" />
+              <MetricSpotlight value={ms.critical_mjes||3} label="Critical MJEs" sub="Score > 80/100" color="#C41E3A" trend="Immediate review" trendDir="up" />
+              <MetricSpotlight value={ms.sod_violations||4} label="SoD Violations" sub="Same maker & checker" color="#C41E3A" />
               <MetricSpotlight value={ms.after_hours_pct ? `${ms.after_hours_pct}%` : "23%"} label="After-Hours Postings" sub="18:00–06:00 or weekends" color="#4A6070" />
             </div>
 
@@ -78,7 +78,7 @@ export default function MJEAgent() {
               {activeTab === "population" && (
                 <div>
                   {(data.mje_entries||[]).slice(0,8).map((entry,i)=>{
-                    const rc = entry.risk_score>=80?"var(--octave-pink)":entry.risk_score>=50?COLOR:"#4A6070";
+                    const rc = entry.risk_score>=80?"#C41E3A":entry.risk_score>=50?COLOR:"#4A6070";
                     return (
                       <div key={i} style={{ padding:"14px 16px", borderBottom:"1px solid var(--color-border)" }}>
                         <div style={{ display:"flex", gap:10, alignItems:"center", marginBottom:8 }}>
@@ -88,7 +88,7 @@ export default function MJEAgent() {
                           <div style={{ flex:1 }}>
                             <div style={{ display:"flex", gap:8, alignItems:"center" }}>
                               <code style={{ fontSize:12, fontWeight:700 }}>{entry.mje_id}</code>
-                              {entry.sod_violation && <span style={{ fontSize:9, fontWeight:800, padding:"2px 6px", background:"var(--octave-pink-light)", color:"var(--octave-pink)", borderRadius:4 }}>SoD</span>}
+                              {entry.sod_violation && <span style={{ fontSize:9, fontWeight:800, padding:"2px 6px", background:"#FCEEF1", color:"#C41E3A", borderRadius:4 }}>SoD</span>}
                               {entry.after_hours && <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", background:"#F3F3F1", color:"#4A6070", borderRadius:4 }}>After-hours</span>}
                             </div>
                             <div style={{ fontSize:11, color:"var(--color-text-2)", marginTop:2 }}>{entry.gl_account_name} · {entry.posting_date}</div>
@@ -116,19 +116,19 @@ export default function MJEAgent() {
                       <Bar dataKey="actual" radius={[3,3,0,0]} name="Observed">
                         {benfordData.map((d,i)=>{
                           const dev = Math.abs(d.actual-d.expected);
-                          return <Cell key={i} fill={dev>4?"var(--octave-pink)":dev>2?COLOR:"#D1D0CB"} />;
+                          return <Cell key={i} fill={dev>4?"#C41E3A":dev>2?COLOR:"#D1D0CB"} />;
                         })}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                   <div style={{ marginTop:12, display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8 }}>
                     {benfordData.filter(d=>Math.abs(d.actual-d.expected)>2).map((d,i)=>(
-                      <div key={i} style={{ padding:"10px 12px", background:Math.abs(d.actual-d.expected)>4?"var(--octave-pink-light)":"#E8FDF4", borderRadius:8, border:`1px solid ${Math.abs(d.actual-d.expected)>4?"rgba(232,42,174,0.25)":"rgba(11,191,122,0.25)"}` }}>
-                        <div style={{ fontSize:28, fontWeight:900, color:Math.abs(d.actual-d.expected)>4?"var(--octave-pink)":COLOR, fontFamily:"var(--font-display)", lineHeight:1 }}>{d.digit}</div>
+                      <div key={i} style={{ padding:"10px 12px", background:Math.abs(d.actual-d.expected)>4?"#FCEEF1":"#E8FDF4", borderRadius:8, border:`1px solid ${Math.abs(d.actual-d.expected)>4?"rgba(196,30,58,0.25)":"rgba(11,191,122,0.25)"}` }}>
+                        <div style={{ fontSize:28, fontWeight:900, color:Math.abs(d.actual-d.expected)>4?"#C41E3A":COLOR, fontFamily:"var(--font-display)", lineHeight:1 }}>{d.digit}</div>
                         <div style={{ fontSize:11, marginTop:4, color:"var(--color-text-2)" }}>
                           Observed: <strong>{d.actual.toFixed(1)}%</strong><br/>
                           Expected: {d.expected.toFixed(1)}%<br/>
-                          <strong style={{ color:Math.abs(d.actual-d.expected)>4?"var(--octave-pink)":COLOR }}>{d.deviation>0?"+":""}{d.deviation.toFixed(1)}% deviation</strong>
+                          <strong style={{ color:Math.abs(d.actual-d.expected)>4?"#C41E3A":COLOR }}>{d.deviation>0?"+":""}{d.deviation.toFixed(1)}% deviation</strong>
                         </div>
                       </div>
                     ))}
@@ -139,7 +139,7 @@ export default function MJEAgent() {
               {activeTab === "gl" && (
                 <div>
                   {(data.gl_reconciliation||[]).map((gl,i)=>{
-                    const riskColor = gl.risk_level==="critical"?"var(--octave-pink)":gl.risk_level==="high"?"#4A6070":COLOR;
+                    const riskColor = gl.risk_level==="critical"?"#C41E3A":gl.risk_level==="high"?"#4A6070":COLOR;
                     return (
                       <div key={i} style={{ padding:"14px 16px", borderBottom:"1px solid var(--color-border)", borderLeft:`4px solid ${riskColor}` }}>
                         <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:8 }}>
@@ -159,7 +159,7 @@ export default function MJEAgent() {
                 <div>
                   {/* Unmatched reversals */}
                   {(data.reversal_analysis?.unmatched_reversals||[]).map((rev,i)=>(
-                    <VerdictCard key={i} verdict="Unmatched Reversal" confidence={rev.risk_score||0.87} finding={rev.finding||`${rev.mje_id} reversed with no traceable original entry`} evidence={[`Amount: LKR ${((rev.amount_lkr||0)/1e6).toFixed(1)}M`, `GL: ${rev.gl_account}`, rev.posting_date].filter(Boolean)} color="var(--octave-pink)" action={rev.recommended_action} />
+                    <VerdictCard key={i} verdict="Unmatched Reversal" confidence={rev.risk_score||0.87} finding={rev.finding||`${rev.mje_id} reversed with no traceable original entry`} evidence={[`Amount: LKR ${((rev.amount_lkr||0)/1e6).toFixed(1)}M`, `GL: ${rev.gl_account}`, rev.posting_date].filter(Boolean)} color="#C41E3A" action={rev.recommended_action} />
                   ))}
                   {/* Net-zero manipulations */}
                   {(data.reversal_analysis?.net_zero_manipulations||[]).map((nz,i)=>(

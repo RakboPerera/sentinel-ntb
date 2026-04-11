@@ -144,10 +144,10 @@ export function getCasesForCell(branchCode, domain) {
 
 /** Severity colours */
 export const CASE_SEV_COLOR = {
-  critical: '#E82AAE', high: '#D97706', medium: '#185FA5', low: '#16A34A'
+  critical: '#C41E3A', high: '#4A6070', medium: '#0BBF7A', low: '#16A34A'
 };
 export const CASE_SEV_BG = {
-  critical: '#FEF0F0', high: '#FFFBEB', medium: '#EBF4FF', low: '#F0FDF4'
+  critical: '#FCEEF1', high: '#F3F3F1', medium: '#E8FDF4', low: '#F0FDF4'
 };
 export const CASE_STATUS_COLOR = {
   open: '#DC2626', investigating: '#D97706', resolved: '#16A34A', closed: '#9ca3af'

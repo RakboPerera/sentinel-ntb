@@ -8,7 +8,7 @@ import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { demoData, peerBenchmarks } from '../../data/demoData.js';
 
 const COLOR = '#0F6E56';
-const RISK_COLORS = { high:'var(--octave-pink)', medium:'#4A6070', low:'#0BBF7A', critical:'var(--octave-pink)' };
+const RISK_COLORS = { high:'#C41E3A', medium:'#4A6070', low:'#0BBF7A', critical:'#C41E3A' };
 
 export default function KYCAgent() {
   const [activeTab, setActiveTab] = useState('gaps');
@@ -22,7 +22,7 @@ export default function KYCAgent() {
         // Summary for pie chart
         const gapData = [
           { name:'Compliant', value: cs.total_customers_analyzed - cs.kyc_gap_count, fill:'#0BBF7A' },
-          { name:'KYC Gap', value: cs.kyc_gap_count, fill:'var(--octave-pink)' },
+          { name:'KYC Gap', value: cs.kyc_gap_count, fill:'#C41E3A' },
         ];
 
         return (
@@ -51,8 +51,8 @@ export default function KYCAgent() {
 
             {/* Hero metrics with compliance pie */}
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr 200px', gap:12, alignItems:'start' }}>
-              <MetricSpotlight value={(cs.kyc_gap_count||39290).toLocaleString()} label="KYC Gap Accounts" sub={`${cs.kyc_gap_pct||4.7}% of portfolio — CBSL limit: 2%`} color="var(--octave-pink)" icon="✦" trend="Breach" trendDir="up" />
-              <MetricSpotlight value={cs.pep_accounts||34} label="PEP Accounts" sub={`${cs.pep_related_accounts||89} related accounts`} color="var(--octave-pink)" trend="EDD required" trendDir="up" />
+              <MetricSpotlight value={(cs.kyc_gap_count||39290).toLocaleString()} label="KYC Gap Accounts" sub={`${cs.kyc_gap_pct||4.7}% of portfolio — CBSL limit: 2%`} color="#C41E3A" icon="✦" trend="Breach" trendDir="up" />
+              <MetricSpotlight value={cs.pep_accounts||34} label="PEP Accounts" sub={`${cs.pep_related_accounts||89} related accounts`} color="#C41E3A" trend="EDD required" trendDir="up" />
               <MetricSpotlight value={cs.beneficial_ownership_gaps||234} label="BO Gaps" sub="Ownership undisclosed" color="#4A6070" />
               <MetricSpotlight value={cs.overdue_refresh_count?.toLocaleString()||'12,847'} label="Overdue Refresh" sub="Documentation expired" color={COLOR} />
               <div style={{ background:'var(--color-surface)', border:'1px solid var(--color-border)', borderRadius:12, padding:'14px', display:'flex', flexDirection:'column', alignItems:'center' }}>
@@ -62,7 +62,7 @@ export default function KYCAgent() {
                   </Pie>
                 </PieChart>
                 <div style={{ textAlign:'center', marginTop:4 }}>
-                  <div style={{ fontSize:16, fontWeight:900, color:'var(--octave-pink)', fontFamily:'var(--font-display)' }}>{cs.kyc_gap_pct||4.7}%</div>
+                  <div style={{ fontSize:16, fontWeight:900, color:'#C41E3A', fontFamily:'var(--font-display)' }}>{cs.kyc_gap_pct||4.7}%</div>
                   <div style={{ fontSize:10, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.05em' }}>Gap rate</div>
                 </div>
               </div>
@@ -112,14 +112,14 @@ export default function KYCAgent() {
                       <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:10 }}>
                         <code style={{ fontSize:13, fontWeight:800 }}>{pep.customer_id}</code>
                         <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{pep.pep_category}</span>
-                        <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, padding:'2px 8px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:5 }}>EDD {pep.edd_status}</span>
+                        <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, padding:'2px 8px', background:'#FCEEF1', color:'#C41E3A', borderRadius:5 }}>EDD {pep.edd_status}</span>
                       </div>
                       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:10 }}>
-                        <HeatStrip value={pep.days_edd_overdue||0} max={500} color={pep.days_edd_overdue>180?'var(--octave-pink)':'#4A6070'} label="EDD Overdue" format={v=>`${v} days`} />
+                        <HeatStrip value={pep.days_edd_overdue||0} max={500} color={pep.days_edd_overdue>180?'#C41E3A':'#4A6070'} label="EDD Overdue" format={v=>`${v} days`} />
                         <HeatStrip value={(pep.transaction_volume_lkr||0)} max={1e9} color={COLOR} label="Transaction Volume" format={v=>`LKR ${(v/1e6).toFixed(0)}M`} />
                       </div>
                       {pep.regulatory_breach && (
-                        <div style={{ padding:'8px 12px', background:'var(--octave-pink-light)', borderRadius:8, fontSize:11, color:'var(--octave-pink)', fontWeight:600, border:'1px solid rgba(232,42,174,0.2)' }}>
+                        <div style={{ padding:'8px 12px', background:'#FCEEF1', borderRadius:8, fontSize:11, color:'#C41E3A', fontWeight:600, border:'1px solid rgba(196,30,58,0.2)' }}>
                           ⚠ {pep.regulatory_breach}
                         </div>
                       )}
@@ -137,13 +137,13 @@ export default function KYCAgent() {
                       <Tooltip formatter={v=>`${v.toFixed(1)}% gap rate`} />
                       <Bar dataKey="gap_rate_pct" radius={[0,4,4,0]} label={{ position:'right', fontSize:10, formatter:v=>`${v.toFixed(1)}%` }}>
                         {(data.branch_compliance_heatmap||[]).slice(0,12).map((d,i)=>(
-                          <Cell key={i} fill={d.gap_rate_pct>10?'var(--octave-pink)':d.gap_rate_pct>5?'#4A6070':'#0BBF7A'} />
+                          <Cell key={i} fill={d.gap_rate_pct>10?'#C41E3A':d.gap_rate_pct>5?'#4A6070':'#0BBF7A'} />
                         ))}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                   <div style={{ marginTop:12, display:'flex', gap:10 }}>
-                    {[['var(--octave-pink)','>10% — Critical'],['#4A6070','5–10% — Review'],['#0BBF7A','<5% — Compliant']].map(([c,l])=>(
+                    {[['#C41E3A','>10% — Critical'],['#4A6070','5–10% — Review'],['#0BBF7A','<5% — Compliant']].map(([c,l])=>(
                       <span key={l} style={{ fontSize:10, display:'flex', alignItems:'center', gap:5, color:'var(--color-text-2)' }}>
                         <span style={{ width:10, height:10, borderRadius:2, background:c, display:'inline-block' }} />{l}
                       </span>
@@ -161,7 +161,7 @@ export default function KYCAgent() {
                   const labels = { kyc_gap_rate:'KYC Gap Rate (%)', pep_edd_overdue_pct:'PEP EDD Overdue (%)', str_filing_rate:'STR Filing Rate (per acct)' };
                   const lowerBetter = ['kyc_gap_rate','pep_edd_overdue_pct'].includes(key);
                   const better = lowerBetter ? b.ntb <= b.peer_median : b.ntb >= b.peer_median;
-                  const col = better ? '#0BBF7A' : 'var(--octave-pink)';
+                  const col = better ? '#0BBF7A' : '#C41E3A';
                   return <AnomalyHeatRow key={key} label={labels[key]||key} value={b.ntb} benchmark={b.peer_median} deviation={Math.round(((b.ntb-b.peer_median)/b.peer_median)*100)} risk={better?'low':'critical'} color={col} />;
                 })}
                 <div style={{ padding:'8px 14px', fontSize:10, color:'var(--color-text-3)' }}>Source: CBSL AML Compliance Review 2025</div>

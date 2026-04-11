@@ -213,9 +213,9 @@ const CASE_DETAIL = {
 
 const COLS = ['open', 'investigating', 'resolved', 'closed'];
 const COL_LABELS = { open: 'Open', investigating: 'Investigating', resolved: 'Resolved', closed: 'Closed' };
-const COL_COLORS = { open: '#E82AAE', investigating: '#4A6070', resolved: '#16A34A', closed: '#9ca3af' };
+const COL_COLORS = { open: '#C41E3A', investigating: '#4A6070', resolved: '#16A34A', closed: '#9ca3af' };
 const STR_MAP = {
-  eligible: { label: 'STR Eligible — filing required', color: '#E82AAE', bg: '#FEF0F0' },
+  eligible: { label: 'STR Eligible — filing required', color: '#C41E3A', bg: '#FEF0F0' },
   under_assessment: { label: 'STR Under Assessment', color: '#4A6070', bg: '#F3F3F1' },
   not_required: { label: 'STR Not Required', color: '#16A34A', bg: '#F0FDF4' },
   filed: { label: 'STR Filed', color: '#16A34A', bg: '#F0FDF4' },
@@ -244,7 +244,7 @@ function getSla(c, status) {
   const elapsed = (Date.now() - new Date(d.createdAt).getTime()) / 3600000;
   const pct = Math.min(100, Math.round((elapsed / d.slaHours) * 100));
   const breached = pct >= 100;
-  return { pct, color: breached ? '#E82AAE' : pct >= 75 ? '#4A6070' : '#16A34A', label: breached ? `BREACHED` : `${Math.round(elapsed)}h / ${d.slaHours}h`, breached };
+  return { pct, color: breached ? '#C41E3A' : pct >= 75 ? '#4A6070' : '#16A34A', label: breached ? `BREACHED` : `${Math.round(elapsed)}h / ${d.slaHours}h`, breached };
 }
 
 // ─── CASE DETAIL PANEL ───────────────────────────────────────────────────────
@@ -285,8 +285,8 @@ function CaseDetail({ c, status, onStatusChange, onClose }) {
           <span style={{ fontSize:10, fontWeight:800, letterSpacing:'0.08em', textTransform:'uppercase', padding:'2px 8px', borderRadius:20, background:sc, color:'white' }}>{c.severity}</span>
           <code style={{ fontSize:10, color:'var(--color-text-3)' }}>{c.id}</code>
           {c.branch_code && <span style={{ fontSize:10, padding:'2px 7px', background:'var(--color-surface)', color:'var(--color-text-2)', borderRadius:5, border:'1px solid var(--color-border)', fontWeight:600 }}>{c.branch_name}</span>}
-          {sla.breached && <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#FEF0F0', color:'#E82AAE', borderRadius:4 }}>SLA BREACHED</span>}
-          {d.strStatus === 'eligible' && !d.strFiled && <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#FEF0F0', color:'#E82AAE', borderRadius:4 }}>STR REQUIRED</span>}
+          {sla.breached && <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#FEF0F0', color:'#C41E3A', borderRadius:4 }}>SLA BREACHED</span>}
+          {d.strStatus === 'eligible' && !d.strFiled && <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#FEF0F0', color:'#C41E3A', borderRadius:4 }}>STR REQUIRED</span>}
           <button onClick={onClose} style={{ marginLeft:'auto', background:'none', border:'none', cursor:'pointer', color:'var(--color-text-3)', padding:4 }}><X size={14}/></button>
         </div>
         <div style={{ fontSize:13, fontWeight:700, lineHeight:1.4, marginBottom:8 }}>{c.title}</div>
@@ -329,7 +329,7 @@ function CaseDetail({ c, status, onStatusChange, onClose }) {
 
       <div style={{ flex:1, overflowY:'auto', padding:'14px 18px', display:'flex', flexDirection:'column', gap:12 }}>
         {tab === 'overview' && (<>
-          {c.exposureLkr > 0 && <div style={{ display:'flex', gap:6, alignItems:'center', padding:'9px 12px', background:'#FEF0F0', border:'1px solid rgba(220,38,38,0.2)', borderRadius:8, fontSize:13, fontWeight:700, color:'#E82AAE' }}><AlertTriangle size={14}/>LKR {(c.exposureLkr/1e9).toFixed(2)} Bn exposure</div>}
+          {c.exposureLkr > 0 && <div style={{ display:'flex', gap:6, alignItems:'center', padding:'9px 12px', background:'#FEF0F0', border:'1px solid rgba(220,38,38,0.2)', borderRadius:8, fontSize:13, fontWeight:700, color:'#C41E3A' }}><AlertTriangle size={14}/>LKR {(c.exposureLkr/1e9).toFixed(2)} Bn exposure</div>}
           <div>
             <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-3)', marginBottom:5 }}>Finding summary</div>
             <div style={{ fontSize:12, color:'var(--color-text)', lineHeight:1.7, padding:'10px 12px', background:'var(--color-surface-2)', borderRadius:8 }}>{d.description || c.title}</div>
@@ -406,7 +406,7 @@ function CaseDetail({ c, status, onStatusChange, onClose }) {
               <Shield size={13} style={{ color:strInfo.color }}/>
               <span style={{ fontSize:13, fontWeight:700, color:strInfo.color }}>{strInfo.label}</span>
               {d.strStatus==='eligible' && !d.strFiled && (
-                <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#E82AAE' }}>
+                <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#C41E3A' }}>
                   ⏱ FTRA deadline: 5 working days from case creation
                 </span>
               )}
@@ -421,8 +421,8 @@ function CaseDetail({ c, status, onStatusChange, onClose }) {
           {/* Key regulatory fields */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10 }}>
             {[
-              { label:'STR Filed', value:d.strFiled?'Yes':'Not yet filed', color:d.strFiled?'#16A34A':d.strStatus==='eligible'?'#E82AAE':'var(--color-text-3)' },
-              { label:'CBSL Notification', value:d.cbslNotified?'Filed':'Not filed', color:d.cbslNotified?'#16A34A':'#E82AAE' },
+              { label:'STR Filed', value:d.strFiled?'Yes':'Not yet filed', color:d.strFiled?'#16A34A':d.strStatus==='eligible'?'#C41E3A':'var(--color-text-3)' },
+              { label:'CBSL Notification', value:d.cbslNotified?'Filed':'Not filed', color:d.cbslNotified?'#16A34A':'#C41E3A' },
               { label:'Fraud Register Ref', value:d.fraudRegisterRef||'— Not assigned', color:d.fraudRegisterRef?'var(--color-text)':'var(--color-text-3)' },
             ].map((f,i) => (
               <div key={i} style={{ padding:'10px 12px', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:8 }}>
@@ -659,8 +659,8 @@ export default function CaseManager() {
       {/* Alert strip */}
       {(openCritical>0||strPending>0) && (
         <div style={{ display:'flex', gap:9, marginBottom:14, flexWrap:'wrap' }}>
-          {openCritical>0 && <div style={{ display:'flex', gap:5, alignItems:'center', padding:'6px 11px', background:'#FEF0F0', border:'1px solid rgba(220,38,38,0.3)', borderRadius:8, fontSize:12, fontWeight:700, color:'#E82AAE' }}><AlertTriangle size={12}/>{openCritical} critical case{openCritical>1?'s':''} open</div>}
-          {strPending>0 && <div style={{ display:'flex', gap:5, alignItems:'center', padding:'6px 11px', background:'#FEF0F0', border:'1px solid rgba(220,38,38,0.3)', borderRadius:8, fontSize:12, fontWeight:700, color:'#E82AAE' }}><Shield size={12}/>{strPending} STR filing{strPending>1?'s':''} required</div>}
+          {openCritical>0 && <div style={{ display:'flex', gap:5, alignItems:'center', padding:'6px 11px', background:'#FEF0F0', border:'1px solid rgba(220,38,38,0.3)', borderRadius:8, fontSize:12, fontWeight:700, color:'#C41E3A' }}><AlertTriangle size={12}/>{openCritical} critical case{openCritical>1?'s':''} open</div>}
+          {strPending>0 && <div style={{ display:'flex', gap:5, alignItems:'center', padding:'6px 11px', background:'#FEF0F0', border:'1px solid rgba(220,38,38,0.3)', borderRadius:8, fontSize:12, fontWeight:700, color:'#C41E3A' }}><Shield size={12}/>{strPending} STR filing{strPending>1?'s':''} required</div>}
         </div>
       )}
 
@@ -688,12 +688,12 @@ export default function CaseManager() {
                       <div style={{ display:'flex', gap:5, marginBottom:5, alignItems:'center', flexWrap:'wrap' }}>
                         <span style={{ fontSize:9, fontWeight:700, padding:'2px 5px', borderRadius:3, background:sc2, color:'white', textTransform:'uppercase', letterSpacing:'0.05em' }}>{c.severity}</span>
                         <code style={{ fontSize:10, color:'var(--color-text-3)' }}>{c.id}</code>
-                        {d2.strStatus==='eligible'&&!d2.strFiled&&<span style={{ marginLeft:'auto', fontSize:9, fontWeight:700, padding:'1px 5px', background:'#FEF0F0', color:'#E82AAE', borderRadius:3 }}>STR</span>}
+                        {d2.strStatus==='eligible'&&!d2.strFiled&&<span style={{ marginLeft:'auto', fontSize:9, fontWeight:700, padding:'1px 5px', background:'#FEF0F0', color:'#C41E3A', borderRadius:3 }}>STR</span>}
                         {sla.breached&&<span style={{ fontSize:9, fontWeight:700, padding:'1px 5px', background:'#F3F3F1', color:'#4A6070', borderRadius:3 }}>SLA</span>}
                       </div>
                       <div style={{ fontSize:12, fontWeight:600, lineHeight:1.4, marginBottom:5 }}>{c.title}</div>
                       {c.branch_code && <div style={{ fontSize:10, color:'var(--color-text-3)', marginBottom:4 }}>{c.branch_code} · {c.branch_name}</div>}
-                      {c.exposureLkr>0&&<div style={{ fontSize:11, fontWeight:600, color:'#E82AAE', marginBottom:4 }}>LKR {(c.exposureLkr/1e6).toFixed(0)}M</div>}
+                      {c.exposureLkr>0&&<div style={{ fontSize:11, fontWeight:600, color:'#C41E3A', marginBottom:4 }}>LKR {(c.exposureLkr/1e6).toFixed(0)}M</div>}
                       <div style={{ height:3, borderRadius:2, background:'var(--color-surface-2)', overflow:'hidden', marginBottom:4 }}><div style={{ width:`${sla.pct}%`, height:'100%', background:sla.color, borderRadius:2 }}/></div>
                       <div style={{ fontSize:10, color:sla.color, fontWeight:sla.breached?700:400, marginBottom:6 }}>{sla.label}</div>
                       <div style={{ display:'flex', gap:3, flexWrap:'wrap' }}>{c.domains.slice(0,5).map(dom=><span key={dom} style={{ fontSize:9, padding:'1px 4px', background:`${DOMAIN_COLORS[dom]}15`, borderRadius:3, color:DOMAIN_COLORS[dom] }}>{DOMAIN_LABELS[dom]||dom}</span>)}</div>

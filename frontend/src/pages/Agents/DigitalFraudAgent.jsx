@@ -12,7 +12,7 @@ const SCHEMA = [{ field:'session_id',type:'string' },{ field:'account_id',type:'
 
 function BehavioralGauge({ score }) {
   const pct = Math.round(score * 100);
-  const color = pct >= 80 ? 'var(--octave-pink)' : pct >= 50 ? '#4A6070' : '#0BBF7A';
+  const color = pct >= 80 ? '#C41E3A' : pct >= 50 ? '#4A6070' : '#0BBF7A';
   const angle = -135 + (pct / 100) * 270;
   return (
     <div style={{ textAlign:'center', padding:'8px 0' }}>
@@ -64,9 +64,9 @@ export default function DigitalFraudAgent() {
             {/* Hero metrics */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
               <MetricSpotlight value={(ds.total_sessions_analyzed||0).toLocaleString()} label="Sessions Analysed" sub={`${ds.anomalous_session_count||0} anomalous`} color={COLOR} icon="⊕" />
-              <MetricSpotlight value={ds.critical_sessions||0} label="Critical Sessions" sub="Behavioral score < 30" color="var(--octave-pink)" trend="Immediate review" trendDir="up" />
+              <MetricSpotlight value={ds.critical_sessions||0} label="Critical Sessions" sub="Behavioral score < 30" color="#C41E3A" trend="Immediate review" trendDir="up" />
               <MetricSpotlight value={ds.impossible_travel_cases||0} label="Impossible Travel" sub="Geographic impossibility" color="#4A6070" />
-              <MetricSpotlight value={ps.psi_score?.toFixed(2)||'0.14'} label="Model PSI" sub={ps.psi_score > 0.1 ? '⚠ Drift detected' : 'Stable'} color={ps.psi_score > 0.1 ? 'var(--octave-pink)' : '#0BBF7A'} trend="Recalibration needed" trendDir={ps.psi_score > 0.1 ? 'up' : 'down'} />
+              <MetricSpotlight value={ps.psi_score?.toFixed(2)||'0.14'} label="Model PSI" sub={ps.psi_score > 0.1 ? '⚠ Drift detected' : 'Stable'} color={ps.psi_score > 0.1 ? '#C41E3A' : '#0BBF7A'} trend="Recalibration needed" trendDir={ps.psi_score > 0.1 ? 'up' : 'down'} />
             </div>
 
             <div className="agent-panel">
@@ -83,7 +83,7 @@ export default function DigitalFraudAgent() {
                   <div style={{ padding:'16px' }}>
                     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10, marginBottom:14 }}>
                       {[
-                        { label:'PSI Score', val:ps.psi_score?.toFixed(2)||'0.14', color: ps.psi_score>0.1?'var(--octave-pink)':'#0BBF7A' },
+                        { label:'PSI Score', val:ps.psi_score?.toFixed(2)||'0.14', color: ps.psi_score>0.1?'#C41E3A':'#0BBF7A' },
                         { label:'Mean Score', val:ps.mean_behavioral_score?.toFixed(1)||'52.3', color:'var(--color-text)' },
                         { label:'Expected Mean', val:ps.expected_mean?.toFixed(1)||'67.8', color:'#4A6070' },
                       ].map((m,i)=>(
@@ -93,7 +93,7 @@ export default function DigitalFraudAgent() {
                         </div>
                       ))}
                     </div>
-                    <HeatStrip value={ps.psi_score||0.14} max={0.25} color="var(--octave-pink)" label="PSI Severity" sublabel="0.10 = monitor  ·  0.20 = retrain  ·  0.25+ = suspend" format={v=>v.toFixed(3)} />
+                    <HeatStrip value={ps.psi_score||0.14} max={0.25} color="#C41E3A" label="PSI Severity" sublabel="0.10 = monitor  ·  0.20 = retrain  ·  0.25+ = suspend" format={v=>v.toFixed(3)} />
                     <InsightBox type={ps.detected?'warning':'success'} body={ps.interpretation||'Model shows drift ahead of HSBC migration. Recalibration recommended before Q2 2026 cutover.'} />
                   </div>
                 </PanelWithMethod>
@@ -106,9 +106,9 @@ export default function DigitalFraudAgent() {
                         <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                           <code style={{ fontSize:12, fontWeight:700 }}>{itc.account_id}</code>
                           <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{itc.from_city} → {itc.to_city}</span>
-                          <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'var(--octave-pink)' }}>Impossible</span>
+                          <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, color:'#C41E3A' }}>Impossible</span>
                         </div>
-                        <ComparisonSplit leftLabel="Elapsed time" leftValue={`${itc.time_elapsed_minutes}min`} leftColor="var(--octave-pink)" rightLabel="Minimum travel" rightValue={`${itc.minimum_travel_minutes}min`} rightColor="#0BBF7A" note={`${Math.round((itc.minimum_travel_minutes/itc.time_elapsed_minutes)*100)}% faster than physically possible`} />
+                        <ComparisonSplit leftLabel="Elapsed time" leftValue={`${itc.time_elapsed_minutes}min`} leftColor="#C41E3A" rightLabel="Minimum travel" rightValue={`${itc.minimum_travel_minutes}min`} rightColor="#0BBF7A" note={`${Math.round((itc.minimum_travel_minutes/itc.time_elapsed_minutes)*100)}% faster than physically possible`} />
                       </div>
                     ))}
                   </div>
@@ -120,7 +120,7 @@ export default function DigitalFraudAgent() {
                 <div style={{ maxHeight:560, overflowY:'auto' }}>
                   {(data.anomalous_sessions||[]).map((sess,i)=>{
                     const score = sess.behavioral_score || 0;
-                    const riskColor = score < 30 ? 'var(--octave-pink)' : score < 60 ? '#4A6070' : '#0BBF7A';
+                    const riskColor = score < 30 ? '#C41E3A' : score < 60 ? '#4A6070' : '#0BBF7A';
                     return (
                       <div key={i}>
                         <div style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', cursor:'pointer', background: expandedSession===i?'var(--color-surface-2)':'transparent' }}
@@ -131,7 +131,7 @@ export default function DigitalFraudAgent() {
                               <div style={{ display:'flex', gap:6, alignItems:'center', marginBottom:4, flexWrap:'wrap' }}>
                                 <code style={{ fontSize:12, fontWeight:700 }}>{sess.account_id}</code>
                                 {!sess.device_registered && <span style={{ fontSize:9, fontWeight:700, padding:'2px 6px', background:'#F3F3F1', color:'#4A6070', borderRadius:4, border:'1px solid #D1D0CB' }}>Unregistered device</span>}
-                                {sess.impossible_travel && <span style={{ fontSize:9, fontWeight:700, padding:'2px 6px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:4 }}>Impossible travel</span>}
+                                {sess.impossible_travel && <span style={{ fontSize:9, fontWeight:700, padding:'2px 6px', background:'#FCEEF1', color:'#C41E3A', borderRadius:4 }}>Impossible travel</span>}
                               </div>
                               <div style={{ fontSize:11, color:'var(--color-text-2)' }}>{sess.anomaly_type}</div>
                             </div>
@@ -154,7 +154,7 @@ export default function DigitalFraudAgent() {
                             <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.6, padding:'10px 14px', background:'var(--color-surface)', borderRadius:8, marginBottom:8 }}>
                               {sess.explanation}
                             </div>
-                            <div style={{ padding:'8px 14px', background:'var(--octave-pink-light)', borderRadius:8, fontSize:12, fontWeight:600, color:'var(--octave-pink)', border:'1px solid rgba(232,42,174,0.2)' }}>
+                            <div style={{ padding:'8px 14px', background:'#FCEEF1', borderRadius:8, fontSize:12, fontWeight:600, color:'#C41E3A', border:'1px solid rgba(196,30,58,0.2)' }}>
                               → {sess.recommended_action}
                             </div>
                           </div>
@@ -170,7 +170,7 @@ export default function DigitalFraudAgent() {
             <PanelWithMethod title="Device Sharing Clusters" tooltip="One device ID accessing 3+ distinct accounts is a money mule indicator or credential theft." methodology="Device fingerprinting maps each device ID to all accounts using it. Cluster risk = number of accounts × session frequency." agentColor={COLOR}>
               <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:12, padding:'16px' }}>
                 {(data.device_sharing_clusters||[]).map((cluster,i)=>(
-                  <VerdictCard key={i} verdict={cluster.risk} confidence={cluster.risk==='critical'?0.94:0.72} finding={cluster.description||`Device ${cluster.device_id} accessed ${cluster.account_count} distinct accounts`} evidence={cluster.account_ids} color={cluster.risk==='critical'?'var(--octave-pink)':'#4A6070'} action={cluster.recommended_action} />
+                  <VerdictCard key={i} verdict={cluster.risk} confidence={cluster.risk==='critical'?0.94:0.72} finding={cluster.description||`Device ${cluster.device_id} accessed ${cluster.account_count} distinct accounts`} evidence={cluster.account_ids} color={cluster.risk==='critical'?'#C41E3A':'#4A6070'} action={cluster.recommended_action} />
                 ))}
               </div>
             </PanelWithMethod>

@@ -343,9 +343,9 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
         </div>
       )}
       {hasOpenFinding && (
-        <div onClick={e => { e.stopPropagation(); handleClick(); }} style={{ padding:'10px 16px', borderTop: finding.severity === 'critical' ? '1px solid rgba(232,42,174,0.2)' : `1px solid ${p.border}22`, background:`${agentColor}06`, display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
+        <div onClick={e => { e.stopPropagation(); handleClick(); }} style={{ padding:'10px 16px', borderTop: finding.severity === 'critical' ? '1px solid rgba(196,30,58,0.2)' : `1px solid ${p.border}22`, background:`${agentColor}06`, display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
           <span style={{ fontSize:11, color:'var(--color-text-3)' }}>Click to open full analysis, evidence, and regulatory context</span>
-          <span style={{ fontSize:12, fontWeight:700, color: finding.severity === 'critical' ? 'var(--octave-pink)' : agentColor, display:'flex', alignItems:'center', gap:4 }}>Full analysis <ArrowRight size={13} /></span>
+          <span style={{ fontSize:12, fontWeight:700, color: finding.severity === 'critical' ? '#C41E3A' : agentColor, display:'flex', alignItems:'center', gap:4 }}>Full analysis <ArrowRight size={13} /></span>
         </div>
       )}
       {showCreateCase && <CreateCaseModal finding={finding} agentId={agentId} agentColor={agentColor} onClose={() => setShowCreateCase(false)} />}
@@ -579,7 +579,7 @@ export function MetricSpotlight({ value, label, sub, color, icon, trend, trendDi
       <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-2)', marginTop:6, marginBottom:trend?4:0 }}>{label}</div>
       {sub && <div style={{ fontSize:11, color:'var(--color-text-3)', lineHeight:1.4 }}>{sub}</div>}
       {trend && (
-        <div style={{ marginTop:6, fontSize:11, fontWeight:600, color: trendDir==='up'?'#E82AAE':trendDir==='down'?'#0BBF7A':'var(--color-text-3)', display:'flex', alignItems:'center', gap:3 }}>
+        <div style={{ marginTop:6, fontSize:11, fontWeight:600, color: trendDir==='up'?'#C41E3A':trendDir==='down'?'#0BBF7A':'var(--color-text-3)', display:'flex', alignItems:'center', gap:3 }}>
           {trendDir==='up'?'↑':trendDir==='down'?'↓':'→'} {trend}
         </div>
       )}
@@ -595,10 +595,10 @@ export function RiskTimeline({ events, color }) {
       <div style={{ position:'absolute', left:8, top:6, bottom:6, width:2, background:`${color}20`, borderRadius:2 }} />
       {(events||[]).map((ev,i) => (
         <div key={i} style={{ position:'relative', marginBottom:16, paddingLeft:12 }}>
-          <div style={{ position:'absolute', left:-18, top:4, width:10, height:10, borderRadius:'50%', background: ev.severity==='critical'?'var(--octave-pink)':ev.severity==='high'?color:'var(--color-text-3)', border:'2px solid white', boxShadow:'0 0 0 2px currentColor' }} />
+          <div style={{ position:'absolute', left:-18, top:4, width:10, height:10, borderRadius:'50%', background: ev.severity==='critical'?'#C41E3A':ev.severity==='high'?color:'var(--color-text-3)', border:'2px solid white', boxShadow:'0 0 0 2px currentColor' }} />
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:3 }}>
             <span style={{ fontSize:10, color:'var(--color-text-3)', fontFamily:'var(--font-display)', letterSpacing:'0.05em' }}>{ev.time || ev.date}</span>
-            {ev.severity && <span style={{ fontSize:9, fontWeight:800, textTransform:'uppercase', padding:'1px 6px', borderRadius:4, background: ev.severity==='critical'?'var(--octave-pink-light)':'var(--color-surface-2)', color: ev.severity==='critical'?'var(--octave-pink)':'var(--color-text-2)' }}>{ev.severity}</span>}
+            {ev.severity && <span style={{ fontSize:9, fontWeight:800, textTransform:'uppercase', padding:'1px 6px', borderRadius:4, background: ev.severity==='critical'?'#FCEEF1':'var(--color-surface-2)', color: ev.severity==='critical'?'#C41E3A':'var(--color-text-2)' }}>{ev.severity}</span>}
           </div>
           <div style={{ fontSize:12, fontWeight:600, color:'var(--color-text)', marginBottom:2 }}>{ev.title || ev.event}</div>
           {ev.detail && <div style={{ fontSize:11, color:'var(--color-text-2)', lineHeight:1.55 }}>{ev.detail}</div>}
@@ -724,7 +724,7 @@ export function SignalMatrix({ signals, color }) {
 // ─── ANOMALY HEATROW ──────────────────────────────────────────────────────────
 // A row with heatmap-style coloring — replaces plain table rows
 export function AnomalyHeatRow({ label, value, benchmark, deviation, risk, color, formatter }) {
-  const riskColors = { critical:'var(--octave-pink)', high:color||'#4A6070', medium:'#0BBF7A', low:'var(--color-text-3)' };
+  const riskColors = { critical:'#C41E3A', high:color||'#4A6070', medium:'#0BBF7A', low:'var(--color-text-3)' };
   const rc = riskColors[risk] || riskColors.medium;
   const pct = benchmark > 0 ? Math.min(200, (value/benchmark)*100) : 0;
   return (

@@ -31,26 +31,22 @@ import RiskRegister from './pages/RiskRegister/RiskRegister.jsx';
 
 // ─── ERROR BOUNDARY ──────────────────────────────────────────────────────────
 class ErrorBoundary extends React.Component {
-  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
-  static getDerivedStateFromError(error) { return { hasError: true, error }; }
-  componentDidCatch(error, info) { console.error('Sentinel render error:', error, info); }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{ position:'fixed', inset:0, zIndex:9999, background:'rgba(0,0,0,0.6)', display:'flex', alignItems:'center', justifyContent:'center', padding:24 }}>
-          <div style={{ background:'white', borderRadius:12, padding:24, maxWidth:480, width:'100%' }}>
-            <div style={{ fontSize:13, fontWeight:700, color:'#DC2626', marginBottom:8 }}>Panel render error</div>
-            <div style={{ fontSize:12, color:'#6B7280', fontFamily:'monospace', background:'#F9FAFB', padding:12, borderRadius:8, marginBottom:16, wordBreak:'break-all' }}>
-              {this.state.error?.message || 'Unknown error'}
-            </div>
-            <button onClick={() => this.setState({ hasError:false, error:null })}
-              style={{ padding:'8px 16px', background:'#111110', color:'white', border:'none', borderRadius:8, fontSize:13, fontWeight:600, cursor:'pointer' }}>
-              Dismiss
-            </button>
-          </div>
-        </div>
-      );
+  constructor(props) { 
+    super(props); 
+    this.state = { hasError: false, retried: false }; 
+    this._retryTimer = null;
+  }
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error, info) { 
+    console.error('Sentinel render error:', error, info?.componentStack?.split('\n').slice(0,3).join(' '));
+    // Auto-retry once after 50ms — clears transient first-render errors
+    if (!this.state.retried) {
+      this._retryTimer = setTimeout(() => this.setState({ hasError: false, retried: true }), 50);
     }
+  }
+  componentWillUnmount() { clearTimeout(this._retryTimer); }
+  render() {
+    if (this.state.hasError) return null; // silent — auto-retries in 50ms
     return this.props.children;
   }
 }

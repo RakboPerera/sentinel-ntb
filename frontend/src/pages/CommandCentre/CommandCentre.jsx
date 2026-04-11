@@ -340,7 +340,7 @@ function AlertDrawer({ alert, onClose }) {
   const isCritical = alert.severity === 'critical';
   const headerBg = isCritical ? '#FEF0F0' : '#F3F3F1';
   const headerBorder = isCritical ? '#FECACA' : '#D1D0CB';
-  const severityColor = isCritical ? '#E82AAE' : '#4A6070';
+  const severityColor = isCritical ? '#C41E3A' : '#4A6070';
 
   const tabs = [
     { id: 'signals', label: 'Detection signals' },
@@ -486,7 +486,7 @@ function AlertDrawer({ alert, onClose }) {
               {alert.sla && (() => {
                 const pct = Math.min(100, Math.round((alert.sla.elapsed_minutes / alert.sla.target_minutes) * 100));
                 const isBreached = pct >= 100;
-                const slaColor = isBreached ? '#E82AAE' : pct >= 75 ? '#4A6070' : '#16A34A';
+                const slaColor = isBreached ? '#C41E3A' : pct >= 75 ? '#4A6070' : '#16A34A';
                 return (
                   <div style={{ padding: '14px 16px', background: `${slaColor}08`, border: `1px solid ${slaColor}22`, borderRadius: 10 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
@@ -559,7 +559,7 @@ function AlertDrawer({ alert, onClose }) {
                 </div>
                 <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
                   {[
-                    { label:'Confirmed fraud — open case', color:'#E82AAE', bg:'#FEF0F0' },
+                    { label:'Confirmed fraud — open case', color:'#C41E3A', bg:'#FEF0F0' },
                     { label:'STR-eligible — initiate filing', color:'#4A6070', bg:'#F3F3F1' },
                     { label:'False positive — model error', color:'#185FA5', bg:'#E8FDF4' },
                     { label:'False positive — business reason', color:'#185FA5', bg:'#E8FDF4' },
@@ -617,7 +617,7 @@ function AlertDrawer({ alert, onClose }) {
                   <div>
                     <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginBottom:8 }}>
                       {['Confirmed fraud','False positive','Inconclusive','STR-Eligible'].map(d => {
-                        const col = d==='Confirmed fraud'?'#E82AAE':d==='False positive'?'#16A34A':d==='STR-Eligible'?'#4A6070':'#185FA5';
+                        const col = d==='Confirmed fraud'?'#C41E3A':d==='False positive'?'#16A34A':d==='STR-Eligible'?'#4A6070':'#185FA5';
                         return <button key={d} onClick={()=>setDisposition(d)} style={{ fontSize:11, padding:'6px 12px', borderRadius:7, border:`1px solid ${col}33`, background:`${col}10`, color:col, cursor:'pointer', fontWeight:600 }}>{d}</button>;
                       })}
                     </div>
@@ -704,8 +704,8 @@ function FindingsRegisterView({ navigate }) {
   const critCount = ALL_FINDINGS.filter(f => f.severity === 'critical').length;
   const overdueCount = ALL_FINDINGS.filter(f => f.daysOpen > 30 && !f.status.includes('Resolved')).length;
 
-  function ageColor(d) { return d > 60 ? '#E82AAE' : d > 30 ? '#4A6070' : '#16A34A'; }
-  function sevColor(s) { return { critical: '#E82AAE', high: '#4A6070', medium: '#185FA5' }[s] || '#6b6963'; }
+  function ageColor(d) { return d > 60 ? '#C41E3A' : d > 30 ? '#4A6070' : '#16A34A'; }
+  function sevColor(s) { return { critical: '#C41E3A', high: '#4A6070', medium: '#185FA5' }[s] || '#6b6963'; }
   function statusColor(s) {
     if (s.includes('Resolved') || s.includes('Filed')) return '#16A34A';
     if (s.includes('Investigation') || s.includes('Remediation') || s.includes('Progress')) return '#185FA5';
@@ -720,8 +720,8 @@ function FindingsRegisterView({ navigate }) {
         {[
           { label:'Total Findings', val:ALL_FINDINGS.length, sub:'This audit cycle', color:'#185FA5' },
           { label:'Open Findings', val:openCount, sub:'Awaiting action or investigation', color:'#4A6070' },
-          { label:'Critical', val:critCount, sub:'Immediate action required', color:'#E82AAE' },
-          { label:'Overdue >30 days', val:overdueCount, sub:'Passed standard resolution SLA', color:'#E82AAE' },
+          { label:'Critical', val:critCount, sub:'Immediate action required', color:'#C41E3A' },
+          { label:'Overdue >30 days', val:overdueCount, sub:'Passed standard resolution SLA', color:'#C41E3A' },
         ].map((s,i) => (
           <div key={i} style={{ background:'var(--color-surface)', border:'1px solid var(--color-border)', borderRadius:10, padding:'14px 16px', borderTop:`3px solid ${s.color}` }}>
             <div style={{ fontSize:11, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:5 }}>{s.label}</div>
@@ -796,7 +796,7 @@ function FindingsRegisterView({ navigate }) {
                   <td style={{ padding:'8px 10px' }}>
                     <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', borderRadius:4, background:`${sevColor(f.severity)}15`, color:sevColor(f.severity), textTransform:'capitalize' }}>{f.severity}</span>
                   </td>
-                  <td style={{ padding:'8px 10px', fontWeight:700, color:'#E82AAE', whiteSpace:'nowrap' }}>{f.exposure}</td>
+                  <td style={{ padding:'8px 10px', fontWeight:700, color:'#C41E3A', whiteSpace:'nowrap' }}>{f.exposure}</td>
                   <td style={{ padding:'8px 10px' }}><code style={{ fontSize:10, color:'var(--color-text-2)' }}>{f.branch}</code></td>
                   <td style={{ padding:'8px 10px', whiteSpace:'nowrap' }}>
                     <span style={{ fontSize:11, fontWeight:700, color:ageColor(f.daysOpen) }}>{f.daysOpen}d</span>
@@ -814,7 +814,7 @@ function FindingsRegisterView({ navigate }) {
           </table>
         </div>
         <div style={{ padding:'10px 16px', borderTop:'1px solid var(--color-border)', background:'var(--color-surface-2)', fontSize:10, color:'var(--color-text-3)', display:'flex', justifyContent:'space-between' }}>
-          <span>Age: <span style={{ color:'#16A34A' }}>■</span> &lt;30d &nbsp;<span style={{ color:'#4A6070' }}>■</span> 30–60d &nbsp;<span style={{ color:'#E82AAE' }}>■</span> &gt;60d — findings requiring action</span>
+          <span>Age: <span style={{ color:'#16A34A' }}>■</span> &lt;30d &nbsp;<span style={{ color:'#4A6070' }}>■</span> 30–60d &nbsp;<span style={{ color:'#C41E3A' }}>■</span> &gt;60d — findings requiring action</span>
           <span>Sentinel FY 2025 · 9 Domain Agents · {ALL_FINDINGS.length} total findings this audit cycle</span>
         </div>
       </div>
@@ -849,7 +849,7 @@ const KYC_REMEDIATION = [
 ];
 
 function RegulatoryView({ navigate }) {
-  function urgencyColor(u) { return { critical:'#E82AAE', high:'#4A6070', medium:'#185FA5', filed:'#16A34A', low:'#6b6963' }[u] || '#6b6963'; }
+  function urgencyColor(u) { return { critical:'#C41E3A', high:'#4A6070', medium:'#185FA5', filed:'#16A34A', low:'#6b6963' }[u] || '#6b6963'; }
   function urgencyBg(u) { return { critical:'#FEF0F0', high:'#F3F3F1', medium:'#E8FDF4', filed:'#F0FDF4', low:'var(--color-surface-2)' }[u] || 'var(--color-surface-2)'; }
 
   const pendingSTRs = STR_QUEUE.filter(s => s.status !== 'Filed').length;
@@ -863,8 +863,8 @@ function RegulatoryView({ navigate }) {
       {/* Summary strip */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
         {[
-          { label:'STR Filings Pending', val:pendingSTRs, sub:'Under FTRA — 5 working day limit', color: pendingSTRs > 0 ? '#E82AAE' : '#16A34A' },
-          { label:'STR Overdue', val:overdueSTRs, sub:'Deadline passed — immediate action', color:'#E82AAE' },
+          { label:'STR Filings Pending', val:pendingSTRs, sub:'Under FTRA — 5 working day limit', color: pendingSTRs > 0 ? '#C41E3A' : '#16A34A' },
+          { label:'STR Overdue', val:overdueSTRs, sub:'Deadline passed — immediate action', color:'#C41E3A' },
           { label:'CBSL Notifications Due', val:pendingCBSL, sub:'Pending formal submission', color: pendingCBSL > 0 ? '#4A6070' : '#16A34A' },
           { label:'KYC Remediation', val:`${Math.round((completeKYC/totalKYC)*100)}%`, sub:`${completeKYC.toLocaleString()} of ${totalKYC.toLocaleString()} accounts`, color:'#185FA5' },
         ].map((s,i) => (
@@ -890,7 +890,7 @@ function RegulatoryView({ navigate }) {
                   <div style={{ fontSize:11, fontWeight:700, color:'#16A34A', padding:'3px 8px', background:'#F0FDF4', borderRadius:6, border:'1px solid rgba(22,163,74,0.2)' }}>FILED</div>
                 ) : (
                   <>
-                    <div style={{ fontSize:20, fontWeight:900, color:str.daysRemaining < 0 ? '#E82AAE' : str.daysRemaining <= 1 ? '#4A6070' : '#185FA5', lineHeight:1 }}>
+                    <div style={{ fontSize:20, fontWeight:900, color:str.daysRemaining < 0 ? '#C41E3A' : str.daysRemaining <= 1 ? '#4A6070' : '#185FA5', lineHeight:1 }}>
                       {str.daysRemaining < 0 ? `+${Math.abs(str.daysRemaining)}d` : `${str.daysRemaining}d`}
                     </div>
                     <div style={{ fontSize:9, color:'var(--color-text-3)', marginTop:2 }}>{str.daysRemaining < 0 ? 'OVERDUE' : 'remaining'}</div>
@@ -912,7 +912,7 @@ function RegulatoryView({ navigate }) {
                 </div>
               </div>
               {str.status !== 'Filed' && (
-                <button onClick={() => navigate('/cases', { state: { caseId: str.case } })} style={{ padding:'6px 14px', background:'#E82AAE', color:'white', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer', flexShrink:0, whiteSpace:'nowrap' }}>
+                <button onClick={() => navigate('/cases', { state: { caseId: str.case } })} style={{ padding:'6px 14px', background:'#C41E3A', color:'white', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer', flexShrink:0, whiteSpace:'nowrap' }}>
                   File STR →
                 </button>
               )}
@@ -948,7 +948,7 @@ function RegulatoryView({ navigate }) {
         <div style={{ padding:'4px 0' }}>
           {KYC_REMEDIATION.map((r, i) => {
             const pct = Math.round((r.complete / r.total) * 100);
-            const pc = { critical:'#E82AAE', high:'#4A6070', medium:'#185FA5', low:'#16A34A' }[r.priority];
+            const pc = { critical:'#C41E3A', high:'#4A6070', medium:'#185FA5', low:'#16A34A' }[r.priority];
             return (
               <div key={i} style={{ padding:'12px 18px', borderBottom:'1px solid var(--color-border)' }}>
                 <div style={{ display:'flex', gap:10, alignItems:'center', marginBottom:6 }}>
@@ -1184,7 +1184,7 @@ export default function CommandCentre() {
                   const pct = higherGood
                     ? Math.min(100, Math.round((r.limit / r.actual) * 100))
                     : Math.min(100, Math.round((r.actual / (r.limit > 0 ? r.limit : 1)) * 100));
-                  const color = r.status === 'green' ? '#3B6D11' : r.status === 'amber' ? '#26EA9F' : '#E82AAE';
+                  const color = r.status === 'green' ? '#3B6D11' : r.status === 'amber' ? '#26EA9F' : '#C41E3A';
                   return (
                     <div key={i} style={{ marginBottom: 16 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
@@ -1204,7 +1204,7 @@ export default function CommandCentre() {
                         )}
                       </div>
                       {r.status === 'red' && !higherGood && (
-                        <div style={{ fontSize: 10, color: '#E82AAE', marginTop: 3, fontWeight: 600 }}>⚠ Limit breached — {Math.round((r.actual/(r.limit||1)-1)*100)}% above limit</div>
+                        <div style={{ fontSize: 10, color: '#C41E3A', marginTop: 3, fontWeight: 600 }}>⚠ Limit breached — {Math.round((r.actual/(r.limit||1)-1)*100)}% above limit</div>
                       )}
                       {r.status === 'amber' && (
                         <div style={{ fontSize: 10, color: '#4A6070', marginTop: 3 }}>Approaching limit — monitor closely</div>
@@ -1229,7 +1229,7 @@ export default function CommandCentre() {
                   { step:'Branch approval pressure', detail:'Volume pressure led to override rate rising from 3.1% to 4.8% across the network', color:'#3A5A3A', icon:'⚠' },
                   { step:'Control environment failure', detail:'BR-14 override rate reaches 14.3%. STF-1847 accounts for 87% of branch overrides', color:'#3A5A3A', icon:'⚙' },
                   { step:'Insider fraud enabled', detail:'STF-1847 approves 11 anomalous loans LKR 387M. 4 SoD violations. Risk score 94/100', color:'#2D2D2B', icon:'👤' },
-                  { step:'Book inflation + ECL gap', detail:'Fictitious/inflated loans inflate loan book. Stage 3 ratio understated. LKR 1.1 Bn ECL gap', color:'#E82AAE', icon:'📋' },
+                  { step:'Book inflation + ECL gap', detail:'Fictitious/inflated loans inflate loan book. Stage 3 ratio understated. LKR 1.1 Bn ECL gap', color:'#C41E3A', icon:'📋' },
                   { step:'LCR deterioration', detail:'Inflated loan book + rapid growth depletes liquid assets. LCR: 320.6% → 203.4% (-37%)', color:'#4A6070', icon:'💧' },
                 ].map((node, i, arr) => (
                   <div key={i} style={{ display:'flex', alignItems:'stretch', flexShrink:0 }}>
@@ -1280,7 +1280,7 @@ export default function CommandCentre() {
               { step: 'Branch approval pressure', detail: 'Override rate: 3.1% → 4.8% network-wide. BR-14 at 14.3%', color: '#3A5A3A', icon: '⚠', agent: 'Controls Agent', path: '/agents/controls' },
               { step: 'Control environment failure', detail: '4 SoD violations. STF-1847: 87% override concentration at BR-14', color: '#3A5A3A', icon: '⚙', agent: 'Insider Risk Agent', path: '/agents/insider-risk' },
               { step: 'Insider fraud confirmed', detail: 'STF-1847 score 94/100. 11 anomalous loans LKR 387M fabricated or inflated', color: '#2D2D2B', icon: '👤', agent: 'Credit + MJE Agent', path: '/cases', caseId: 'CASE-001' },
-              { step: 'ECL understatement', detail: 'Stage 3 ratio understated. LKR 1.1 Bn ECL provisioning gap', color: '#E82AAE', icon: '📋', agent: 'MJE Agent', path: '/agents/mje' },
+              { step: 'ECL understatement', detail: 'Stage 3 ratio understated. LKR 1.1 Bn ECL provisioning gap', color: '#C41E3A', icon: '📋', agent: 'MJE Agent', path: '/agents/mje' },
               { step: 'LCR deterioration', detail: 'Loan book inflation + rapid growth depletes HQLA. 320.6% → 203.4%', color: '#4A6070', icon: '💧', agent: 'Trade Agent', path: '/agents/trade' },
             ].map((node, i, arr) => (
               <div key={i} style={{ display: 'flex', alignItems: 'stretch', flexShrink: 0 }}>

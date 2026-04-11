@@ -52,8 +52,8 @@ export default function TransactionAgent() {
             {/* Hero metrics */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
               <MetricSpotlight value={`LKR ${((ss.total_volume_lkr||0)/1e9).toFixed(1)}Bn`} label="Total Volume" sub={`${(ss.total_transactions_analyzed||0).toLocaleString()} transactions`} color={COLOR} icon="⟳" />
-              <MetricSpotlight value={ss.str_eligible_count||4} label="STR Eligible" sub="File within 5 working days" color="var(--octave-pink)" trend="FTRA deadline" trendDir="up" />
-              <MetricSpotlight value={ss.structuring_clusters||7} label="Structuring Clusters" sub="Below-threshold splitting" color="var(--octave-pink)" />
+              <MetricSpotlight value={ss.str_eligible_count||4} label="STR Eligible" sub="File within 5 working days" color="#C41E3A" trend="FTRA deadline" trendDir="up" />
+              <MetricSpotlight value={ss.structuring_clusters||7} label="Structuring Clusters" sub="Below-threshold splitting" color="#C41E3A" />
               <MetricSpotlight value={ss.high_risk_accounts||23} label="High-Risk Accounts" sub="Velocity or Benford flags" color="#4A6070" />
             </div>
 
@@ -75,7 +75,7 @@ export default function TransactionAgent() {
                       <Bar dataKey="actual" radius={[3,3,0,0]} name="Observed">
                         {benfordData.map((d,i)=>{
                           const deviation = Math.abs(d.actual-d.expected);
-                          return <Cell key={i} fill={deviation>3?'var(--octave-pink)':deviation>1.5?COLOR:'#0BBF7A'} />;
+                          return <Cell key={i} fill={deviation>3?'#C41E3A':deviation>1.5?COLOR:'#0BBF7A'} />;
                         })}
                       </Bar>
                     </BarChart>
@@ -83,12 +83,12 @@ export default function TransactionAgent() {
                   <div style={{ minWidth:180 }}>
                     <div style={{ fontSize:11, fontWeight:700, marginBottom:10, color:'var(--color-text-2)', textTransform:'uppercase', letterSpacing:'0.06em' }}>Key deviations</div>
                     {benfordData.filter(d=>Math.abs(d.actual-d.expected)>2).map((d,i)=>(
-                      <div key={i} style={{ padding:'8px 12px', background:`${Math.abs(d.actual-d.expected)>4?'var(--octave-pink-light)':'#F3F3F1'}`, borderRadius:8, marginBottom:6, border:`1px solid ${Math.abs(d.actual-d.expected)>4?'rgba(232,42,174,0.2)':'var(--color-border)'}` }}>
-                        <div style={{ fontSize:24, fontWeight:900, color:Math.abs(d.actual-d.expected)>4?'var(--octave-pink)':COLOR, fontFamily:'var(--font-display)', lineHeight:1 }}>{d.digit}</div>
+                      <div key={i} style={{ padding:'8px 12px', background:`${Math.abs(d.actual-d.expected)>4?'#FCEEF1':'#F3F3F1'}`, borderRadius:8, marginBottom:6, border:`1px solid ${Math.abs(d.actual-d.expected)>4?'rgba(196,30,58,0.2)':'var(--color-border)'}` }}>
+                        <div style={{ fontSize:24, fontWeight:900, color:Math.abs(d.actual-d.expected)>4?'#C41E3A':COLOR, fontFamily:'var(--font-display)', lineHeight:1 }}>{d.digit}</div>
                         <div style={{ fontSize:11, color:'var(--color-text-2)' }}>
                           Observed: <strong>{d.actual.toFixed(1)}%</strong><br/>
                           Expected: {d.expected.toFixed(1)}%<br/>
-                          <strong style={{ color:'var(--octave-pink)' }}>+{(d.actual-d.expected).toFixed(1)}% excess</strong>
+                          <strong style={{ color:'#C41E3A' }}>+{(d.actual-d.expected).toFixed(1)}% excess</strong>
                         </div>
                       </div>
                     ))}
@@ -115,14 +115,14 @@ export default function TransactionAgent() {
                       <div style={{ display:'flex', gap:10, alignItems:'center', marginBottom:12, flexWrap:'wrap' }}>
                         <code style={{ fontSize:13, fontWeight:800 }}>{cl.account_id}</code>
                         <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{cl.branch_code}</span>
-                        <span style={{ marginLeft:'auto', fontSize:22, fontWeight:900, color:'var(--octave-pink)', fontFamily:'var(--font-display)' }}>LKR {((cl.combined_amount_lkr||0)/1e6).toFixed(1)}M</span>
+                        <span style={{ marginLeft:'auto', fontSize:22, fontWeight:900, color:'#C41E3A', fontFamily:'var(--font-display)' }}>LKR {((cl.combined_amount_lkr||0)/1e6).toFixed(1)}M</span>
                       </div>
                       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginBottom:12 }}>
                         {[
                           { label:'Transactions', val:cl.cluster_transactions, color:COLOR },
                           { label:'Timespan', val:`${cl.cluster_timespan_minutes}min`, color:'#4A6070' },
                           { label:'Max single', val:`LKR ${((cl.max_single_txn_lkr||0)/1e6).toFixed(1)}M`, color:'var(--color-text-2)' },
-                          { label:'Score', val:`${(cl.structuring_score*100).toFixed(0)}/100`, color:'var(--octave-pink)' },
+                          { label:'Score', val:`${(cl.structuring_score*100).toFixed(0)}/100`, color:'#C41E3A' },
                         ].map((m,j)=>(
                           <div key={j} style={{ textAlign:'center', padding:'8px', background:`${m.color}08`, borderRadius:8, border:`1px solid ${m.color}20` }}>
                             <div style={{ fontSize:18, fontWeight:900, color:m.color, fontFamily:'var(--font-display)' }}>{m.val}</div>
@@ -130,7 +130,7 @@ export default function TransactionAgent() {
                           </div>
                         ))}
                       </div>
-                      <VerdictCard verdict={cl.str_eligible?'STR Eligible':'Flag'} confidence={cl.structuring_score} finding={cl.pattern_description||`${cl.cluster_transactions} transactions in ${cl.cluster_timespan_minutes} minutes — combined LKR ${((cl.combined_amount_lkr||0)/1e6).toFixed(0)}M`} evidence={cl.transaction_ids?.slice(0,3)} color={cl.str_eligible?'var(--octave-pink)':COLOR} action={cl.recommended_action} />
+                      <VerdictCard verdict={cl.str_eligible?'STR Eligible':'Flag'} confidence={cl.structuring_score} finding={cl.pattern_description||`${cl.cluster_transactions} transactions in ${cl.cluster_timespan_minutes} minutes — combined LKR ${((cl.combined_amount_lkr||0)/1e6).toFixed(0)}M`} evidence={cl.transaction_ids?.slice(0,3)} color={cl.str_eligible?'#C41E3A':COLOR} action={cl.recommended_action} />
                     </div>
                   ))}
                 </div>
@@ -143,9 +143,9 @@ export default function TransactionAgent() {
                       <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                         <code style={{ fontSize:12, fontWeight:700 }}>{va.account_id}</code>
                         <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{va.account_type}</span>
-                        <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, padding:'2px 8px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:5 }}>{va.velocity_score?.toFixed(2)||0} score</span>
+                        <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, padding:'2px 8px', background:'#FCEEF1', color:'#C41E3A', borderRadius:5 }}>{va.velocity_score?.toFixed(2)||0} score</span>
                       </div>
-                      <HeatStrip value={va.velocity_score||0} max={1} color={va.velocity_score>0.8?'var(--octave-pink)':COLOR} label={`${va.flag_period_txn_count} txns vs ${va.baseline_txn_count} baseline`} sublabel={`${va.velocity_multiple?.toFixed(1)||3}× above 90-day baseline`} format={v=>`${(v*100).toFixed(0)}/100`} />
+                      <HeatStrip value={va.velocity_score||0} max={1} color={va.velocity_score>0.8?'#C41E3A':COLOR} label={`${va.flag_period_txn_count} txns vs ${va.baseline_txn_count} baseline`} sublabel={`${va.velocity_multiple?.toFixed(1)||3}× above 90-day baseline`} format={v=>`${(v*100).toFixed(0)}/100`} />
                     </div>
                   ))}
                 </div>
@@ -153,15 +153,15 @@ export default function TransactionAgent() {
 
               {activeTab === 'str' && (
                 <div>
-                  <div style={{ padding:'10px 14px', background:'var(--octave-pink-light)', borderBottom:'1px solid rgba(232,42,174,0.2)', fontSize:12, fontWeight:600, color:'var(--octave-pink)' }}>
+                  <div style={{ padding:'10px 14px', background:'#FCEEF1', borderBottom:'1px solid rgba(196,30,58,0.2)', fontSize:12, fontWeight:600, color:'#C41E3A' }}>
                     ⏱ FTRA Section 7 — STR must be filed with CBSL FIU within 5 working days of identification
                   </div>
                   {(data.str_queue||[]).map((str,i)=>(
                     <div key={i} style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)' }}>
                       <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                         <code style={{ fontSize:12, fontWeight:700 }}>{str.account_id}</code>
-                        <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background: str.urgency==='immediate'?'var(--octave-pink)':'#4A6070', color:'white', borderRadius:4 }}>{str.urgency}</span>
-                        <span style={{ marginLeft:'auto', fontSize:13, fontWeight:800, color:'var(--octave-pink)' }}>LKR {((str.amount_lkr||0)/1e6).toFixed(0)}M</span>
+                        <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background: str.urgency==='immediate'?'#C41E3A':'#4A6070', color:'white', borderRadius:4 }}>{str.urgency}</span>
+                        <span style={{ marginLeft:'auto', fontSize:13, fontWeight:800, color:'#C41E3A' }}>LKR {((str.amount_lkr||0)/1e6).toFixed(0)}M</span>
                       </div>
                       <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.6 }}>{str.str_grounds}</div>
                     </div>

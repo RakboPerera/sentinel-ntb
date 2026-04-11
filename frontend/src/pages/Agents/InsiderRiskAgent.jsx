@@ -56,7 +56,7 @@ export default function InsiderRiskAgent() {
 
             {/* Hero metrics */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
-              <MetricSpotlight value={s.critical_staff||1} label="Critical Risk Staff" sub={`Score > 80/100`} color="var(--octave-pink)" icon="◉" trend="Immediate action" trendDir="up" />
+              <MetricSpotlight value={s.critical_staff||1} label="Critical Risk Staff" sub={`Score > 80/100`} color="#C41E3A" icon="◉" trend="Immediate action" trendDir="up" />
               <MetricSpotlight value={s.elevated_risk_staff||8} label="Elevated Risk" sub="Score 50–80" color="#4A6070" />
               <MetricSpotlight value={`LKR ${((s.total_flagged_exposure_lkr||387e6)/1e6).toFixed(0)}M`} label="Flagged Exposure" sub="Override-approved loans" color={COLOR} />
               <MetricSpotlight value={`${s.sod_violation_count||23}`} label="SoD Violations" sub="FY 2025" color="#0BBF7A" trend="All at BR-14" />
@@ -75,7 +75,7 @@ export default function InsiderRiskAgent() {
                 <div style={{ overflowY:'auto', maxHeight:520 }}>
                   {profiles.map((p,i)=>{
                     const isSelected = selectedStaff?.staff_id === p.staff_id;
-                    const riskColor = p.risk_score >= 80 ? 'var(--octave-pink)' : p.risk_score >= 50 ? '#4A6070' : '#0BBF7A';
+                    const riskColor = p.risk_score >= 80 ? '#C41E3A' : p.risk_score >= 50 ? '#4A6070' : '#0BBF7A';
                     return (
                       <div key={i} onClick={()=>setSelectedStaff(p)}
                         style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)', cursor:'pointer', background: isSelected?`${COLOR}06`:'transparent', borderLeft: isSelected?`3px solid ${COLOR}`:'3px solid transparent', transition:'all 0.12s' }}>
@@ -91,7 +91,7 @@ export default function InsiderRiskAgent() {
                             <div style={{ fontSize:11, color:'var(--color-text-2)', marginTop:1 }}>{p.role} · {p.branch_code}</div>
                           </div>
                           {p.sod_violations > 0 && (
-                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:4 }}>SoD ×{p.sod_violations}</span>
+                            <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', background:'#FCEEF1', color:'#C41E3A', borderRadius:4 }}>SoD ×{p.sod_violations}</span>
                           )}
                         </div>
                       </div>
@@ -107,7 +107,7 @@ export default function InsiderRiskAgent() {
                     <div className="agent-panel-header">
                       <code style={{ fontSize:13, fontWeight:700 }}>{topStaff.staff_id}</code>
                       <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{topStaff.role} · {topStaff.branch_code}</span>
-                      <span style={{ marginLeft:'auto', fontSize:22, fontWeight:900, color:'var(--octave-pink)', fontFamily:'var(--font-display)' }}>{topStaff.risk_score}/100</span>
+                      <span style={{ marginLeft:'auto', fontSize:22, fontWeight:900, color:'#C41E3A', fontFamily:'var(--font-display)' }}>{topStaff.risk_score}/100</span>
                     </div>
                     <div style={{ padding:'8px 0 0' }}>
                       <div style={{ display:'flex', borderBottom:'1px solid var(--color-border)' }}>
@@ -127,7 +127,7 @@ export default function InsiderRiskAgent() {
                           </ResponsiveContainer>
                           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginTop:8 }}>
                             {radarData.map((d,i)=>(
-                              <HeatStrip key={i} value={d.score} max={100} color={d.score>=70?'var(--octave-pink)':d.score>=40?'#4A6070':'#0BBF7A'} label={d.dim} format={v=>`${Math.round(v)}/100`} />
+                              <HeatStrip key={i} value={d.score} max={100} color={d.score>=70?'#C41E3A':d.score>=40?'#4A6070':'#0BBF7A'} label={d.dim} format={v=>`${Math.round(v)}/100`} />
                             ))}
                           </div>
                         </div>
@@ -137,7 +137,7 @@ export default function InsiderRiskAgent() {
                         <div style={{ padding:'16px' }}>
                           <div style={{ marginBottom:12 }}>
                             <div style={{ fontSize:11, fontWeight:700, marginBottom:6, color:'var(--color-text-2)', textTransform:'uppercase', letterSpacing:'0.06em' }}>Override Pattern</div>
-                            <ComparisonSplit leftLabel="This staff override rate" leftValue={`${topStaff.override_rate_pct||87}%`} leftColor="var(--octave-pink)" rightLabel="Branch average" rightValue={`${topStaff.branch_avg_override_pct||4.8}%`} rightColor="#0BBF7A" note="Statistically impossible at p < 0.0001" />
+                            <ComparisonSplit leftLabel="This staff override rate" leftValue={`${topStaff.override_rate_pct||87}%`} leftColor="#C41E3A" rightLabel="Branch average" rightValue={`${topStaff.branch_avg_override_pct||4.8}%`} rightColor="#0BBF7A" note="Statistically impossible at p < 0.0001" />
                           </div>
                           <div style={{ fontSize:11, fontWeight:700, marginBottom:6, color:'var(--color-text-2)', textTransform:'uppercase', letterSpacing:'0.06em' }}>Off-hours activity (last 90 days)</div>
                           <div style={{ background:'var(--color-surface-2)', borderRadius:8, padding:'10px 14px', fontSize:12, color:'var(--color-text)', lineHeight:1.7 }}>
@@ -162,7 +162,7 @@ export default function InsiderRiskAgent() {
                       {activeTab === 'actions' && (
                         <div style={{ padding:'16px', display:'flex', flexDirection:'column', gap:8 }}>
                           {[
-                            { step:'Immediate', action:'Suspend override privileges pending investigation', color:'var(--octave-pink)' },
+                            { step:'Immediate', action:'Suspend override privileges pending investigation', color:'#C41E3A' },
                             { step:'24 hours', action:'Preserve all system logs and approval records', color:'#4A6070' },
                             { step:'48 hours', action:'Refer to Fraud Investigation Unit with full evidence package', color:'#4A6070' },
                             { step:'5 working days', action:'File STR with CBSL FIU if financial crime suspected', color:'#0BBF7A' },
@@ -194,14 +194,14 @@ export default function InsiderRiskAgent() {
                     <span style={{ fontSize:16, color:'var(--color-text-3)' }}>⟷</span>
                     <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', background:`${COLOR}10`, color:COLOR, borderRadius:6 }}>{pair.staff_b}</span>
                     <span style={{ fontSize:11, color:'var(--color-text-3)' }}>{pair.role_b} · {pair.branch_b}</span>
-                    <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, padding:'3px 9px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:6 }}>{pair.severity}</span>
+                    <span style={{ marginLeft:'auto', fontSize:11, fontWeight:700, padding:'3px 9px', background:'#FCEEF1', color:'#C41E3A', borderRadius:6 }}>{pair.severity}</span>
                   </div>
                   <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginBottom:12 }}>
                     {[
                       { label:'Observed', val:pair.co_occurrences, color:COLOR },
                       { label:'Expected', val:pair.expected_co_occurrences, color:'var(--color-text-3)' },
-                      { label:'Ratio', val:`${pair.co_occurrence_ratio}×`, color:'var(--octave-pink)' },
-                      { label:'Exposure', val:`LKR ${(pair.financial_exposure_lkr/1e6).toFixed(0)}M`, color:'var(--octave-pink)' },
+                      { label:'Ratio', val:`${pair.co_occurrence_ratio}×`, color:'#C41E3A' },
+                      { label:'Exposure', val:`LKR ${(pair.financial_exposure_lkr/1e6).toFixed(0)}M`, color:'#C41E3A' },
                     ].map((m,j)=>(
                       <div key={j} style={{ textAlign:'center', padding:'10px 8px', background:`${m.color}08`, borderRadius:8, border:`1px solid ${m.color}20` }}>
                         <div style={{ fontSize:22, fontWeight:900, color:m.color, lineHeight:1, fontFamily:'var(--font-display)' }}>{m.val}</div>

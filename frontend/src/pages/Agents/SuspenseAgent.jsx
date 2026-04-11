@@ -8,8 +8,8 @@ import useOpenFinding from '../../hooks/useOpenFinding.js';
 import { demoData } from '../../data/demoData.js';
 
 const COLOR = '#993C1D';
-const RISK_COLORS = { critical:'var(--octave-pink)', red:'#E82AAE', amber:'#4A6070', watch:'#0BBF7A' };
-const RISK_BG = { critical:'var(--octave-pink-light)', red:'#FCE7F6', amber:'#F3F3F1', watch:'#E8FDF4' };
+const RISK_COLORS = { critical:'#C41E3A', red:'#C41E3A', amber:'#4A6070', watch:'#0BBF7A' };
+const RISK_BG = { critical:'#FCEEF1', red:'#FCEEF1', amber:'#F3F3F1', watch:'#E8FDF4' };
 
 export default function SuspenseAgent() {
   const [selected, setSelected] = useState(null);
@@ -49,8 +49,8 @@ export default function SuspenseAgent() {
             {/* Hero metrics */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
               <MetricSpotlight value={`LKR ${((rs.total_unreconciled_balance_lkr||0)/1e9).toFixed(1)}Bn`} label="Unreconciled Balance" sub={`${rs.total_accounts_analyzed||143} accounts analysed`} color={COLOR} icon="⊟" />
-              <MetricSpotlight value={rs.critical_accounts||3} label="Critical Accounts" sub="CBSL breach risk" color="var(--octave-pink)" trend="Immediate action" trendDir="up" />
-              <MetricSpotlight value={rs.phantom_receivable_risk_accounts||2} label="Phantom Receivable" sub="High growth + low clearing" color="var(--octave-pink)" />
+              <MetricSpotlight value={rs.critical_accounts||3} label="Critical Accounts" sub="CBSL breach risk" color="#C41E3A" trend="Immediate action" trendDir="up" />
+              <MetricSpotlight value={rs.phantom_receivable_risk_accounts||2} label="Phantom Receivable" sub="High growth + low clearing" color="#C41E3A" />
               <MetricSpotlight value={rs.growth_anomalies||5} label="Growth Anomalies" sub=">50% in 30 days" color="#4A6070" />
             </div>
 
@@ -85,8 +85,8 @@ export default function SuspenseAgent() {
                                 { label:'Growth 30d', val:`+${acc.growth_rate_30d_pct}%`, alert:acc.growth_rate_30d_pct>50 },
                                 { label:'Clearing', val:`${(acc.clearing_ratio*100).toFixed(0)}%`, alert:acc.clearing_ratio<0.3 },
                               ].map((m,j)=>(
-                                <div key={j} style={{ textAlign:'center', padding:'6px 4px', background:m.alert?'var(--octave-pink-light)':'var(--color-surface-2)', borderRadius:6, border:`1px solid ${m.alert?'rgba(232,42,174,0.2)':'var(--color-border)'}` }}>
-                                  <div style={{ fontSize:14, fontWeight:900, color:m.alert?'var(--octave-pink)':'var(--color-text)', fontFamily:'var(--font-display)' }}>{m.val}</div>
+                                <div key={j} style={{ textAlign:'center', padding:'6px 4px', background:m.alert?'#FCEEF1':'var(--color-surface-2)', borderRadius:6, border:`1px solid ${m.alert?'rgba(196,30,58,0.2)':'var(--color-border)'}` }}>
+                                  <div style={{ fontSize:14, fontWeight:900, color:m.alert?'#C41E3A':'var(--color-text)', fontFamily:'var(--font-display)' }}>{m.val}</div>
                                   <div style={{ fontSize:9, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.05em' }}>{m.label}</div>
                                 </div>
                               ))}
@@ -111,9 +111,9 @@ export default function SuspenseAgent() {
                       <div style={{ fontSize:12, color:'var(--color-text-2)' }}>{sel.account_type} · {sel.branch_code}</div>
                     </div>
                     <div style={{ padding:'16px', display:'flex', flexDirection:'column', gap:12 }}>
-                      <HeatStrip value={sel.aging_days||0} max={120} color={sel.aging_days>90?'var(--octave-pink)':'#4A6070'} label="Aging" sublabel="CBSL breach threshold: 90 days" format={v=>`${v} days`} />
-                      <HeatStrip value={sel.growth_rate_30d_pct||0} max={400} color={sel.growth_rate_30d_pct>50?'var(--octave-pink)':'#0BBF7A'} label="30-day Growth Rate" sublabel="Flag threshold: >50% in 30 days" format={v=>`+${v}%`} />
-                      <HeatStrip value={(1-sel.clearing_ratio)*100||0} max={100} color={sel.clearing_ratio<0.3?'var(--octave-pink)':'#0BBF7A'} label="Uncleared (inverse clearing ratio)" sublabel="Flag: clearing ratio < 30% of balance" format={v=>`${v.toFixed(0)}% uncleared`} />
+                      <HeatStrip value={sel.aging_days||0} max={120} color={sel.aging_days>90?'#C41E3A':'#4A6070'} label="Aging" sublabel="CBSL breach threshold: 90 days" format={v=>`${v} days`} />
+                      <HeatStrip value={sel.growth_rate_30d_pct||0} max={400} color={sel.growth_rate_30d_pct>50?'#C41E3A':'#0BBF7A'} label="30-day Growth Rate" sublabel="Flag threshold: >50% in 30 days" format={v=>`+${v}%`} />
+                      <HeatStrip value={(1-sel.clearing_ratio)*100||0} max={100} color={sel.clearing_ratio<0.3?'#C41E3A':'#0BBF7A'} label="Uncleared (inverse clearing ratio)" sublabel="Flag: clearing ratio < 30% of balance" format={v=>`${v.toFixed(0)}% uncleared`} />
                       <VerdictCard verdict={sel.risk_tier?.toUpperCase()||'CRITICAL'} confidence={sel.phantom_score||0.94} finding={sel.pattern_detected||'Phantom receivable pattern detected'} color={RISK_COLORS[sel.risk_tier]||COLOR} action={sel.recommended_action} />
                     </div>
                   </div>
@@ -126,16 +126,16 @@ export default function SuspenseAgent() {
                           <XAxis dataKey="bucket" tick={{ fontSize:10 }} />
                           <YAxis tickFormatter={v=>`${(v/1e9).toFixed(1)}Bn`} tick={{ fontSize:10 }} />
                           <Tooltip formatter={v=>`LKR ${(v/1e9).toFixed(2)}Bn`} />
-                          <ReferenceLine x="91–120d" stroke="var(--octave-pink)" strokeDasharray="4 3" />
+                          <ReferenceLine x="91–120d" stroke="#C41E3A" strokeDasharray="4 3" />
                           <Bar dataKey="balance_lkr" radius={[4,4,0,0]}>
                             {(data.aging_distribution||[]).map((d,i)=>{
                               const isBreached = d.bucket?.includes('91') || d.bucket?.includes('120') || d.bucket?.includes('>');
-                              return <Cell key={i} fill={isBreached?'var(--octave-pink)':COLOR} opacity={isBreached?1:0.6} />;
+                              return <Cell key={i} fill={isBreached?'#C41E3A':COLOR} opacity={isBreached?1:0.6} />;
                             })}
                           </Bar>
                         </BarChart>
                       </ResponsiveContainer>
-                      <div style={{ marginTop:10, padding:'8px 12px', background:'var(--octave-pink-light)', borderRadius:8, fontSize:11, color:'var(--octave-pink)', fontWeight:600, border:'1px solid rgba(232,42,174,0.2)' }}>
+                      <div style={{ marginTop:10, padding:'8px 12px', background:'#FCEEF1', borderRadius:8, fontSize:11, color:'#C41E3A', fontWeight:600, border:'1px solid rgba(196,30,58,0.2)' }}>
                         ⚠ Amounts in the 91d+ bucket constitute CBSL regulatory breaches requiring Board Audit Committee notification
                       </div>
                     </div>

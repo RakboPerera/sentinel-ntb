@@ -29,7 +29,7 @@ export default function InternalControlsAgent() {
           { dim:'Temporal', score:(selBranch.temporal_clustering_score||0)*100 },
         ] : [];
 
-        const scoreColor = s => s >= 80 ? 'var(--octave-pink)' : s >= 60 ? '#4A6070' : '#0BBF7A';
+        const scoreColor = s => s >= 80 ? '#C41E3A' : s >= 60 ? '#4A6070' : '#0BBF7A';
 
         return (
           <>
@@ -57,8 +57,8 @@ export default function InternalControlsAgent() {
 
             {/* Hero metrics */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
-              <MetricSpotlight value={cs.high_risk_branches||4} label="High-Risk Branches" sub="Composite score < 65/100" color="var(--octave-pink)" icon="⚙" trend="Field audit required" trendDir="up" />
-              <MetricSpotlight value={cs.sod_violations||7} label="SoD Violations" sub="End-to-end control failure" color="var(--octave-pink)" />
+              <MetricSpotlight value={cs.high_risk_branches||4} label="High-Risk Branches" sub="Composite score < 65/100" color="#C41E3A" icon="⚙" trend="Field audit required" trendDir="up" />
+              <MetricSpotlight value={cs.sod_violations||7} label="SoD Violations" sub="End-to-end control failure" color="#C41E3A" />
               <MetricSpotlight value={`${cs.network_override_rate_pct||4.8}%`} label="Network Override Rate" sub="BR-14: 14.3% (3× network)" color="#4A6070" />
               <MetricSpotlight value={cs.off_hours_approvals||143} label="Off-Hours Approvals" sub="18:00–06:00 and weekends" color={COLOR} />
             </div>
@@ -75,7 +75,7 @@ export default function InternalControlsAgent() {
                 <div>
                   {/* Score legend */}
                   <div style={{ padding:'8px 16px', borderBottom:'1px solid var(--color-border)', display:'flex', gap:12, fontSize:10, color:'var(--color-text-3)' }}>
-                    {[['var(--octave-pink)','< 65 — Adverse'],['#4A6070','65–79 — Review'],['#0BBF7A','≥ 80 — Effective']].map(([c,l])=>(
+                    {[['#C41E3A','< 65 — Adverse'],['#4A6070','65–79 — Review'],['#0BBF7A','≥ 80 — Effective']].map(([c,l])=>(
                       <span key={l} style={{ display:'flex', alignItems:'center', gap:4 }}>
                         <span style={{ width:8, height:8, borderRadius:'50%', background:c, display:'inline-block' }} />{l}
                       </span>
@@ -98,8 +98,8 @@ export default function InternalControlsAgent() {
                                 <span style={{ fontSize:11, color:'var(--color-text-2)' }}>{br.branch_name}</span>
                               </div>
                               <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-                                {br.override_rate_pct > 5 && <span style={{ fontSize:9, fontWeight:700, padding:'1px 5px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:3 }}>Override {br.override_rate_pct}%</span>}
-                                {br.sod_violations > 0 && <span style={{ fontSize:9, fontWeight:700, padding:'1px 5px', background:'var(--octave-pink-light)', color:'var(--octave-pink)', borderRadius:3 }}>SoD ×{br.sod_violations}</span>}
+                                {br.override_rate_pct > 5 && <span style={{ fontSize:9, fontWeight:700, padding:'1px 5px', background:'#FCEEF1', color:'#C41E3A', borderRadius:3 }}>Override {br.override_rate_pct}%</span>}
+                                {br.sod_violations > 0 && <span style={{ fontSize:9, fontWeight:700, padding:'1px 5px', background:'#FCEEF1', color:'#C41E3A', borderRadius:3 }}>SoD ×{br.sod_violations}</span>}
                               </div>
                             </div>
                           </div>
@@ -129,7 +129,7 @@ export default function InternalControlsAgent() {
                       </ResponsiveContainer>
                       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginTop:4 }}>
                         {radarData.map((d,i)=>(
-                          <HeatStrip key={i} value={Math.min(100,d.score)} max={100} color={d.score>=70?'var(--octave-pink)':d.score>=40?'#4A6070':'#0BBF7A'} label={d.dim} format={v=>`${Math.round(v)}/100`} />
+                          <HeatStrip key={i} value={Math.min(100,d.score)} max={100} color={d.score>=70?'#C41E3A':d.score>=40?'#4A6070':'#0BBF7A'} label={d.dim} format={v=>`${Math.round(v)}/100`} />
                         ))}
                       </div>
                     </div>
@@ -144,10 +144,10 @@ export default function InternalControlsAgent() {
                         <div>
                           <code style={{ fontSize:11, fontWeight:700 }}>{sod.transaction_id}</code>
                           <div style={{ fontSize:11, color:'var(--color-text-2)', marginTop:2 }}>{sod.transaction_type} · {sod.branch_code}</div>
-                          <code style={{ fontSize:10, color:'var(--octave-pink)' }}>Both: {sod.staff_id}</code>
+                          <code style={{ fontSize:10, color:'#C41E3A' }}>Both: {sod.staff_id}</code>
                         </div>
                         <span style={{ fontSize:12, fontWeight:800, textAlign:'right' }}>LKR {((sod.amount_lkr||0)/1e6).toFixed(1)}M</span>
-                        <span style={{ fontSize:9, fontWeight:800, padding:'2px 7px', borderRadius:5, background:'var(--octave-pink-light)', color:'var(--octave-pink)', textAlign:'center' }}>{sod.severity?.toUpperCase()}</span>
+                        <span style={{ fontSize:9, fontWeight:800, padding:'2px 7px', borderRadius:5, background:'#FCEEF1', color:'#C41E3A', textAlign:'center' }}>{sod.severity?.toUpperCase()}</span>
                       </div>
                     ))}
                   </div>
@@ -162,7 +162,7 @@ export default function InternalControlsAgent() {
                 {Object.entries(peerBenchmarks?.controls||{}).map(([key,b],i)=>{
                   const labels = { override_rate_branch:'BR-14 Override Rate (%)', sod_violation_rate:'SoD Violation Rate (%)', avg_approval_minutes:'Avg Approval Turnaround (min)' };
                   const better = b.ntb <= b.peer_median;
-                  const col = better ? '#0BBF7A' : 'var(--octave-pink)';
+                  const col = better ? '#0BBF7A' : '#C41E3A';
                   return <AnomalyHeatRow key={key} label={labels[key]||key} value={b.ntb} benchmark={b.peer_median} deviation={Math.round(((b.ntb-b.peer_median)/b.peer_median)*100)} risk={better?'low':'critical'} color={col} />;
                 })}
                 <div style={{ padding:'8px 14px', fontSize:10, color:'var(--color-text-3)' }}>Source: CBSL Supervisory Review 2025</div>
