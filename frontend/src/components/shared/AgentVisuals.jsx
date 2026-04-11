@@ -232,7 +232,7 @@ export function UrgencyBadge({ urgency }) {
 export function RiskTierBadge({ tier }) {
   const map = {
     critical: '#C41E3A', red: '#CF4343', amber: '#26EA9F',
-    high: '#3A5A3A', medium: '#185FA5', green: '#3B6D11', watch: '#3D3C38',
+    high: '#3A5A3A', medium: '#185FA5', green: '#3B6D11', watch: 'var(--color-text-2)',
   };
   const color = map[tier?.toLowerCase()] || '#6b6963';
   return (

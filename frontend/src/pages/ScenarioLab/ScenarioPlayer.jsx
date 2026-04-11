@@ -70,7 +70,7 @@ const SCENARIOS = {
         signal: 'Orchestrator: MJE evidence links to Credit + Controls signals on BR-14/STF-1847. Balance sheet manipulation confirmed. Elevating to 5-agent correlation.',
       },
       {
-        id: 6, agent: 'Orchestrator', agentColor: '#3D3C38', agentIcon: '◎',
+        id: 6, agent: 'Orchestrator', agentColor: 'var(--color-text-2)', agentIcon: '◎',
         title: 'Cross-agent correlation — CORR-001 severity 0.98',
         narrative: 'The Orchestrator receives signals from five independently operating agents — Credit Intelligence, Internal Controls, KYC, Digital Fraud, and MJE Testing — all converging on Branch BR-14 and staff member STF-1847. The MJE evidence is the final piece: it shows not only that STF-1847 approved anomalous loans, but also manipulated the GL entries to conceal them.',
         finding: 'CORR-001: BR-14/STF-1847 flagged by 5 agents. Combined severity 0.98. Fraud type: Insider-enabled loan fraud with GL manipulation. STF-1847 manufactured or inflated loans, approved via SoD violations, concealed via midnight MJE postings. Case NTB-2025-FR-0847 opened.',
@@ -103,7 +103,7 @@ const SCENARIOS = {
         signal: 'Orchestrator signal → Transaction Agent: Analyse all CEFT flows linked to SUS-017 in last 30 days. Flag structuring patterns.',
       },
       {
-        id: 2, agent: 'Transaction Surveillance', agentColor: '#3D3C38', agentIcon: '⟳',
+        id: 2, agent: 'Transaction Surveillance', agentColor: 'var(--color-text-2)', agentIcon: '⟳',
         title: 'Structuring cluster — 15 CEFT transfers in 22 minutes',
         narrative: 'Responding to the orchestrator signal, the Transaction Agent analyses CEFT flows from accounts linked to SUS-017. It finds a textbook structuring cluster: 15 transfers in 22 minutes, each deliberately below the LKR 5M STR threshold, totalling LKR 71.25M.',
         finding: '15 CEFT transfers from NTB-0841-X in 22 minutes. Amounts: LKR 4.6M–4.95M — all below the LKR 5M threshold. Combined: LKR 71.25M. Structuring score: 0.94. STR eligible. Hub-and-spoke routing: 89% to same 3 external accounts.',
@@ -114,7 +114,7 @@ const SCENARIOS = {
         signal: null,
       },
       {
-        id: 3, agent: 'Transaction Surveillance', agentColor: '#3D3C38', agentIcon: '⟳',
+        id: 3, agent: 'Transaction Surveillance', agentColor: 'var(--color-text-2)', agentIcon: '⟳',
         title: "Benford's Law deviation — network-wide structuring",
         narrative: "The Transaction Agent runs a Benford's Law first-digit frequency test across all 284,719 transactions in the analysis window. This reveals whether the SUS-017 pattern is an isolated incident or a network-wide phenomenon.",
         finding: "First digit '4' appears at 18.3% vs 9.7% expected under Benford's Law. Chi-squared p-value: 0.003. This is not an isolated account — systematic structuring below LKR 5M is occurring across multiple accounts. STR queue: 4 accounts. Total STR-eligible volume: LKR 1.44 Bn.",
@@ -147,7 +147,7 @@ const SCENARIOS = {
         signal: null,
       },
       {
-        id: 6, agent: 'Orchestrator', agentColor: '#3D3C38', agentIcon: '◎',
+        id: 6, agent: 'Orchestrator', agentColor: 'var(--color-text-2)', agentIcon: '◎',
         title: 'Correlation CORR-002 — severity 0.99',
         narrative: 'The Orchestrator has received signals from four independent agents — all converging on SUS-017 and its counterparty network. The combined severity of 0.99 is the highest of this audit cycle. Account freeze and STR filing are triggered automatically.',
         finding: 'CORR-002: SUS-017 flagged by 4 agents. Combined severity 0.99. Fraud type: CEFT suspense fraud — coordinated external scheme. SUS-017 frozen. STR filed with CBSL FIU. Forensic evidence package generated. Detection time: 6 minutes 58 seconds.',
@@ -213,7 +213,7 @@ const SCENARIOS = {
         signal: 'Orchestrator signal → Digital Agent: Audit STF-1847 system access logs. Look for off-hours activity and document access.',
       },
       {
-        id: 5, agent: 'Insider Risk', agentColor: '#2D2D2B', agentIcon: '◉',
+        id: 5, agent: 'Insider Risk', agentColor: '#1F2937', agentIcon: '◉',
         title: 'Week 8 — Insider Risk Agent: score 94/100',
         narrative: 'The Insider Risk Agent has been quietly building a 6-dimension risk profile for STF-1847 across the full 14-month access history. By Week 8 it has enough evidence to compute a definitive score. STF-1847 matches all six insider fraud indicators simultaneously — the highest combined score in the NTB network.',
         finding: 'STF-1847 risk score: 94/100 (Critical). All 6 dimensions breached: SoD violations (4), override concentration (87%), same-cluster approvals (3), off-hours approvals (12), approval turnaround 1.4 min (below 2-min threshold), session behavioral deviation. Network average: 18/100.',
@@ -246,7 +246,7 @@ const SCENARIOS = {
         signal: null,
       },
       {
-        id: 8, agent: 'Orchestrator', agentColor: '#3D3C38', agentIcon: '◎',
+        id: 8, agent: 'Orchestrator', agentColor: 'var(--color-text-2)', agentIcon: '◎',
         title: 'Week 11 — All six signals correlated',
         narrative: 'The Orchestrator has accumulated signals from six independently operating agents over 11 weeks — each insufficient alone, but together definitive. It computes the combined severity and elevates this to a case-worthy correlation.',
         finding: 'CORR-001: BR-14/STF-1847 flagged by 6 agents over 11 weeks. Combined severity: 0.96. Fraud type: insider-enabled loan fraud — fictitious loans, override abuse, document manipulation, fund recycling. Case NTB-2025-FR-0847 opened. Emergency response triggered.',
@@ -489,7 +489,7 @@ export default function ScenarioPlayer() {
 
               {/* Signal output */}
               {activeStep.signal && (
-                <div style={{ padding: '12px 16px', background: '#F0F0EE', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 8, fontSize: 12, color: '#3D3C38', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                <div style={{ padding: '12px 16px', background: '#F0F0EE', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 8, fontSize: 12, color: 'var(--color-text-2)', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
                   <span style={{ fontSize: 16, flexShrink: 0 }}>◎</span>
                   <span><strong>Orchestrator:</strong> {activeStep.signal}</span>
                 </div>

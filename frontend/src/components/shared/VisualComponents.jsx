@@ -111,9 +111,9 @@ function SeverityMeter({ severity, agentColor }) {
 
 // ─── CREATE CASE MODAL ────────────────────────────────────────────────────────
 const DOMAIN_COLORS_MAP = {
-  credit:'#185FA5', transaction:'#3D3C38', suspense:'#993C1D',
+  credit:'#185FA5', transaction:'var(--color-text-2)', suspense:'#993C1D',
   kyc:'#0F6E56', controls:'#3A5A3A', digital:'#993556',
-  trade:'#3B6D11', insider:'#2D2D2B', mje:'#0BBF7A'
+  trade:'#3B6D11', insider:'#1F2937', mje:'#0BBF7A'
 };
 
 export function CreateCaseModal({ finding, agentId, agentColor, onClose }) {
@@ -361,7 +361,7 @@ export function InsightBox({ title, body, type = 'info', compact = false, collap
     info:        { icon: Info,          bg: '#E8FDF4', border: 'rgba(24,95,165,0.2)',   text: '#185FA5', iconBg: '#DBEAFE' },
     warning:     { icon: AlertTriangle, bg: '#F3F3F1', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
     critical:    { icon: AlertTriangle, bg: '#FEF8F8', border: 'rgba(163,45,45,0.25)',  text: '#C41E3A', iconBg: '#FCEBEB' },
-    methodology: { icon: Microscope,    bg: '#F3F1FF', border: 'rgba(83,74,183,0.2)',   text: '#3D3C38', iconBg: '#E9E7FD' },
+    methodology: { icon: Microscope,    bg: '#F3F1FF', border: 'rgba(83,74,183,0.2)',   text: 'var(--color-text-2)', iconBg: '#E9E7FD' },
     regulatory:  { icon: BookOpen,      bg: '#F3F3F1', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
     success:     { icon: CheckCircle,   bg: '#F0FDF4', border: 'rgba(59,109,17,0.2)',   text: '#3B6D11', iconBg: '#DCFCE7' },
   };
@@ -491,7 +491,7 @@ export function CoverageStatement({ agentId }) {
       population: '94,847 transactions', coverage: '100%', method: "Full population — Benford's Law + Z-score velocity analysis",
       period: '1 October – 31 December 2025 (Q4)', confidence: '95%',
       note: 'All CEFT and RTGS transactions in the period tested. Structuring clusters detected using 22-minute rolling window. Velocity anomalies computed against 90-day rolling baseline.',
-      icon: '⟳', color: '#3D3C38',
+      icon: '⟳', color: 'var(--color-text-2)',
     },
     suspense: {
       population: '143 suspense accounts', coverage: '100%', method: 'Full population — growth-rate × clearing-ratio daily monitoring',
@@ -527,7 +527,7 @@ export function CoverageStatement({ agentId }) {
       population: '2,462 staff members', coverage: '100%', method: 'Full population — 6-dimension composite scoring with peer comparison',
       period: '14-month behavioral history (November 2024 – December 2025)', confidence: '92%',
       note: 'All staff with system access scored. 14-month baseline required for meaningful peer comparison. Any staff above 40/100 enters watch monitoring. Scores above 85/100 trigger investigation.',
-      icon: '◉', color: '#2D2D2B',
+      icon: '◉', color: '#1F2937',
     },
     mje: {
       population: '847 manual journal entries', coverage: '100%', method: "Full population — 5-dimension risk scoring + Benford's Law on GL amounts",

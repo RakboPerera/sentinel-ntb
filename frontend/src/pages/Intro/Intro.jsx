@@ -190,9 +190,9 @@ export default function Intro() {
           <div>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
               {[
-                { label:'Traditional audit cycle', value:'15 weeks', sub:'Planning to final report', color:'#C41E3A', bg:'#FEF0F0' },
+                { label:'Traditional audit cycle', value:'15 weeks', sub:'Planning to final report', color:'#C41E3A', bg:'#FCEEF1' },
                 { label:'Sentinel detection', value:'6m 58s', sub:'Signal to account freeze', color:'#16A34A', bg:'#F0FDF4' },
-                { label:'Traditional coverage', value:'3–5%', sub:'Portfolio sampling rate', color:'#C41E3A', bg:'#FEF0F0' },
+                { label:'Traditional coverage', value:'3–5%', sub:'Portfolio sampling rate', color:'#C41E3A', bg:'#FCEEF1' },
                 { label:'Sentinel coverage', value:'100%', sub:'Every record, every cycle', color:'#16A34A', bg:'#F0FDF4' },
               ].map((s,i) => (
                 <div key={i} style={{ padding:'20px', background:s.bg, borderRadius:12, border:`1px solid ${s.color}22` }}>
@@ -242,7 +242,7 @@ export default function Intro() {
 
           {/* Orchestrator bar */}
           <div style={{ background:'#111110', borderRadius:'0 0 16px 16px', padding:'16px 24px', display:'flex', alignItems:'center', gap:16, marginTop:1 }}>
-            <div style={{ width:32, height:32, borderRadius:8, background:'rgba(83,74,183,0.25)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, border:'1px solid rgba(83,74,183,0.4)', flexShrink:0 }}>◎</div>
+            <div style={{ width:32, height:32, borderRadius:8, background:'rgba(26,234,159,0.12)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, border:'1px solid rgba(38,234,159,0.3)', flexShrink:0 }}>◎</div>
             <div style={{ flex:1 }}>
               <div style={{ fontSize:13, fontWeight:700, color:'#f4f2ec', marginBottom:2 }}>Orchestrator — Cross-Agent Correlation Engine</div>
               <div style={{ fontSize:11, color:'rgba(232,230,224,0.4)' }}>
@@ -326,7 +326,7 @@ export default function Intro() {
           </div>
           <button onClick={enter}
             style={{ padding:'18px 52px', background:'#26EA9F', color:'#111110', border:'none', borderRadius:12, fontSize:17, fontWeight:800, cursor:'pointer', letterSpacing:'-0.01em', transition:'all 0.2s', boxShadow:'0 8px 32px rgba(38,234,159,0.3)' }}
-            onMouseEnter={e => { e.currentTarget.style.background='#FAC775'; e.currentTarget.style.transform='translateY(-2px)'; }}
+            onMouseEnter={e => { e.currentTarget.style.background='#0BBF7A'; e.currentTarget.style.transform='translateY(-2px)'; }}
             onMouseLeave={e => { e.currentTarget.style.background='#26EA9F'; e.currentTarget.style.transform='none'; }}>
             Enter Sentinel →
           </button>

@@ -42,7 +42,7 @@ const AGENTS = [
     ],
   },
   {
-    id: 'transaction', name: 'Transaction Surveillance', color: '#3D3C38', bg: '#F0F0EE', icon: '⟳',
+    id: 'transaction', name: 'Transaction Surveillance', color: 'var(--color-text-2)', bg: '#F0F0EE', icon: '⟳',
     tagline: 'Structuring detection • Benford\'s Law • STR eligibility',
     what: 'Scans transactions for deliberate structuring below the LKR 5M STR threshold, velocity anomalies, and hub-and-spoke routing patterns consistent with layering.',
     required: ['transaction_id','account_id','amount_lkr','transaction_type','timestamp'],
@@ -214,7 +214,7 @@ const AGENTS = [
     ],
   },
   {
-    id: 'insider', name: 'Insider Risk', color: '#2D2D2B', bg: '#F3F1FF', icon: '◉',
+    id: 'insider', name: 'Insider Risk', color: '#1F2937', bg: '#F3F1FF', icon: '◉',
     tagline: 'Staff access logs • override patterns • approval timing',
     what: 'Scores every staff member with system access on 6 insider fraud dimensions — SoD violations, override concentration, same-cluster approvals, off-hours activity, approval turnaround anomaly, and session behavioral deviation.',
     required: ['staff_id','branch_code','transaction_id','role','initiator_flag','approver_flag','timestamp','amount_lkr'],

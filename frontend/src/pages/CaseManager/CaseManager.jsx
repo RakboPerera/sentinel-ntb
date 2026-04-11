@@ -230,9 +230,9 @@ const DOMAIN_LABELS = {
   insider: 'Insider Risk', mje: 'MJE'
 };
 const DOMAIN_COLORS = {
-  credit: '#185FA5', transaction: '#3D3C38', suspense: '#993C1D',
+  credit: '#185FA5', transaction: 'var(--color-text-2)', suspense: '#993C1D',
   kyc: '#0F6E56', controls: '#3A5A3A', digital: '#993556',
-  trade: '#3B6D11', insider: '#2D2D2B', mje: '#0BBF7A'
+  trade: '#3B6D11', insider: '#1F2937', mje: '#0BBF7A'
 };
 
 function fmt(iso) { return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }

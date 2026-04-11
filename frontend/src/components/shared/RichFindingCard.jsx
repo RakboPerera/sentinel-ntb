@@ -3,7 +3,7 @@ import { AlertTriangle, ChevronDown, ChevronUp, Info } from 'lucide-react';
 
 const SEVERITY_CONFIG = {
   critical: { bg: '#FEF0F0', border: '#FECACA', badge: '#C41E3A', icon: '🔴', label: 'CRITICAL', textColor: '#8B0F23' },
-  high:     { bg: '#F3F3F1', border: '#D1D0CB', badge: '#4A6070', icon: '🟡', label: 'HIGH',     textColor: '#3D3C38' },
+  high:     { bg: '#F3F3F1', border: '#D1D0CB', badge: '#4A6070', icon: '🟡', label: 'HIGH',     textColor: 'var(--color-text-2)' },
   medium:   { bg: '#EFF6FF', border: '#A7F3D0', badge: '#0BBF7A', icon: '🔵', label: 'MEDIUM',   textColor: '#1E40AF' },
   low:      { bg: '#F0FDF4', border: '#BBF7D0', badge: '#16A34A', icon: '🟢', label: 'LOW',      textColor: '#14532D' },
 };

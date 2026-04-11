@@ -21,9 +21,9 @@ const TIERS = [
     level: 1,
     label: 'Transaction / Event Layer',
     desc: 'Scores every individual transaction or access event at point of processing',
-    color: '#3D3C38',
+    color: 'var(--color-text-2)',
     agents: [
-      { id: 'transaction', name: 'Transaction Surveillance', color: '#3D3C38' },
+      { id: 'transaction', name: 'Transaction Surveillance', color: 'var(--color-text-2)' },
       { id: 'digital',     name: 'Digital Fraud & Identity', color: '#993556' },
       { id: 'mje',         name: 'MJE Testing',              color: '#0BBF7A' },
     ],
@@ -47,14 +47,14 @@ const TIERS = [
     agents: [
       { id: 'kyc',      name: 'Identity & KYC / AML', color: '#0F6E56' },
       { id: 'controls', name: 'Internal Controls',     color: '#3A5A3A' },
-      { id: 'insider',  name: 'Insider Risk',          color: '#2D2D2B' },
+      { id: 'insider',  name: 'Insider Risk',          color: '#1F2937' },
     ],
   },
 ];
 
 const ALL_AGENTS = [
   ...TIERS[0].agents, ...TIERS[1].agents, ...TIERS[2].agents,
-  { id: 'orchestrator', name: 'Orchestrator', color: '#3D3C38' },
+  { id: 'orchestrator', name: 'Orchestrator', color: 'var(--color-text-2)' },
 ];
 
 const AGENT_COLORS = Object.fromEntries(ALL_AGENTS.map(a => [a.name, a.color]));
@@ -118,14 +118,14 @@ export default function Act3({ onNext }) {
           ))}
           <div style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '14px 20px', background: 'rgba(83,74,183,0.06)', border: '1px solid rgba(83,74,183,0.25)', borderRadius: 12 }}>
             <div style={{ flexShrink: 0, textAlign: 'center', width: 44 }}>
-              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#3D3C38', opacity: 0.7 }}>L4</div>
-              <div style={{ fontSize: 20, fontWeight: 900, color: '#3D3C38', lineHeight: 1 }}>◎</div>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-text-2)', opacity: 0.7 }}>L4</div>
+              <div style={{ fontSize: 20, fontWeight: 900, color: 'var(--color-text-2)', lineHeight: 1 }}>◎</div>
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#3D3C38', marginBottom: 2 }}>Synthesis Layer — Orchestrator</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--color-text-2)', marginBottom: 2 }}>Synthesis Layer — Orchestrator</div>
               <div style={{ fontSize: 11, color: 'rgba(232,230,224,0.5)', lineHeight: 1.5 }}>Correlates signals across all three layers. Detects fraud patterns only visible at the intersection of event + account + entity evidence.</div>
             </div>
-            <span style={{ fontSize: 10, fontWeight: 600, padding: '3px 10px', background: 'rgba(83,74,183,0.18)', color: '#3D3C38', border: '1px solid rgba(83,74,183,0.33)', borderRadius: 20 }}>Orchestrator</span>
+            <span style={{ fontSize: 10, fontWeight: 600, padding: '3px 10px', background: 'rgba(83,74,183,0.18)', color: 'var(--color-text-2)', border: '1px solid rgba(83,74,183,0.33)', borderRadius: 20 }}>Orchestrator</span>
           </div>
         </div>
       )}
@@ -196,9 +196,9 @@ export default function Act3({ onNext }) {
           <div style={{ marginTop: 6, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'rgba(83,74,183,0.6)', padding: '8px 0 3px' }}>Synthesis</div>
             <div style={{ padding: '8px 14px', borderRadius: 8, background: activeAgentSet.has('Orchestrator') ? 'rgba(83,74,183,0.18)' : 'rgba(255,255,255,0.03)', border: `1px solid ${activeAgentSet.has('Orchestrator') ? 'rgba(83,74,183,0.5)' : 'rgba(255,255,255,0.07)'}`, color: activeAgentSet.has('Orchestrator') ? '#f4f2ec' : 'rgba(232,230,224,0.5)', fontSize: 12, fontWeight: activeAgentSet.has('Orchestrator') ? 600 : 400, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 7, height: 7, borderRadius: '50%', background: activeAgentSet.has('Orchestrator') ? '#3D3C38' : 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: activeAgentSet.has('Orchestrator') ? 'var(--color-text-2)' : 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
               Orchestrator
-              {activeAgentSet.has('Orchestrator') && <span style={{ marginLeft: 'auto', fontSize: 10, color: '#3D3C38' }}>correlates</span>}
+              {activeAgentSet.has('Orchestrator') && <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--color-text-2)' }}>correlates</span>}
             </div>
           </div>
         </div>

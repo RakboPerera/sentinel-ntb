@@ -7,7 +7,7 @@ const TODAY = '31 December 2025';
 const PERIOD = 'Year ended 31 December 2025';
 
 const REPORTS = [
-  { id:'board', title:'Board Audit Committee Report', subtitle:'Audit opinion, all 9 agent findings, KRI dashboard, management action plan', icon:ShieldCheck, color:'#3D3C38', category:'Executive', pages:16 },
+  { id:'board', title:'Board Audit Committee Report', subtitle:'Audit opinion, all 9 agent findings, KRI dashboard, management action plan', icon:ShieldCheck, color:'var(--color-text-2)', category:'Executive', pages:16 },
   { id:'credit', title:'SLFRS 9 Staging Review', subtitle:'Full staging analysis, vintage cohort report, sector concentration, ECL impact', icon:BarChart3, color:'#185FA5', category:'Credit', pages:9 },
   { id:'aml', title:'AML & CTF Compliance Report', subtitle:'KYC gaps, STR queue, PEP findings, FATF exposure — for CBSL FIU submission', icon:AlertTriangle, color:'#0F6E56', category:'Compliance', pages:14 },
   { id:'fraud', title:'Fraud Investigation Summary', subtitle:'BR-14 insider fraud, SUS-017 CEFT scheme, NTB-CORP-0887 TBML — full evidence packages including MJE and Insider Risk findings', icon:AlertTriangle, color:'#C41E3A', category:'Fraud', pages:22 },

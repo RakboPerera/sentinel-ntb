@@ -80,7 +80,7 @@ const liveAlerts = [
     accountStatus: 'Frozen',
   },
   {
-    id: 'alert-003', caseId: 'CASE-004', agent: 'Transaction Agent', agentId: 'transaction', agentColor: '#3D3C38',
+    id: 'alert-003', caseId: 'CASE-004', agent: 'Transaction Agent', agentId: 'transaction', agentColor: 'var(--color-text-2)',
     text: 'Account NTB-0841-X scored 0.94. 15 CEFT transfers in 22 minutes, all below LKR 5M threshold.',
     severity: 'critical', time: '7m ago',
     title: 'Structuring Detected — NTB-0841-X CEFT Cluster',
@@ -251,7 +251,7 @@ const liveAlerts = [
     accountStatus: 'Suspended',
   },
   {
-    id: 'alert-008', caseId: 'CASE-010', agent: 'Orchestrator', agentId: 'orchestrator', agentColor: '#3D3C38',
+    id: 'alert-008', caseId: 'CASE-010', agent: 'Orchestrator', agentId: 'orchestrator', agentColor: 'var(--color-text-2)',
     text: 'CORRELATION: BR-14 flagged by 4 agents simultaneously. Combined severity 0.98. Case opened.',
     severity: 'critical', time: '35m ago',
     title: 'Cross-Agent Correlation — BR-14 Insider Fraud (Severity 0.98)',
@@ -512,8 +512,8 @@ function AlertDrawer({ alert, onClose }) {
               {alert.correlationId && (
                 <div style={{ padding: '12px 14px', background: '#F0F0EE', border: '1px solid rgba(83,74,183,0.2)', borderRadius: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}>
-                    <GitBranch size={13} style={{ color: '#3D3C38' }} />
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#3D3C38' }}>Correlation group: {alert.correlationId}</span>
+                    <GitBranch size={13} style={{ color: 'var(--color-text-2)' }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--color-text-2)' }}>Correlation group: {alert.correlationId}</span>
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--color-text-2)', lineHeight: 1.6 }}>
                     This alert is part of a multi-agent correlation. {liveAlerts.filter(a => a.correlationId === alert.correlationId && a.id !== alert.id).length} other alert{liveAlerts.filter(a => a.correlationId === alert.correlationId && a.id !== alert.id).length !== 1 ? 's' : ''} share this correlation ID.
@@ -1014,13 +1014,13 @@ function KRITile({ data, onClick, tooltipText }) {
 
 const agentStatuses = [
   { name: 'Credit Intelligence', findings: 89, critical: 12, color: '#185FA5', path: '/agents/credit' },
-  { name: 'Transaction Surveillance', findings: 847, critical: 4, color: '#3D3C38', path: '/agents/transaction' },
+  { name: 'Transaction Surveillance', findings: 847, critical: 4, color: 'var(--color-text-2)', path: '/agents/transaction' },
   { name: 'Suspense & Reconciliation', findings: 46, critical: 3, color: '#993C1D', path: '/agents/suspense' },
   { name: 'Identity & KYC / AML', findings: 39290, critical: 7, color: '#0F6E56', path: '/agents/kyc' },
   { name: 'Internal Controls', findings: 7, critical: 2, color: '#3A5A3A', path: '/agents/controls' },
   { name: 'Digital Fraud & Identity', findings: 312, critical: 23, color: '#993556', path: '/agents/digital' },
   { name: 'Trade Finance & Treasury', findings: 6, critical: 1, color: '#3B6D11', path: '/agents/trade' },
-  { name: 'Insider Risk', findings: 12, critical: 2, color: '#2D2D2B', path: '/agents/insider-risk' },
+  { name: 'Insider Risk', findings: 12, critical: 2, color: '#1F2937', path: '/agents/insider-risk' },
   { name: 'MJE Testing', findings: 847, critical: 5, color: '#0BBF7A', path: '/agents/mje' },
 ];
 
@@ -1228,7 +1228,7 @@ export default function CommandCentre() {
                   { step:'50% loan growth', detail:'LKR 143 Bn new origination in FY2025 — highest in NTB history', color:'#185FA5', icon:'📈' },
                   { step:'Branch approval pressure', detail:'Volume pressure led to override rate rising from 3.1% to 4.8% across the network', color:'#3A5A3A', icon:'⚠' },
                   { step:'Control environment failure', detail:'BR-14 override rate reaches 14.3%. STF-1847 accounts for 87% of branch overrides', color:'#3A5A3A', icon:'⚙' },
-                  { step:'Insider fraud enabled', detail:'STF-1847 approves 11 anomalous loans LKR 387M. 4 SoD violations. Risk score 94/100', color:'#2D2D2B', icon:'👤' },
+                  { step:'Insider fraud enabled', detail:'STF-1847 approves 11 anomalous loans LKR 387M. 4 SoD violations. Risk score 94/100', color:'#1F2937', icon:'👤' },
                   { step:'Book inflation + ECL gap', detail:'Fictitious/inflated loans inflate loan book. Stage 3 ratio understated. LKR 1.1 Bn ECL gap', color:'#C41E3A', icon:'📋' },
                   { step:'LCR deterioration', detail:'Inflated loan book + rapid growth depletes liquid assets. LCR: 320.6% → 203.4% (-37%)', color:'#4A6070', icon:'💧' },
                 ].map((node, i, arr) => (
@@ -1279,7 +1279,7 @@ export default function CommandCentre() {
               { step: '50% loan growth', detail: 'LKR 143 Bn new origination — highest in NTB history', color: '#185FA5', icon: '📈', agent: 'Credit Agent', path: '/agents/credit' },
               { step: 'Branch approval pressure', detail: 'Override rate: 3.1% → 4.8% network-wide. BR-14 at 14.3%', color: '#3A5A3A', icon: '⚠', agent: 'Controls Agent', path: '/agents/controls' },
               { step: 'Control environment failure', detail: '4 SoD violations. STF-1847: 87% override concentration at BR-14', color: '#3A5A3A', icon: '⚙', agent: 'Insider Risk Agent', path: '/agents/insider-risk' },
-              { step: 'Insider fraud confirmed', detail: 'STF-1847 score 94/100. 11 anomalous loans LKR 387M fabricated or inflated', color: '#2D2D2B', icon: '👤', agent: 'Credit + MJE Agent', path: '/cases', caseId: 'CASE-001' },
+              { step: 'Insider fraud confirmed', detail: 'STF-1847 score 94/100. 11 anomalous loans LKR 387M fabricated or inflated', color: '#1F2937', icon: '👤', agent: 'Credit + MJE Agent', path: '/cases', caseId: 'CASE-001' },
               { step: 'ECL understatement', detail: 'Stage 3 ratio understated. LKR 1.1 Bn ECL provisioning gap', color: '#C41E3A', icon: '📋', agent: 'MJE Agent', path: '/agents/mje' },
               { step: 'LCR deterioration', detail: 'Loan book inflation + rapid growth depletes HQLA. 320.6% → 203.4%', color: '#4A6070', icon: '💧', agent: 'Trade Agent', path: '/agents/trade' },
             ].map((node, i, arr) => (
@@ -1311,11 +1311,11 @@ export default function CommandCentre() {
           <div className="agent-panel">
             <div className="agent-panel-header" style={{ background: '#F0F0EE' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <GitMerge size={15} style={{ color: '#3D3C38' }} />
-                <span className="agent-panel-title" style={{ color: '#3D3C38' }}>Cross-Agent Correlations</span>
+                <GitMerge size={15} style={{ color: 'var(--color-text-2)' }} />
+                <span className="agent-panel-title" style={{ color: 'var(--color-text-2)' }}>Cross-Agent Correlations</span>
                 <InfoTooltip text="When 2+ agents independently flag the same entity (branch, account, staff member), the Orchestrator generates a cross-domain correlation. The combined severity score is higher than any individual agent finding because multi-agent confirmation is statistically powerful." position="bottom" width={300} />
               </div>
-              <span style={{ fontSize: 11, fontWeight: 700, background: '#3D3C38', color: 'white', padding: '2px 8px', borderRadius: 10 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, background: 'var(--color-text-2)', color: 'white', padding: '2px 8px', borderRadius: 10 }}>
                 {orchData.correlations.length} active
               </span>
             </div>
@@ -1340,7 +1340,7 @@ export default function CommandCentre() {
                       <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{corr.fraud_type_suspected}</div>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                         {corr.agents_involved.map(a => (
-                          <span key={a} style={{ fontSize: 10, padding: '1px 6px', background: '#F0F0EE', color: '#3D3C38', borderRadius: 4 }}>{a}</span>
+                          <span key={a} style={{ fontSize: 10, padding: '1px 6px', background: '#F0F0EE', color: 'var(--color-text-2)', borderRadius: 4 }}>{a}</span>
                         ))}
                       </div>
                     </div>

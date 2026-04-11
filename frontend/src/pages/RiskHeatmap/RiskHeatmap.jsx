@@ -258,8 +258,8 @@ function getBranchFindings(branchCode, colKey) {
 
 function scoreColor(s) {
   if (s >= 75) return { bg:'#FEE2E2', border:'#FCA5A5', text:'#8B0F23', dot:'#C41E3A' };
-  if (s >= 60) return { bg:'#FEF3C7', border:'#D1D0CB', text:'#3D3C38', dot:'#4A6070' };
-  if (s >= 40) return { bg:'#F3F3F1', border:'#D1D0CB', text:'#3D3C38', dot:'#26EA9F' };
+  if (s >= 60) return { bg:'#FEF3C7', border:'#D1D0CB', text:'var(--color-text-2)', dot:'#4A6070' };
+  if (s >= 40) return { bg:'#F3F3F1', border:'#D1D0CB', text:'var(--color-text-2)', dot:'#26EA9F' };
   return { bg:'#F0FDF4', border:'#BBF7D0', text:'#166534', dot:'#16A34A' };
 }
 function scoreTier(s) {
@@ -278,7 +278,7 @@ function FindingItem({ item, accentColor }) {
   const [open, setOpen] = useState(false);
   const sevPal = {
     critical:{ bg:'#FEF0F0', border:'#FECACA', badge:'#C41E3A', text:'#8B0F23' },
-    high:    { bg:'#F3F3F1', border:'#D1D0CB', badge:'#4A6070', text:'#3D3C38' },
+    high:    { bg:'#F3F3F1', border:'#D1D0CB', badge:'#4A6070', text:'var(--color-text-2)' },
     medium:  { bg:'#E8FDF4', border:'#A7F3D0', badge:'#0BBF7A', text:'#0BBF7A' },
   };
   const p = sevPal[item.severity] || sevPal.medium;
