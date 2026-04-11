@@ -39,7 +39,7 @@ export function StatCard({ label, value, sub, color, tooltip, trend, trendLabel,
 // Gradient horizontal bar for anomaly / risk scores (0.0 – 1.0)
 export function ScoreBar({ score, width = 72, height = 8, showLabel = true, tooltip }) {
   const pct = Math.min(Math.max(score, 0), 1) * 100;
-  const color = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#EF9F27' : '#3B6D11';
+  const color = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#26EA9F' : '#3B6D11';
   const label = score >= 0.85 ? 'Critical' : score >= 0.65 ? 'Elevated' : 'Normal';
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -64,7 +64,7 @@ export function RiskGauge({ score, maxScore = 100, label, color, size = 100 }) {
   const circ = Math.PI * r;
   const dash = pct * circ;
   const gap = circ - dash;
-  const gaugeColor = pct >= 0.75 ? '#A32D2D' : pct >= 0.5 ? '#EF9F27' : '#3B6D11';
+  const gaugeColor = pct >= 0.75 ? '#A32D2D' : pct >= 0.5 ? '#26EA9F' : '#3B6D11';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
       <svg width={size} height={size / 2 + 10} viewBox={`0 0 ${size} ${size / 2 + 10}`} style={{ overflow: 'visible' }}>
@@ -231,7 +231,7 @@ export function UrgencyBadge({ urgency }) {
 // ─── RISK TIER BADGE ────────────────────────────────────────────────────────────
 export function RiskTierBadge({ tier }) {
   const map = {
-    critical: '#A32D2D', red: '#CF4343', amber: '#EF9F27',
+    critical: '#A32D2D', red: '#CF4343', amber: '#26EA9F',
     high: '#3A5A3A', medium: '#185FA5', green: '#3B6D11', watch: '#3D3C38',
   };
   const color = map[tier?.toLowerCase()] || '#6b6963';

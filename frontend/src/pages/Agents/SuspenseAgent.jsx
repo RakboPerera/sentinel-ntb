@@ -13,13 +13,13 @@ const SCHEMA = {
   required: ['account_id','account_type','branch_code','current_balance_lkr','aging_days'],
   optional: ['growth_rate_30d_pct','clearing_ratio','inflow_lkr_30d','outflow_lkr_30d','balance_30d_ago_lkr'],
 };
-const RISK_COLORS = { critical:'#A32D2D', red:'#CF4343', amber:'#EF9F27', watch:'#185FA5' };
-const RISK_BG = { critical:'#FEF8F8', red:'#FFF1F1', amber:'#FFFBEB', watch:'#EBF4FF' };
+const RISK_COLORS = { critical:'#E82AAE', red:'#CF4343', amber:'#26EA9F', watch:'#185FA5' };
+const RISK_BG = { critical:'#FEF8F8', red:'#FFF1F1', amber:'#F3F3F1', watch:'#E8FDF4' };
 
 function ClearingRatioBadge({ ratio }) {
   const isHealthy = ratio >= 0.85;
   const isWarning = ratio >= 0.5 && ratio < 0.85;
-  const color = isHealthy ? '#3B6D11' : isWarning ? '#3A5A3A' : '#A32D2D';
+  const color = isHealthy ? '#3B6D11' : isWarning ? '#3A5A3A' : '#E82AAE';
   const bg = isHealthy ? '#EAF3DE' : isWarning ? '#E8FDF4' : '#FCEBEB';
   return (
     <span style={{ display:'inline-flex', alignItems:'center', gap:6, padding:'3px 9px', background:bg, borderRadius:6 }}>
@@ -38,9 +38,9 @@ export default function SuspenseAgent() {
         const rs = data.reconciliation_summary;
         const agingPie = [
           { name:'Watch 0–30d', value:data.aging_distribution.watch_0_30.balance_lkr/1e9, count:data.aging_distribution.watch_0_30.count, color:'#185FA5' },
-          { name:'Amber 31–60d', value:data.aging_distribution.amber_31_60.balance_lkr/1e9, count:data.aging_distribution.amber_31_60.count, color:'#EF9F27' },
+          { name:'Amber 31–60d', value:data.aging_distribution.amber_31_60.balance_lkr/1e9, count:data.aging_distribution.amber_31_60.count, color:'#26EA9F' },
           { name:'Red 61–90d', value:data.aging_distribution.red_61_90.balance_lkr/1e9, count:data.aging_distribution.red_61_90.count, color:'#CF4343' },
-          { name:'Critical >90d', value:data.aging_distribution.critical_90_plus.balance_lkr/1e9, count:data.aging_distribution.critical_90_plus.count, color:'#A32D2D' },
+          { name:'Critical >90d', value:data.aging_distribution.critical_90_plus.balance_lkr/1e9, count:data.aging_distribution.critical_90_plus.count, color:'#E82AAE' },
         ];
         return (
           <>
@@ -225,7 +225,7 @@ export default function SuspenseAgent() {
                 >
                   <div>
                     {(data.reconciliation_depth.auto_match_rates || []).map((acc,i) => {
-                      const matchColor = acc.auto_match_pct >= 80 ? '#3B6D11' : acc.auto_match_pct >= 50 ? '#EF9F27' : '#DC2626';
+                      const matchColor = acc.auto_match_pct >= 80 ? '#3B6D11' : acc.auto_match_pct >= 50 ? '#26EA9F' : '#DC2626';
                       return (
                         <div key={i} style={{ padding:'12px 16px', borderBottom:'1px solid var(--color-border)' }}>
                           <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:6 }}>
@@ -261,7 +261,7 @@ export default function SuspenseAgent() {
                 >
                   <div style={{ padding:'16px' }}>
                     {(data.reconciliation_depth.cutoff_analysis || []).map((tier,i) => {
-                      const color = tier.tier.includes('T+0') ? '#3B6D11' : tier.tier.includes('T+1') ? '#EF9F27' : '#DC2626';
+                      const color = tier.tier.includes('T+0') ? '#3B6D11' : tier.tier.includes('T+1') ? '#26EA9F' : '#DC2626';
                       return (
                         <div key={i} style={{ marginBottom:14 }}>
                           <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>

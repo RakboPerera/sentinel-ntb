@@ -83,7 +83,7 @@ export default function Act1({ onNext }) {
           </div>
           {visibleSent >= sentinelRows.length && (
             <div style={{ marginTop: 16, padding: '10px 14px', background: 'rgba(59,109,17,0.15)', border: '1px solid rgba(59,109,17,0.3)', borderRadius: 8, fontSize: 12, color: '#97C459', lineHeight: 1.6 }}>
-              Fraud stopped. <strong style={{ color: '#EF9F27' }}>6 minutes 58 seconds</strong> from first signal to account freeze.
+              Fraud stopped. <strong style={{ color: '#26EA9F' }}>6 minutes 58 seconds</strong> from first signal to account freeze.
             </div>
           )}
         </div>

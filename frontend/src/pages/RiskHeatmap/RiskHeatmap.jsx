@@ -258,8 +258,8 @@ function getBranchFindings(branchCode, colKey) {
 
 function scoreColor(s) {
   if (s >= 75) return { bg:'#FEE2E2', border:'#FCA5A5', text:'#991B1B', dot:'#DC2626' };
-  if (s >= 60) return { bg:'#FEF3C7', border:'#FDE68A', text:'#92400E', dot:'#D97706' };
-  if (s >= 40) return { bg:'#FFFBEB', border:'#FDE68A', text:'#92400E', dot:'#EF9F27' };
+  if (s >= 60) return { bg:'#FEF3C7', border:'#D1D0CB', text:'#3D3C38', dot:'#4A6070' };
+  if (s >= 40) return { bg:'#F3F3F1', border:'#D1D0CB', text:'#3D3C38', dot:'#26EA9F' };
   return { bg:'#F0FDF4', border:'#BBF7D0', text:'#166534', dot:'#16A34A' };
 }
 function scoreTier(s) {
@@ -278,8 +278,8 @@ function FindingItem({ item, accentColor }) {
   const [open, setOpen] = useState(false);
   const sevPal = {
     critical:{ bg:'#FEF0F0', border:'#FECACA', badge:'#DC2626', text:'#991B1B' },
-    high:    { bg:'#FFFBEB', border:'#FDE68A', badge:'#D97706', text:'#92400E' },
-    medium:  { bg:'#EBF4FF', border:'#BFDBFE', badge:'#2563EB', text:'#1D4ED8' },
+    high:    { bg:'#F3F3F1', border:'#D1D0CB', badge:'#4A6070', text:'#3D3C38' },
+    medium:  { bg:'#E8FDF4', border:'#A7F3D0', badge:'#0BBF7A', text:'#0BBF7A' },
   };
   const p = sevPal[item.severity] || sevPal.medium;
   return (
@@ -319,7 +319,7 @@ function PeerMetricBar({ label, value, unit, peer, peerLabel, higherIsBad, toolt
   if (value === null || value === undefined) return null;
   const numVal = parseFloat(String(value).replace(/[^0-9.]/g,''));
   const isAnomaly = peer !== null && !isNaN(numVal) && (higherIsBad ? numVal > peer : numVal < peer);
-  const color = isAnomaly ? (Math.abs(numVal/(peer||1)-1)>0.5?'#DC2626':'#D97706') : '#16A34A';
+  const color = isAnomaly ? (Math.abs(numVal/(peer||1)-1)>0.5?'#DC2626':'#4A6070') : '#16A34A';
   const peerMax = peer !== null ? Math.max(numVal, peer)*1.3 : null;
   return (
     <div style={{ padding:'10px 0', borderBottom:'1px solid var(--color-border)' }}>
@@ -386,7 +386,7 @@ function CellDetailDrawer({ branch, col, onClose }) {
                 <span style={{ fontSize:11, color:'var(--color-text-3)' }}>·</span>
                 <span style={{ fontSize:11, fontWeight:600, color:c.text }}>{col.label}</span>
                 {(critN>0||highN>0) && (
-                  <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', borderRadius:10, background:critN>0?'#DC2626':'#D97706', color:'white', marginLeft:'auto' }}>
+                  <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', borderRadius:10, background:critN>0?'#DC2626':'#4A6070', color:'white', marginLeft:'auto' }}>
                     {critN>0?`${critN} critical`:`${highN} high`}
                   </span>
                 )}
@@ -418,7 +418,7 @@ function CellDetailDrawer({ branch, col, onClose }) {
             <div style={{ display:'flex', gap:6, marginTop:10, flexWrap:'wrap' }}>
               {branch.aml_flag && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#FEF0F0', color:'#991B1B', borderRadius:5, border:'1px solid #FECACA' }}>⚠ AML Active</span>}
               {branch.cbsl_flag && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#FEF0F0', color:'#991B1B', borderRadius:5, border:'1px solid #FECACA' }}>⚠ CBSL Pending</span>}
-              {branch.sla_breach && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#FFFBEB', color:'#3A5A3A', borderRadius:5, border:'1px solid #FDE68A' }}>⏱ SLA Breach</span>}
+              {branch.sla_breach && <span style={{ fontSize:10, fontWeight:700, padding:'3px 8px', background:'#F3F3F1', color:'#3A5A3A', borderRadius:5, border:'1px solid #FDE68A' }}>⏱ SLA Breach</span>}
             </div>
           )}
         </div>
@@ -618,7 +618,7 @@ export default function RiskHeatmap() {
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginBottom:20 }}>
         {[
           { label:'Branches Monitored', value:branchRiskData.length, sub:'Highest-risk of 90 branches — sorted by composite score', color:'#185FA5', tooltip:'The heatmap displays the 10 branches with the highest composite risk scores across all 9 audit domains. Remaining 80 branches are in normal monitoring. Filter controls are in development for full 90-branch view.' },
-          { label:'Elevated or Critical', value:criticalBranches.length, sub:`${Math.round(criticalBranches.length/branchRiskData.length*100)}% of monitored branches`, color:'#EF9F27' },
+          { label:'Elevated or Critical', value:criticalBranches.length, sub:`${Math.round(criticalBranches.length/branchRiskData.length*100)}% of monitored branches`, color:'#26EA9F' },
           { label:'AML / CBSL Flags', value:branchRiskData.filter(b=>b.aml_flag||b.cbsl_flag).length, sub:'Active regulatory escalations', color:'#A32D2D' },
           { label:'Highest Composite', value:`${Math.max(...branchRiskData.map(compositeScore))}/100`, sub:'BR-14 Ratnapura — critical', color:'#A32D2D' },
         ].map((s,i)=>(
@@ -640,7 +640,7 @@ export default function RiskHeatmap() {
                 <InfoTooltip text="Rows = NTB branches. Columns = audit domains. Each score is derived from agent analysis. Click any cell to open the findings drawer — actual agent data, peer metrics, and data upload for that branch × domain combination." position="bottom" width={320}/>
               </div>
               <div style={{ display:'flex', gap:12, fontSize:10, color:'var(--color-text-2)', alignItems:'center' }}>
-                {[['#16A34A','Safe <40'],['#EF9F27','Watch 40–60'],['#D97706','Elevated 60–75'],['#DC2626','Critical 75+']].map(([col,lbl])=>(
+                {[['#16A34A','Safe <40'],['#26EA9F','Watch 40–60'],['#4A6070','Elevated 60–75'],['#DC2626','Critical 75+']].map(([col,lbl])=>(
                   <span key={lbl} style={{ display:'flex', alignItems:'center', gap:4 }}><div style={{ width:10,height:10,borderRadius:2,background:col }}/>{lbl}</span>
                 ))}
                 <span style={{ color:'var(--color-text-3)', marginLeft:4, fontSize:10 }}>← Click any cell</span>
@@ -686,7 +686,7 @@ export default function RiskHeatmap() {
                             <div style={{ display:'flex', gap:3 }}>
                               {branch.aml_flag && <div style={{ width:7,height:7,borderRadius:'50%',background:'#E11D48' }} title="AML flag"/>}
                               {branch.cbsl_flag && <div style={{ width:7,height:7,borderRadius:'50%',background:'#DC2626' }} title="CBSL action"/>}
-                              {branch.sla_breach && <div style={{ width:7,height:7,borderRadius:'50%',background:'#D97706' }} title="SLA breach"/>}
+                              {branch.sla_breach && <div style={{ width:7,height:7,borderRadius:'50%',background:'#4A6070' }} title="SLA breach"/>}
                             </div>
                           </div>
                         </td>
@@ -722,7 +722,7 @@ export default function RiskHeatmap() {
               </table>
             </div>
             <div style={{ padding:'10px 16px', borderTop:'1px solid var(--color-border)', background:'var(--color-surface-2)', display:'flex', gap:16, fontSize:10, color:'var(--color-text-2)', alignItems:'center', flexWrap:'wrap' }}>
-              {[['#E11D48','AML escalation'],['#DC2626','CBSL action'],['#D97706','SLA breach']].map(([col,lbl])=>(
+              {[['#E11D48','AML escalation'],['#DC2626','CBSL action'],['#4A6070','SLA breach']].map(([col,lbl])=>(
                 <span key={lbl} style={{ display:'flex', alignItems:'center', gap:5 }}><div style={{ width:7,height:7,borderRadius:'50%',background:col }}/>{lbl}</span>
               ))}
               <span style={{ marginLeft:'auto' }}>Click any cell → findings · peer metrics · data upload</span>

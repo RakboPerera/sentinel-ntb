@@ -9,6 +9,8 @@
   --octave-turquoise: #26EA9F;
   --octave-turquoise-dark: #0BBF7A;
   --octave-turquoise-light: #E8FDF4;
+  --octave-pink: #E82AAE;
+  --octave-pink-light: #FCE7F6;
 
   /* ── Surface System: white main, dark panels ── */
   --color-bg: #F8F8F7;
@@ -34,13 +36,13 @@
 
   /* ── Semantic colours (kept for agent/severity coding) ── */
   --color-blue: #185FA5;
-  --color-blue-light: #E6F1FB;
+  --color-blue-light: #E8FDF4;
   --color-teal: #0F6E56;
   --color-teal-light: #E1F5EE;
-  --color-amber: #3A5A3A;
-  --color-amber-light: #E8FDF4;
-  --color-red: #A32D2D;
-  --color-red-light: #FCEBEB;
+  --color-amber: #4A4A48;
+  --color-amber-light: #F3F3F1;
+  --color-red: #E82AAE;
+  --color-red-light: #FCE7F6;
   --color-green: #3B6D11;
   --color-green-light: #EAF3DE;
   --color-purple: #3D3C38;
@@ -49,6 +51,8 @@
   --color-coral-light: #FAECE7;
   --color-pink: #993556;
   --color-pink-light: #FBEAF0;
+  --color-danger: #A32D2D;
+  --color-danger-light: #FCEBEB;
   --color-gray: #5F5E5A;
   --color-gray-light: #F1EFE8;
 
@@ -91,7 +95,7 @@ body.intro-mode { background: #0A0A0B; color: #e8e6e0; }
 .status-green { color: var(--color-green); background: var(--color-green-light); }
 .status-amber { color: var(--color-amber); background: var(--color-amber-light); }
 .status-red { color: var(--color-red); background: var(--color-red-light); }
-.status-critical { color: #791F1F; background: #FCEBEB; }
+.status-critical { color: #9B1070; background: #FCE7F6; }
 .status-high { color: var(--color-amber); background: var(--color-amber-light); }
 .status-medium { color: var(--color-blue); background: var(--color-blue-light); }
 

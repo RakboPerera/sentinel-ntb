@@ -211,7 +211,7 @@ export default function CreditAgent() {
               color={COLOR} tooltip="Full NTB loan portfolio scanned. Each loan is scored on 8 features using Isolation Forest. Only loans with anomaly score > 0.65 are flagged for review." />
             <StatCard label="Flagged Loans" value={data.portfolio_summary.flagged_count}
               sub={`LKR ${(data.portfolio_summary.flagged_exposure_lkr / 1e9).toFixed(2)} Bn exposure`}
-              color="#EF9F27" tooltip="Loans with anomaly score above 0.65. These loans show feature combinations statistically inconsistent with their assigned SLFRS 9 stage — they deviate significantly from their stage-peers." />
+              color="#26EA9F" tooltip="Loans with anomaly score above 0.65. These loans show feature combinations statistically inconsistent with their assigned SLFRS 9 stage — they deviate significantly from their stage-peers." />
             <StatCard label="Critical" value={data.portfolio_summary.critical_count}
               sub="Anomaly score > 0.85"
               color="#A32D2D" tooltip="Loans scoring above 0.85 — the highest anomaly tier. These require immediate Staging Committee attention. Multiple Stage 3 trigger criteria are present simultaneously." alert="Immediate action required" />
@@ -279,11 +279,11 @@ export default function CreditAgent() {
                       <XAxis dataKey="cohort" tick={{ fontSize: 10 }} angle={-35} textAnchor="end" interval={0} />
                       <YAxis tick={{ fontSize: 10 }} unit="%" tickFormatter={v => v.toFixed(1)} />
                       <Tooltip formatter={(v) => [`${v}%`, 'Projected S3 migration']} labelFormatter={l => `Cohort: ${l}`} />
-                      <ReferenceLine y={1.0} stroke="#EF9F27" strokeDasharray="4 3"
+                      <ReferenceLine y={1.0} stroke="#26EA9F" strokeDasharray="4 3"
                         label={{ value: 'Historic avg 1.0%', fontSize: 9, fill: '#3A5A3A', position: 'insideTopRight' }} />
                       <Bar dataKey="projected_stage3_migration_pct" radius={[3, 3, 0, 0]}>
                         {(data.vintage_analysis || []).map((v, i) => (
-                          <Cell key={i} fill={v.risk_flag === 'red' ? '#A32D2D' : v.risk_flag === 'amber' ? '#EF9F27' : '#3B6D11'} />
+                          <Cell key={i} fill={v.risk_flag === 'red' ? '#A32D2D' : v.risk_flag === 'amber' ? '#26EA9F' : '#3B6D11'} />
                         ))}
                       </Bar>
                     </BarChart>
@@ -293,7 +293,7 @@ export default function CreditAgent() {
                     compact
                   />
                   <div style={{ display: 'flex', gap: 10, justifyContent: 'center', margin: '10px 0 6px', fontSize: 10, color: 'var(--color-text-2)', flexWrap: 'wrap' }}>
-                    {[['#3B6D11','On track'],['#EF9F27','Elevated risk'],['#A32D2D','Deteriorating']].map(([c,l]) => (
+                    {[['#3B6D11','On track'],['#26EA9F','Elevated risk'],['#A32D2D','Deteriorating']].map(([c,l]) => (
                       <span key={l} style={{ display:'flex', alignItems:'center', gap:4 }}><span style={{ width:10,height:10,borderRadius:2,background:c,display:'inline-block' }}/>{l}</span>
                     ))}
                   </div>
@@ -326,7 +326,7 @@ export default function CreditAgent() {
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'var(--color-surface-2)', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${s.avg_anomaly_score * 100}%`, background: s.avg_anomaly_score >= 0.75 ? '#A32D2D' : '#EF9F27', borderRadius: 3 }} />
+                          <div style={{ height: '100%', width: `${s.avg_anomaly_score * 100}%`, background: s.avg_anomaly_score >= 0.75 ? '#A32D2D' : '#26EA9F', borderRadius: 3 }} />
                         </div>
                         <span style={{ fontSize: 10, color: 'var(--color-text-3)', minWidth: 60, textAlign: 'right' }}>
                           score {s.avg_anomaly_score.toFixed(2)}
@@ -468,7 +468,7 @@ export default function CreditAgent() {
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:1, background:'var(--color-border)' }}>
               {[
                 { label:'Current Tier 1 CAR', value:`${data.capital_impact?.current_tier1_car}%`, color:'#16A34A', sub:'As reported to CBSL' },
-                { label:'If Staging Corrected', value:`${data.capital_impact?.corrected_tier1_car}%`, color:'#D97706', sub:`−${data.capital_impact?.car_impact_bps} basis points` },
+                { label:'If Staging Corrected', value:`${data.capital_impact?.corrected_tier1_car}%`, color:'#4A6070', sub:`−${data.capital_impact?.car_impact_bps} basis points` },
                 { label:'Additional RWA', value:`LKR ${((data.capital_impact?.rwa_increase_lkr||0)/1e9).toFixed(1)}Bn`, color:'#DC2626', sub:'Risk-weighted asset increase' },
                 { label:'CBSL Notification', value:data.capital_impact?.aggregate_notification_required ? 'REQUIRED' : 'Not required', color:data.capital_impact?.aggregate_notification_required ? '#DC2626' : '#16A34A', sub:`Aggregate: ${data.capital_impact?.aggregate_impact_with_sus017_bps}bps incl. SUS-017` },
               ].map((m,i) => (

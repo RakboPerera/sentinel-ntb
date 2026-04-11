@@ -4,21 +4,21 @@
 /* ─── INTRO NAV ────────────────────────────────────────────── */
 .intro-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; background: rgba(10,10,11,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.07); }
 .intro-nav-logo { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
-.intro-nav-logo span { color: #EF9F27; }
+.intro-nav-logo span { color: #26EA9F; }
 .intro-nav-right { display: flex; align-items: center; gap: 16px; }
 .intro-nav-ntb { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.4); text-transform: uppercase; }
 .intro-step-dots { display: flex; gap: 8px; align-items: center; }
 .intro-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: all 0.3s; cursor: pointer; }
-.intro-dot.active { background: #EF9F27; width: 20px; border-radius: 3px; }
+.intro-dot.active { background: #26EA9F; width: 20px; border-radius: 3px; }
 .intro-dot.done { background: rgba(255,255,255,0.4); }
 
 /* ─── ACT CONTAINER ───────────────────────────────────────── */
 .intro-act { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 80px 40px 60px; max-width: 1280px; margin: 0 auto; }
 
 /* ─── TYPOGRAPHY ──────────────────────────────────────────── */
-.intro-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #EF9F27; margin-bottom: 16px; }
+.intro-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #26EA9F; margin-bottom: 16px; }
 .intro-h1 { font-size: clamp(36px, 5vw, 64px); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; color: #f4f2ec; margin-bottom: 20px; }
-.intro-h1 .amber { color: #EF9F27; }
+.intro-h1 .amber { color: #26EA9F; }
 .intro-h1 .dim { color: rgba(244,242,236,0.4); }
 .intro-body { font-size: 18px; line-height: 1.7; color: rgba(232,230,224,0.7); max-width: 640px; margin-bottom: 32px; }
 .intro-sub { font-size: 14px; color: rgba(232,230,224,0.45); }
@@ -28,18 +28,18 @@
 .act1-col { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 32px; }
 .act1-col-header { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
 .act1-col-header.dim { color: rgba(232,230,224,0.4); }
-.act1-col-header.amber { color: #EF9F27; }
+.act1-col-header.amber { color: #26EA9F; }
 .act1-timeline { display: flex; flex-direction: column; gap: 0; }
 .act1-row { display: flex; gap: 16px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); animation: fadeIn 0.5s ease both; }
 .act1-row:last-child { border-bottom: none; }
 .act1-row-week { font-size: 11px; font-weight: 600; color: rgba(232,230,224,0.35); min-width: 56px; padding-top: 2px; }
 .act1-row-text { font-size: 13px; color: rgba(232,230,224,0.6); line-height: 1.5; }
-.act1-row-time { font-size: 11px; font-weight: 600; color: #EF9F27; font-variant-numeric: tabular-nums; min-width: 64px; padding-top: 2px; }
+.act1-row-time { font-size: 11px; font-weight: 600; color: #26EA9F; font-variant-numeric: tabular-nums; min-width: 64px; padding-top: 2px; }
 .act1-row.live { }
 .act1-row-live-text { font-size: 13px; color: rgba(232,230,224,0.8); line-height: 1.5; }
 .act1-stat { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 40px; }
 .act1-stat-big { font-size: clamp(16px, 2.5vw, 22px); font-weight: 600; color: #f4f2ec; max-width: 700px; margin: 0 auto 12px; line-height: 1.4; }
-.act1-stat-big .amber { color: #EF9F27; }
+.act1-stat-big .amber { color: #26EA9F; }
 .act1-stat-source { font-size: 11px; color: rgba(232,230,224,0.25); }
 
 /* ─── ACT 2 — FRAUD LANDSCAPE ──────────────────────────────── */
@@ -59,7 +59,7 @@
 .act2-card-desc { font-size: 12px; color: rgba(232,230,224,0.5); line-height: 1.5; margin-bottom: 12px; }
 .act2-card-difficulty { display: flex; gap: 3px; }
 .act2-card-dot { width: 6px; height: 6px; border-radius: 50%; }
-.act2-card-dot.filled { background: #EF9F27; }
+.act2-card-dot.filled { background: #26EA9F; }
 .act2-card-dot.empty { background: rgba(255,255,255,0.15); }
 .act2-legend { display: flex; gap: 24px; justify-content: center; margin-bottom: 24px; font-size: 12px; color: rgba(232,230,224,0.5); }
 .act2-legend-item { display: flex; align-items: center; gap: 8px; }
@@ -69,14 +69,14 @@
 .act3-layout { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: center; min-height: 500px; margin: 40px 0; }
 .act3-col { display: flex; flex-direction: column; gap: 12px; }
 .act3-fraud-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: rgba(232,230,224,0.8); text-align: right; transition: all 0.2s; }
-.act3-fraud-item.active { background: rgba(239,159,39,0.12); border-color: rgba(239,159,39,0.4); color: #EF9F27; }
+.act3-fraud-item.active { background: rgba(239,159,39,0.12); border-color: rgba(239,159,39,0.4); color: #26EA9F; }
 .act3-agent-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: rgba(232,230,224,0.8); transition: all 0.2s; }
 .act3-agent-item.active { background: rgba(24,95,165,0.15); border-color: rgba(24,95,165,0.5); color: #85B7EB; }
 .act3-center { width: 140px; display: flex; flex-direction: column; align-items: center; }
 .act3-svg { width: 140px; flex: 1; }
 .act3-stats { display: flex; gap: 40px; justify-content: center; margin-top: 48px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.07); }
 .act3-stat { text-align: center; }
-.act3-stat-num { font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: #EF9F27; line-height: 1; font-variant-numeric: tabular-nums; }
+.act3-stat-num { font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: #26EA9F; line-height: 1; font-variant-numeric: tabular-nums; }
 .act3-stat-label { font-size: 13px; color: rgba(232,230,224,0.45); margin-top: 6px; }
 
 /* ─── ACT 4 — SCENARIOS ─────────────────────────────────────── */
@@ -91,13 +91,13 @@
 .act4-card-body { font-size: 13px; line-height: 1.7; color: rgba(232,230,224,0.55); margin-bottom: 20px; }
 .act4-card-stats { display: flex; gap: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.07); }
 .act4-stat { }
-.act4-stat-val { font-size: 18px; font-weight: 700; color: #EF9F27; }
+.act4-stat-val { font-size: 18px; font-weight: 700; color: #26EA9F; }
 .act4-stat-label { font-size: 11px; color: rgba(232,230,224,0.35); margin-top: 2px; }
-.act4-enter-btn { display: block; margin: 0 auto; padding: 16px 48px; font-size: 16px; font-weight: 600; color: #0A0A0B; background: #EF9F27; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; letter-spacing: -0.01em; }
+.act4-enter-btn { display: block; margin: 0 auto; padding: 16px 48px; font-size: 16px; font-weight: 600; color: #0A0A0B; background: #26EA9F; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; letter-spacing: -0.01em; }
 .act4-enter-btn:hover { background: #FAC775; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239,159,39,0.3); }
 
 /* ─── INTRO NAV BUTTONS ─────────────────────────────────────── */
-.intro-nav-btn { position: fixed; bottom: 40px; right: 40px; width: 52px; height: 52px; border-radius: 50%; background: #EF9F27; color: #0A0A0B; border: none; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 100; box-shadow: 0 4px 16px rgba(239,159,39,0.4); }
+.intro-nav-btn { position: fixed; bottom: 40px; right: 40px; width: 52px; height: 52px; border-radius: 50%; background: #26EA9F; color: #0A0A0B; border: none; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 100; box-shadow: 0 4px 16px rgba(239,159,39,0.4); }
 .intro-nav-btn:hover { transform: scale(1.08); }
 
 @media (max-width: 900px) { .act1-split { grid-template-columns: 1fr; } .act2-grid { grid-template-columns: repeat(2,1fr); } .act4-grid { grid-template-columns: 1fr; } .act3-layout { grid-template-columns: 1fr; } }

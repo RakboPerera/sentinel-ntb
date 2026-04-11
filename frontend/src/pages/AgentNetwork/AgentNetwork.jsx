@@ -16,7 +16,7 @@ const AGENTS = [
     how: 'Runs an Isolation Forest across all loans using 8+ features: DPD, collateral ratio, restructure count, sector risk, override flag, and origination quarter. Validates against SLFRS 9 staging rules. Performs vintage cohort analysis to detect underwriting quality degradation across growth periods.',
     methods: ['Isolation Forest', 'SLFRS 9 Rules Engine', 'Vintage Cohort Analysis', 'Sector Risk Weighting'],
     ntbContext: 'NTB\'s loan book grew 50% in 2025 (LKR 287 Bn → LKR 430 Bn). At current Stage 3 ratio of 0.91% — the lowest in the Sri Lankan banking industry — even small misstaging has material provisioning consequences.',
-    metric: '89 loans flagged', metricSub: 'LKR 1.41 Bn exposure', metricColor: '#EF9F27',
+    metric: '89 loans flagged', metricSub: 'LKR 1.41 Bn exposure', metricColor: '#26EA9F',
     tier: 2, tierLabel: 'Account / Position',
     critical: 12, findings: 89,
     keySignal: 'BR-14: 11 override-approved anomalous loans',

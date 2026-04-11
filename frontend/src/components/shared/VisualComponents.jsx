@@ -7,7 +7,7 @@ import InfoTooltip from './InfoTooltip.jsx';
 
 export function ScoreBar({ score, label = '', showValue = true, height = 8 }) {
   const pct = Math.min(Math.max(score, 0), 1) * 100;
-  const color = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#EF9F27' : score >= 0.4 ? '#185FA5' : '#3B6D11';
+  const color = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#26EA9F' : score >= 0.4 ? '#185FA5' : '#3B6D11';
   const tier = score >= 0.85 ? 'Critical' : score >= 0.65 ? 'Elevated' : score >= 0.4 ? 'Moderate' : 'Low';
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -40,7 +40,7 @@ export function AnomalyBadge({ score }) {
 
 export function SignalBar({ label, strength, tooltip, index = 0 }) {
   const pct = Math.round(strength * 100);
-  const color = strength >= 0.8 ? '#A32D2D' : strength >= 0.6 ? '#EF9F27' : '#185FA5';
+  const color = strength >= 0.8 ? '#A32D2D' : strength >= 0.6 ? '#26EA9F' : '#185FA5';
   const tiers = ['Low', 'Moderate', 'Elevated', 'High', 'Critical'];
   const tier = tiers[Math.min(4, Math.floor(strength * 5))];
   return (
@@ -95,7 +95,7 @@ export function DetectionPipeline({ steps, color = '#185FA5' }) {
 function SeverityMeter({ severity, agentColor }) {
   const levels = { critical: 4, high: 3, medium: 2, low: 1 };
   const level = levels[severity] || 2;
-  const colors = { critical: '#DC2626', high: '#D97706', medium: '#185FA5', low: '#16A34A' };
+  const colors = { critical: '#DC2626', high: '#4A6070', medium: '#185FA5', low: '#16A34A' };
   const color = colors[severity] || colors.medium;
   return (
     <div style={{ display: 'flex', gap: 3, alignItems: 'center' }}>
@@ -206,7 +206,7 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
   const sev = finding.severity || 'medium';
   const palette = {
     critical: { border: '#A32D2D', bg: '#FEF8F8', text: '#991B1B', label: '#FCEBEB', badge: '#DC2626' },
-    high:     { border: '#EF9F27', bg: '#FFFBF0', text: '#3A5A3A', label: '#E8FDF4', badge: '#D97706' },
+    high:     { border: '#26EA9F', bg: '#FFFBF0', text: '#3A5A3A', label: '#E8FDF4', badge: '#4A6070' },
     medium:   { border: '#185FA5', bg: '#F6FAFF', text: '#185FA5', label: '#E6F1FB', badge: '#185FA5' },
     low:      { border: '#3B6D11', bg: '#F6FBF0', text: '#2D5A11', label: '#EAF3DE', badge: '#16A34A' },
   };
@@ -343,9 +343,9 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
         </div>
       )}
       {hasOpenFinding && (
-        <div onClick={handleClick} style={{ padding:'10px 16px', borderTop:`1px solid ${p.border}22`, background:`${agentColor}06`, display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
+        <div onClick={e => { e.stopPropagation(); handleClick(); }} style={{ padding:'10px 16px', borderTop: finding.severity === 'critical' ? '1px solid rgba(232,42,174,0.2)' : `1px solid ${p.border}22`, background:`${agentColor}06`, display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
           <span style={{ fontSize:11, color:'var(--color-text-3)' }}>Click to open full analysis, evidence, and regulatory context</span>
-          <span style={{ fontSize:12, fontWeight:700, color:agentColor, display:'flex', alignItems:'center', gap:4 }}>Full analysis <ArrowRight size={13} /></span>
+          <span style={{ fontSize:12, fontWeight:700, color: finding.severity === 'critical' ? 'var(--octave-pink)' : agentColor, display:'flex', alignItems:'center', gap:4 }}>Full analysis <ArrowRight size={13} /></span>
         </div>
       )}
       {showCreateCase && <CreateCaseModal finding={finding} agentId={agentId} agentColor={agentColor} onClose={() => setShowCreateCase(false)} />}
@@ -358,11 +358,11 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
 export function InsightBox({ title, body, type = 'info', compact = false, collapsible = false }) {
   const [open, setOpen] = useState(true);
   const types = {
-    info:        { icon: Info,          bg: '#EBF4FF', border: 'rgba(24,95,165,0.2)',   text: '#185FA5', iconBg: '#DBEAFE' },
-    warning:     { icon: AlertTriangle, bg: '#FFFBEB', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
+    info:        { icon: Info,          bg: '#E8FDF4', border: 'rgba(24,95,165,0.2)',   text: '#185FA5', iconBg: '#DBEAFE' },
+    warning:     { icon: AlertTriangle, bg: '#F3F3F1', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
     critical:    { icon: AlertTriangle, bg: '#FEF8F8', border: 'rgba(163,45,45,0.25)',  text: '#A32D2D', iconBg: '#FCEBEB' },
     methodology: { icon: Microscope,    bg: '#F3F1FF', border: 'rgba(83,74,183,0.2)',   text: '#3D3C38', iconBg: '#E9E7FD' },
-    regulatory:  { icon: BookOpen,      bg: '#FFFBEB', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
+    regulatory:  { icon: BookOpen,      bg: '#F3F3F1', border: 'rgba(133,79,11,0.25)',  text: '#3A5A3A', iconBg: '#FEF3C7' },
     success:     { icon: CheckCircle,   bg: '#F0FDF4', border: 'rgba(59,109,17,0.2)',   text: '#3B6D11', iconBg: '#DCFCE7' },
   };
   const t = types[type] || types.info;
@@ -455,7 +455,7 @@ export function MetricComparison({ label, actual, benchmark, benchmarkLabel = 'B
   const ratio = benchmark > 0 ? actual / benchmark : 0;
   const deviation = ((ratio - 1) * 100).toFixed(0);
   const isAnomaly = higherIsBad ? actual > benchmark : actual < benchmark;
-  const color = isAnomaly ? (Math.abs(ratio - 1) > 0.5 ? '#A32D2D' : '#EF9F27') : '#3B6D11';
+  const color = isAnomaly ? (Math.abs(ratio - 1) > 0.5 ? '#A32D2D' : '#26EA9F') : '#3B6D11';
 
   return (
     <div style={{ padding: '10px 0', borderBottom: '1px solid var(--color-border)' }}>

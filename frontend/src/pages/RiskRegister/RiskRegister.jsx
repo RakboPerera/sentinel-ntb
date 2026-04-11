@@ -96,9 +96,9 @@ const SEVERITIES = ['All', 'critical', 'high', 'medium', 'low'];
 const STATUSES = ['All', 'pending', 'in_progress', 'complete'];
 const DOMAINS = ['All', 'Credit Intelligence', 'Transaction Surveillance', 'Suspense & Reconciliation', 'Identity & KYC / AML', 'Internal Controls', 'Digital Fraud & Identity', 'Trade Finance & Treasury', 'Insider Risk', 'MJE Testing'];
 
-const SEV_COLORS = { critical: '#DC2626', high: '#D97706', medium: '#185FA5', low: '#16A34A' };
-const SEV_BG = { critical: '#FEF0F0', high: '#FFFBEB', medium: '#EBF4FF', low: '#F0FDF4' };
-const STATUS_COLORS = { pending: '#9ca3af', in_progress: '#D97706', complete: '#16A34A' };
+const SEV_COLORS = { critical: '#DC2626', high: '#4A6070', medium: '#185FA5', low: '#16A34A' };
+const SEV_BG = { critical: '#FEF0F0', high: '#F3F3F1', medium: '#E8FDF4', low: '#F0FDF4' };
+const STATUS_COLORS = { pending: '#9ca3af', in_progress: '#4A6070', complete: '#16A34A' };
 const STATUS_LABELS = { pending: 'Pending', in_progress: 'In Progress', complete: 'Closed' };
 
 function fmt(dt) { return new Date(dt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
@@ -144,7 +144,7 @@ export default function RiskRegister() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 10, marginBottom: 16 }}>
           {[
             { label: 'Total findings', value: RISK_REGISTER.length, color: '#185FA5' },
-            { label: 'Open / In-Progress', value: openCount, color: '#D97706' },
+            { label: 'Open / In-Progress', value: openCount, color: '#4A6070' },
             { label: 'Critical open', value: criticalOpen, color: '#DC2626' },
             { label: 'STR obligations', value: strRequired, color: '#DC2626' },
             { label: 'Open exposure', value: `LKR ${(exposureOpen / 1e9).toFixed(2)}Bn`, color: '#DC2626', tooltip: 'Total financial exposure across all open and in-progress findings. Excludes resolved findings. Does not include reputational or regulatory penalty exposure.' },
@@ -271,7 +271,7 @@ export default function RiskRegister() {
       <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
         {[
           { label: 'Critical findings', total: RISK_REGISTER.filter(r=>r.severity==='critical').length, closed: RISK_REGISTER.filter(r=>r.severity==='critical' && r.status==='complete').length, color: '#DC2626' },
-          { label: 'High findings', total: RISK_REGISTER.filter(r=>r.severity==='high').length, closed: RISK_REGISTER.filter(r=>r.severity==='high' && r.status==='complete').length, color: '#D97706' },
+          { label: 'High findings', total: RISK_REGISTER.filter(r=>r.severity==='high').length, closed: RISK_REGISTER.filter(r=>r.severity==='high' && r.status==='complete').length, color: '#4A6070' },
           { label: 'STR obligations', total: RISK_REGISTER.filter(r=>r.strRequired).length, closed: RISK_REGISTER.filter(r=>r.strRequired && r.status==='complete').length, color: '#DC2626' },
         ].map((m, i) => {
           const pct = m.total === 0 ? 0 : Math.round((m.closed / m.total) * 100);

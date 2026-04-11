@@ -145,7 +145,7 @@ export default function Act3({ onNext }) {
                 style={{ padding: '9px 14px', borderRadius: 9, cursor: 'pointer', transition: 'all 0.18s', textAlign: 'right',
                   background: isActive ? 'rgba(239,159,39,0.12)' : isRelated ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.03)',
                   border: `1px solid ${isActive ? 'rgba(239,159,39,0.5)' : isRelated ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.07)'}`,
-                  color: isActive ? '#EF9F27' : 'rgba(232,230,224,0.75)', fontSize: 12, fontWeight: isActive ? 600 : 400,
+                  color: isActive ? '#26EA9F' : 'rgba(232,230,224,0.75)', fontSize: 12, fontWeight: isActive ? 600 : 400,
                   transform: isActive ? 'translateX(-4px)' : 'none',
                 }}>
                 {conn.fraud}
@@ -160,7 +160,7 @@ export default function Act3({ onNext }) {
           {activeIdx !== null ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
               <div style={{ width: 2, flex: 1, background: 'linear-gradient(to bottom, transparent, rgba(239,159,39,0.6))', minHeight: 50 }} />
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#EF9F27', boxShadow: '0 0 12px rgba(239,159,39,0.8)' }} />
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#26EA9F', boxShadow: '0 0 12px rgba(239,159,39,0.8)' }} />
               <div style={{ width: 2, flex: 1, background: 'linear-gradient(to top, transparent, rgba(239,159,39,0.6))', minHeight: 50 }} />
             </div>
           ) : (
@@ -215,7 +215,7 @@ export default function Act3({ onNext }) {
       {activeConn && (
         <div className="animate-fade-in" style={{ margin: '0 0 24px', padding: '12px 20px', background: 'rgba(239,159,39,0.06)', border: '1px solid rgba(239,159,39,0.2)', borderRadius: 10 }}>
           <div style={{ fontSize: 12, color: 'rgba(232,230,224,0.6)', flex: 1 }}>
-            <strong style={{ color: '#EF9F27' }}>{activeConn.fraud}</strong> activates <strong style={{ color: '#f4f2ec' }}>{activeConn.agents.filter(a => a !== 'Orchestrator').length} domain agents</strong> — {activeConn.agents.filter(a => a !== 'Orchestrator').join(' · ')}. Each sees a fragment. The Orchestrator sees the whole.
+            <strong style={{ color: '#26EA9F' }}>{activeConn.fraud}</strong> activates <strong style={{ color: '#f4f2ec' }}>{activeConn.agents.filter(a => a !== 'Orchestrator').length} domain agents</strong> — {activeConn.agents.filter(a => a !== 'Orchestrator').join(' · ')}. Each sees a fragment. The Orchestrator sees the whole.
           </div>
         </div>
       )}
@@ -224,7 +224,7 @@ export default function Act3({ onNext }) {
       <div style={{ display: 'flex', gap: 48, paddingTop: 28, borderTop: '1px solid rgba(255,255,255,0.07)', justifyContent: 'center', flexWrap: 'wrap' }}>
         {stats.map((s, i) => (
           <div key={i} style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 'clamp(22px, 2.5vw, 38px)', fontWeight: 800, color: '#EF9F27', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{s.num}</div>
+            <div style={{ fontSize: 'clamp(22px, 2.5vw, 38px)', fontWeight: 800, color: '#26EA9F', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{s.num}</div>
             <div style={{ fontSize: 12, color: 'rgba(232,230,224,0.4)', marginTop: 6, maxWidth: 200, lineHeight: 1.5 }}>{s.label}</div>
           </div>
         ))}

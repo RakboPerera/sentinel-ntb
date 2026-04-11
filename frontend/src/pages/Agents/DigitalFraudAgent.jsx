@@ -10,7 +10,7 @@ const SCHEMA = { agentName:'Digital Fraud & Identity', required:['session_id','a
 const COLOR = '#993556';
 
 function BehavioralMeter({ score }) {
-  const color = score < 30 ? '#A32D2D' : score < 50 ? '#3A5A3A' : score < 70 ? '#EF9F27' : '#3B6D11';
+  const color = score < 30 ? '#A32D2D' : score < 50 ? '#3A5A3A' : score < 70 ? '#26EA9F' : '#3B6D11';
   const label = score < 30 ? 'Critical — likely ATO' : score < 50 ? 'Low — investigate' : score < 70 ? 'Watch' : 'Normal';
   return (
     <div>
@@ -26,7 +26,7 @@ function BehavioralMeter({ score }) {
       </div>
       <div style={{ position:'relative', height:12, borderRadius:6, overflow:'hidden', background:'var(--color-surface-2)', border:'1px solid var(--color-border)' }}>
         {/* Zone coloring */}
-        {[[0,30,'#A32D2D'],[30,50,'#3A5A3A'],[50,70,'#EF9F27'],[70,100,'#3B6D11']].map(([from,to,c]) => (
+        {[[0,30,'#A32D2D'],[30,50,'#3A5A3A'],[50,70,'#26EA9F'],[70,100,'#3B6D11']].map(([from,to,c]) => (
           <div key={from} style={{ position:'absolute', left:`${from}%`, width:`${to-from}%`, top:0, bottom:0, background:c, opacity:0.15 }} />
         ))}
         <div style={{ position:'absolute', left:0, width:`${score}%`, top:0, bottom:0, background:color, opacity:0.85, borderRadius:6 }} />

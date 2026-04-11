@@ -45,9 +45,9 @@ const NOP_BREAKDOWN = [
   { pair:'CNH/LKR', position:1400000, limit:4000000, pct:35, breach:false, trader:'TRD-002' },
 ];
 
-const RISK_COLORS = { critical:'#DC2626', high:'#D97706', medium:'#185FA5', low:'#6b6963' };
-const RISK_BGS = { critical:'#FEF0F0', high:'#FFFBEB', medium:'#EBF4FF', low:'var(--color-surface-2)' };
-const FATF_COLORS = { grey_list:'#DC2626', enhanced:'#D97706', standard:'#16A34A' };
+const RISK_COLORS = { critical:'#DC2626', high:'#4A6070', medium:'#185FA5', low:'#6b6963' };
+const RISK_BGS = { critical:'#FEF0F0', high:'#F3F3F1', medium:'#E8FDF4', low:'var(--color-surface-2)' };
+const FATF_COLORS = { grey_list:'#DC2626', enhanced:'#4A6070', standard:'#16A34A' };
 
 export default function TradeTreasuryAgent() {
   const [activeTab, setActiveTab] = useState('tbml');
@@ -124,7 +124,7 @@ export default function TradeTreasuryAgent() {
                     <XAxis type="number" domain={[0,100]} tick={{ fontSize:10 }} unit="%" label={{ value:'Max % deviation from benchmark', position:'insideBottom', offset:-2, fontSize:10 }} />
                     <YAxis type="category" dataKey="code" tick={{ fontSize:11 }} width={50} />
                     <Tooltip formatter={(v,n) => [`${v}%`, 'Max deviation']} />
-                    <ReferenceLine x={25} stroke="#D97706" strokeDasharray="4 4" label={{ value:'Flag 25%', fontSize:9, fill:'#D97706' }} />
+                    <ReferenceLine x={25} stroke="#4A6070" strokeDasharray="4 4" label={{ value:'Flag 25%', fontSize:9, fill:'#4A6070' }} />
                     <Bar dataKey="maxDev" radius={[0,4,4,0]} label={{ position:'right', fontSize:11, formatter:(v)=>`${v}%` }}>
                       {HS_ANOMALIES.map((d,i) => <Cell key={i} fill={RISK_COLORS[d.risk]} />)}
                     </Bar>
@@ -150,7 +150,7 @@ export default function TradeTreasuryAgent() {
             {/* ── NOP Tab ── */}
             {activeTab === 'nop' && (
               <div>
-                <div style={{ padding:'10px 14px', background:'#FFFBEB', borderBottom:'1px solid var(--color-border)', fontSize:12, color:'#D97706', lineHeight:1.6 }}>
+                <div style={{ padding:'10px 14px', background:'#F3F3F1', borderBottom:'1px solid var(--color-border)', fontSize:12, color:'#4A6070', lineHeight:1.6 }}>
                   <strong>2 currency pairs breach approved limits:</strong> GBP/LKR at 140% of limit, AED/LKR at 136%. Both were intraday-only breaches — resolved before end-of-day mark-to-market, bypassing daily limit reporting.
                 </div>
                 {NOP_BREAKDOWN.map((pos,i) => (
@@ -167,7 +167,7 @@ export default function TradeTreasuryAgent() {
                         <span style={{ fontWeight:700, color:pos.breach?'#DC2626':'#3B6D11' }}>{pos.pct}% utilised</span>
                       </div>
                       <div style={{ height:8, borderRadius:4, background:'var(--color-surface-2)', overflow:'hidden' }}>
-                        <div style={{ width:`${Math.min(pos.pct,100)}%`, height:'100%', background:pos.breach?'#DC2626':pos.pct>80?'#D97706':'#3B6D11', borderRadius:4 }} />
+                        <div style={{ width:`${Math.min(pos.pct,100)}%`, height:'100%', background:pos.breach?'#DC2626':pos.pct>80?'#4A6070':'#3B6D11', borderRadius:4 }} />
                         {pos.breach && <div style={{ width:'100%', height:'100%', background:'rgba(220,38,38,0.15)', marginTop:-8 }} />}
                       </div>
                     </div>
@@ -188,7 +188,7 @@ export default function TradeTreasuryAgent() {
                     <YAxis domain={[120,340]} tick={{ fontSize:10 }} />
                     <Tooltip />
                     <ReferenceLine y={100} stroke="#DC2626" strokeDasharray="4 4" label={{ value:'Min 100%', fontSize:9, fill:'#DC2626', position:'insideTopLeft' }} />
-                    <ReferenceLine y={150} stroke="#D97706" strokeDasharray="4 4" label={{ value:'Amber 150%', fontSize:9, fill:'#D97706', position:'insideTopLeft' }} />
+                    <ReferenceLine y={150} stroke="#4A6070" strokeDasharray="4 4" label={{ value:'Amber 150%', fontSize:9, fill:'#4A6070', position:'insideTopLeft' }} />
                     <ReferenceLine y={200} stroke="#854F0B" strokeDasharray="3 3" label={{ value:'Watch 200%', fontSize:9, fill:'#3A5A3A', position:'insideTopLeft' }} />
                     <Line type="monotone" dataKey="lcr" stroke="#185FA5" strokeWidth={2.5} name="LCR %" dot={{ r:3 }} strokeDasharray={(d) => d?.projected ? '4 4' : '0'} />
                     <Line type="monotone" dataKey="nsfr" stroke="#3B6D11" strokeWidth={2.5} name="NSFR %" dot={{ r:3 }} />
@@ -202,7 +202,7 @@ export default function TradeTreasuryAgent() {
                   {[
                     { label:'Term deposit campaign', status:'Active', detail:'Special rate 14.5% — LKR 8.2Bn raised', color:'#16A34A' },
                     { label:'REPO facility access', status:'Executed', detail:'LKR 10Bn from Central Bank repo', color:'#16A34A' },
-                    { label:'Loan growth moderation', status:'In progress', detail:'Credit growth cap 15% Q1 2026 (was 50%)', color:'#D97706' },
+                    { label:'Loan growth moderation', status:'In progress', detail:'Credit growth cap 15% Q1 2026 (was 50%)', color:'#4A6070' },
                     { label:'HQLA portfolio rebuild', status:'Planned', detail:'LKR 15Bn T-bill purchases — Q1 2026', color:'#185FA5' },
                   ].map((a,i) => (
                     <div key={i} style={{ padding:'10px 14px', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderLeft:`3px solid ${a.color}`, borderRadius:8 }}>
@@ -225,17 +225,17 @@ export default function TradeTreasuryAgent() {
                   <div>Country</div><div>FATF Status</div><div>Transactions</div><div>Exposure</div><div>Customers</div><div>Action</div>
                 </div>
                 {FATF_EXPOSURE.map((row,i) => (
-                  <div key={i} style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:0, padding:'10px 16px', borderBottom:'1px solid var(--color-border)', alignItems:'center', background:row.status==='grey_list'?'#FEF0F0':row.status==='enhanced'?'#FFFBEB':'transparent' }}>
+                  <div key={i} style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:0, padding:'10px 16px', borderBottom:'1px solid var(--color-border)', alignItems:'center', background:row.status==='grey_list'?'#FEF0F0':row.status==='enhanced'?'#F3F3F1':'transparent' }}>
                     <div style={{ fontSize:13, fontWeight:700 }}>{row.flag} {row.name}</div>
                     <div>
-                      <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', borderRadius:4, background:row.status==='grey_list'?'#DC2626':row.status==='enhanced'?'#D97706':'#16A34A', color:'white' }}>
+                      <span style={{ fontSize:10, fontWeight:700, padding:'2px 7px', borderRadius:4, background:row.status==='grey_list'?'#DC2626':row.status==='enhanced'?'#4A6070':'#16A34A', color:'white' }}>
                         {row.status==='grey_list'?'Grey list':row.status==='enhanced'?'Enhanced':'Standard'}
                       </span>
                     </div>
                     <div style={{ fontSize:12, fontWeight:600 }}>{row.txns}</div>
                     <div style={{ fontSize:12, fontWeight:700, color:row.status==='grey_list'?'#DC2626':'var(--color-text)' }}>{row.exposure}</div>
                     <div style={{ fontSize:12 }}>{row.customers}</div>
-                    <div style={{ fontSize:11, fontWeight:600, color:row.status==='grey_list'?'#DC2626':row.status==='enhanced'?'#D97706':'#16A34A' }}>
+                    <div style={{ fontSize:11, fontWeight:600, color:row.status==='grey_list'?'#DC2626':row.status==='enhanced'?'#4A6070':'#16A34A' }}>
                       {row.status==='grey_list'?'STR required':row.status==='enhanced'?'EDD required':'Standard CDD'}
                     </div>
                   </div>
@@ -261,7 +261,7 @@ export default function TradeTreasuryAgent() {
                   </span>
                 </div>
                 {(data.counterparty_network?.ubo_conflicts||[]).map((conflict, i) => (
-                  <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:`4px solid ${conflict.risk==='critical'?'#DC2626':'#D97706'}`, borderRadius:8, marginBottom:10 }}>
+                  <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:`4px solid ${conflict.risk==='critical'?'#DC2626':'#4A6070'}`, borderRadius:8, marginBottom:10 }}>
                     <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
                       <code style={{ fontSize:12, fontWeight:700 }}>{conflict.customer_id}</code>
                       <span style={{ fontSize:10, color:'var(--color-text-3)' }}>links to: {conflict.linked_accounts.join(', ')}</span>
@@ -326,7 +326,7 @@ export default function TradeTreasuryAgent() {
                   {[
                     { label:'L1 — Govt Securities', val:data.hqla_breakdown?.level1_govt_securities||0, color:'#16A34A' },
                     { label:'L1 — CBSL Reserves', val:data.hqla_breakdown?.level1_cbsl_reserves||0, color:'#0F6E56' },
-                    { label:'L2A Assets', val:data.hqla_breakdown?.level2a_assets||0, color:'#D97706' },
+                    { label:'L2A Assets', val:data.hqla_breakdown?.level2a_assets||0, color:'#4A6070' },
                   ].map((row, i) => {
                     const total = data.hqla_breakdown?.total_hqla_lkr||1;
                     const pct = Math.round((row.val/total)*100);
@@ -420,11 +420,11 @@ export default function TradeTreasuryAgent() {
                       <span style={{ fontSize:13, fontWeight:800, color:'#DC2626' }}>LKR {(dep.amount_lkr/1e9).toFixed(1)}Bn</span>
                     </div>
                     <div style={{ height:6, background:'var(--color-border)', borderRadius:3, overflow:'hidden', marginBottom:6 }}>
-                      <div style={{ width:`${Math.min(dep.pct_of_funding*3, 100)}%`, height:'100%', background:dep.pct_of_funding>8?'#DC2626':'#D97706', borderRadius:3 }} />
+                      <div style={{ width:`${Math.min(dep.pct_of_funding*3, 100)}%`, height:'100%', background:dep.pct_of_funding>8?'#DC2626':'#4A6070', borderRadius:3 }} />
                     </div>
                     <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'var(--color-text-2)' }}>
                       <span>{dep.pct_of_funding}% of funding · {dep.type} · Due: {dep.maturity}</span>
-                      <span style={{ color:'#D97706' }}>{dep.risk}</span>
+                      <span style={{ color:'#4A6070' }}>{dep.risk}</span>
                     </div>
                   </div>
                 ))}

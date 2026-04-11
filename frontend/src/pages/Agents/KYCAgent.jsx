@@ -167,7 +167,7 @@ export default function KYCAgent() {
                             <YAxis type="category" dataKey="branch_code" tick={{ fontSize:11 }} width={44} />
                             <Tooltip formatter={(v) => [`${v} risk score`, 'Branch KYC Risk']} />
                             <Bar dataKey="risk_score" radius={[0,3,3,0]} label={{ position:'right', fontSize:10 }}>
-                              {(data.branch_compliance_heatmap || []).map((d,i) => <Cell key={i} fill={d.risk_score>=80?'#A32D2D':d.risk_score>=60?'#EF9F27':'#3B6D11'} />)}
+                              {(data.branch_compliance_heatmap || []).map((d,i) => <Cell key={i} fill={d.risk_score>=80?'#A32D2D':d.risk_score>=60?'#26EA9F':'#3B6D11'} />)}
                             </Bar>
                           </BarChart>
                         </ResponsiveContainer>

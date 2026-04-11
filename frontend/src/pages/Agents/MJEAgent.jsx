@@ -18,16 +18,16 @@ const SCHEMA = {
 // ─── STATUS / SEVERITY HELPERS ────────────────────────────────────────────────
 
 function statusColor(status) {
-  if (status === 'Escalated') return { bg: '#FEF0F0', text: '#991B1B', badge: '#DC2626' };
-  if (status === 'Flagged')   return { bg: '#FFFBEB', text: '#92400E', badge: '#D97706' };
-  if (status === 'Under Review') return { bg: '#EBF4FF', text: '#1D4ED8', badge: '#2563EB' };
+  if (status === 'Escalated') return { bg: '#FEF0F0', text: '#991B1B', badge: '#E82AAE' };
+  if (status === 'Flagged')   return { bg: '#F3F3F1', text: '#3D3C38', badge: '#4A6070' };
+  if (status === 'Under Review') return { bg: '#E8FDF4', text: '#0BBF7A', badge: '#0BBF7A' };
   return { bg: '#F0FDF4', text: '#166534', badge: '#16A34A' };
 }
 
 function riskColor(score) {
-  if (score >= 80) return '#DC2626';
-  if (score >= 60) return '#D97706';
-  if (score >= 40) return '#EF9F27';
+  if (score >= 80) return '#E82AAE';
+  if (score >= 60) return '#4A6070';
+  if (score >= 40) return '#26EA9F';
   return '#16A34A';
 }
 
@@ -47,7 +47,7 @@ function MJEExpandedRow({ entry }) {
           </div>
           <div style={{ marginBottom: 12 }}>
             {[
-              { type: 'Debit', account: entry.debit_account, color: '#DC2626' },
+              { type: 'Debit', account: entry.debit_account, color: '#E82AAE' },
               { type: 'Credit', account: entry.credit_account, color: '#16A34A' },
             ].map(line => (
               <div key={line.type} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '8px 12px', marginBottom: 5, background: 'white', borderRadius: 8, border: '1px solid var(--color-border)' }}>
@@ -94,11 +94,11 @@ function MJEExpandedRow({ entry }) {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ flex: 1, height: 8, borderRadius: 4, background: 'var(--color-surface-2)', overflow: 'hidden' }}>
-                <div style={{ width: `${entry.doc_completeness_pct}%`, height: '100%', background: entry.doc_completeness_pct < 67 ? '#DC2626' : entry.doc_completeness_pct < 100 ? '#D97706' : '#16A34A', borderRadius: 4 }} />
+                <div style={{ width: `${entry.doc_completeness_pct}%`, height: '100%', background: entry.doc_completeness_pct < 67 ? '#E82AAE' : entry.doc_completeness_pct < 100 ? '#4A6070' : '#16A34A', borderRadius: 4 }} />
               </div>
-              <span style={{ fontSize: 12, fontWeight: 700, color: entry.doc_completeness_pct < 67 ? '#DC2626' : entry.doc_completeness_pct < 100 ? '#D97706' : '#16A34A', minWidth: 36 }}>{entry.doc_completeness_pct}%</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: entry.doc_completeness_pct < 67 ? '#E82AAE' : entry.doc_completeness_pct < 100 ? '#4A6070' : '#16A34A', minWidth: 36 }}>{entry.doc_completeness_pct}%</span>
             </div>
-            {entry.doc_completeness_pct < 100 && <div style={{ fontSize: 11, color: '#DC2626', marginTop: 4 }}>⚠ Supporting documents incomplete</div>}
+            {entry.doc_completeness_pct < 100 && <div style={{ fontSize: 11, color: '#E82AAE', marginTop: 4 }}>⚠ Supporting documents incomplete</div>}
           </div>
         </div>
 
@@ -139,7 +139,7 @@ function MJEExpandedRow({ entry }) {
 
           {/* Reversal chain */}
           {entry.reversal_chain && (
-            <div style={{ marginTop: 10, padding: '8px 12px', background: '#FFFBEB', border: '1px solid rgba(215,151,6,0.3)', borderRadius: 8 }}>
+            <div style={{ marginTop: 10, padding: '8px 12px', background: '#F3F3F1', border: '1px solid rgba(215,151,6,0.3)', borderRadius: 8 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: '#3A5A3A', marginBottom: 3, display: 'flex', alignItems: 'center', gap: 5 }}>
                 Reversal chain detected
                 <InfoTooltip text="A reversal chain occurs when an entry is reversed then reposted — often used to reset aging counters or manipulate period-end reporting." position="right" width={240} />
@@ -208,7 +208,7 @@ function MJERow({ entry }) {
         <td style={{ padding: '10px 8px' }}>
           <code style={{ fontSize: 11 }}>{entry.staff_id}</code>
         </td>
-        <td style={{ padding: '10px 8px', fontSize: 11, color: entry.timestamp.includes('T2') || parseInt(entry.timestamp.split('T')[1]) >= 22 ? '#DC2626' : 'var(--color-text-2)' }}>
+        <td style={{ padding: '10px 8px', fontSize: 11, color: entry.timestamp.includes('T2') || parseInt(entry.timestamp.split('T')[1]) >= 22 ? '#E82AAE' : 'var(--color-text-2)' }}>
           {entry.timestamp.split('T')[1]?.slice(0, 5)}
           {entry.day_of_week && <div style={{ fontSize: 10, color: 'var(--color-text-3)' }}>{entry.day_of_week}</div>}
         </td>
@@ -266,7 +266,7 @@ export default function MJEAgent() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
               <StatCard label="Entries Tested" value={(data.mje_summary.total_entries_tested || 0).toLocaleString()} sub="Full population — no sampling" color={COLOR} tooltip="Every manual journal entry in the period is tested — not a sample. This is 100% coverage, which is the key difference from traditional MJE auditing." />
-              <StatCard label="Flagged" value={data.mje_summary.flagged_count} sub={`${data.mje_summary.escalated_count} escalated`} color="#D97706" tooltip="Entries with risk score above 40. Escalated = above 80 with critical flags. Both require immediate human review." alert={`${data.mje_summary.sod_violations} SoD violations`} />
+              <StatCard label="Flagged" value={data.mje_summary.flagged_count} sub={`${data.mje_summary.escalated_count} escalated`} color="#4A6070" tooltip="Entries with risk score above 40. Escalated = above 80 with critical flags. Both require immediate human review." alert={`${data.mje_summary.sod_violations} SoD violations`} />
               <StatCard label="Benford Failures" value={data.mje_summary.benford_failures} sub="First digit deviates from expected" color="#2D2D2B" tooltip="Journal entries where the first digit of the amount falls outside Benford's Law expected frequency range. In MJE populations, digit anomalies often indicate deliberate amount selection to stay below internal review thresholds." />
               <StatCard label="After-hours Entries" value={data.mje_summary.after_hours_entries} sub="Before 08:00 or after 18:00" color="#A32D2D" tooltip="Manual journal entries posted outside business hours. Legitimate after-hours postings should have documented emergency justification. Systematic after-hours activity by the same staff member is a strong fraud indicator." />
             </div>
@@ -388,7 +388,7 @@ export default function MJEAgent() {
                         <Bar dataKey="actual" name="actual" radius={[3, 3, 0, 0]}>
                           {(data.benford_distribution || []).map((d, i) => {
                             const deviation = Math.abs(d.actual - d.expected);
-                            return <Cell key={i} fill={deviation > 3 ? '#DC2626' : deviation > 1.5 ? '#D97706' : '#16A34A'} />;
+                            return <Cell key={i} fill={deviation > 3 ? '#E82AAE' : deviation > 1.5 ? '#4A6070' : '#16A34A'} />;
                           })}
                         </Bar>
                       </BarChart>
@@ -396,7 +396,7 @@ export default function MJEAgent() {
                     <div style={{ display: 'flex', gap: 16, justifyContent: 'center', fontSize: 11, color: 'var(--color-text-2)', marginTop: 6 }}>
                       <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: `${COLOR}28`, borderRadius: 1 }} />Expected (Benford)</span>
                       <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: '#16A34A', borderRadius: 1 }} />Within range</span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: '#DC2626', borderRadius: 1 }} />Anomalous deviation</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><div style={{ width: 16, height: 3, background: '#E82AAE', borderRadius: 1 }} />Anomalous deviation</span>
                     </div>
                   </div>
                   {(data.benford_distribution || []).some(d => Math.abs(d.actual - d.expected) > 3) && (
@@ -436,11 +436,11 @@ export default function MJEAgent() {
                             <td style={{ fontSize: 12, fontWeight: 500 }}>{gl.name}</td>
                             <td style={{ fontSize: 12, fontVariantNumeric: 'tabular-nums' }}>LKR {(gl.gl_balance_lkr / 1e6).toFixed(1)}M</td>
                             <td style={{ fontSize: 12, fontVariantNumeric: 'tabular-nums', color: 'var(--color-text-2)' }}>LKR {(gl.sub_ledger_lkr / 1e6).toFixed(1)}M</td>
-                            <td style={{ fontVariantNumeric: 'tabular-nums', fontWeight: gl.break_lkr > 0 ? 700 : 400, color: gl.break_lkr > 0 ? '#DC2626' : '#16A34A' }}>
+                            <td style={{ fontVariantNumeric: 'tabular-nums', fontWeight: gl.break_lkr > 0 ? 700 : 400, color: gl.break_lkr > 0 ? '#E82AAE' : '#16A34A' }}>
                               {gl.break_lkr > 0 ? `LKR ${(gl.break_lkr / 1e6).toFixed(1)}M` : '—'}
                             </td>
-                            <td style={{ color: parseInt(gl.aging) > 30 ? '#DC2626' : 'var(--color-text-2)', fontWeight: parseInt(gl.aging) > 30 ? 700 : 400, fontSize: 12 }}>{gl.aging}</td>
-                            <td><span style={{ fontSize: 10, padding: '2px 7px', background: gl.status === 'Matched' ? '#F0FDF4' : '#FFFBEB', color: gl.status === 'Matched' ? '#16A34A' : '#3A5A3A', borderRadius: 4, fontWeight: 700 }}>{gl.status}</span></td>
+                            <td style={{ color: parseInt(gl.aging) > 30 ? '#E82AAE' : 'var(--color-text-2)', fontWeight: parseInt(gl.aging) > 30 ? 700 : 400, fontSize: 12 }}>{gl.aging}</td>
+                            <td><span style={{ fontSize: 10, padding: '2px 7px', background: gl.status === 'Matched' ? '#F0FDF4' : '#F3F3F1', color: gl.status === 'Matched' ? '#16A34A' : '#3A5A3A', borderRadius: 4, fontWeight: 700 }}>{gl.status}</span></td>
                             <td><span style={{ fontSize: 10, padding: '2px 7px', background: sc.bg, color: sc.text, borderRadius: 4, fontWeight: 700 }}>{gl.priority}</span></td>
                           </tr>
                         );
@@ -459,7 +459,7 @@ export default function MJEAgent() {
                     <div style={{ fontSize:12, fontWeight:700, color:'var(--color-text)', marginBottom:12, display:'flex', alignItems:'center', gap:8 }}>
                       Unmatched Reversal Entries
                       <InfoTooltip text="A reversal posted with no traceable original entry creates an unexplained balance movement. Legitimate reversals always reference the original entry ID. Reversals with no original entry are either errors or deliberate manipulations." width={280} position="right" />
-                      <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>
+                      <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#E82AAE', borderRadius:4, fontWeight:700 }}>
                         {(data.reversal_analysis?.unmatched_reversals||[]).length} unmatched
                       </span>
                     </div>
@@ -468,13 +468,13 @@ export default function MJEAgent() {
                         <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
                           <code style={{ fontSize:12, fontWeight:700 }}>{entry.entry_id}</code>
                           <span style={{ fontSize:11, color:'var(--color-text-3)' }}>GL: <strong>{entry.gl_account}</strong></span>
-                          <span style={{ fontSize:11, fontWeight:700, color:'#DC2626' }}>LKR {(entry.amount_lkr/1e6).toFixed(1)}M</span>
+                          <span style={{ fontSize:11, fontWeight:700, color:'#E82AAE' }}>LKR {(entry.amount_lkr/1e6).toFixed(1)}M</span>
                           <span style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>Maker: {entry.maker_id} · Risk: {entry.risk_score}/100</span>
                         </div>
                         <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>
                           {entry.finding}
                         </div>
-                        <div style={{ marginTop:8, fontSize:11, color:'#DC2626' }}>
+                        <div style={{ marginTop:8, fontSize:11, color:'#E82AAE' }}>
                           ⚠ Original entry ID: <code>null</code> — no corresponding original found in GL
                         </div>
                       </div>
@@ -486,16 +486,16 @@ export default function MJEAgent() {
                     <div style={{ fontSize:12, fontWeight:700, color:'var(--color-text)', marginBottom:12, display:'flex', alignItems:'center', gap:8 }}>
                       Net-Zero Period Manipulations
                       <InfoTooltip text="Multiple entries that net to zero over a reporting period can conceal a temporary balance manipulation used for window dressing or income smoothing. The net effect is zero but peak mid-period balances reveal the manipulation." width={300} position="right" />
-                      <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>
+                      <span style={{ marginLeft:'auto', fontSize:11, padding:'2px 8px', background:'#FEF0F0', color:'#E82AAE', borderRadius:4, fontWeight:700 }}>
                         {(data.reversal_analysis?.net_zero_manipulations||[]).length} patterns
                       </span>
                     </div>
                     {(data.reversal_analysis?.net_zero_manipulations||[]).map((entry, i) => (
-                      <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:`4px solid ${entry.severity==='critical'?'#DC2626':'#D97706'}`, borderRadius:8, marginBottom:10 }}>
+                      <div key={i} style={{ padding:'14px 16px', background:'var(--color-surface)', border:'1px solid var(--color-border)', borderLeft:`4px solid ${entry.severity==='critical'?'#E82AAE':'#4A6070'}`, borderRadius:8, marginBottom:10 }}>
                         <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
                           <span style={{ fontSize:11, fontWeight:700 }}>{entry.period}</span>
                           <span style={{ fontSize:11, color:'var(--color-text-3)' }}>GL: <strong>{entry.gl_account}</strong></span>
-                          <span style={{ fontSize:11, padding:'2px 7px', background:`${entry.severity==='critical'?'#FEF0F0':'#FFFBEB'}`, color:`${entry.severity==='critical'?'#DC2626':'#D97706'}`, borderRadius:4, fontWeight:700 }}>{entry.manipulation_type}</span>
+                          <span style={{ fontSize:11, padding:'2px 7px', background:`${entry.severity==='critical'?'#FEF0F0':'#F3F3F1'}`, color:`${entry.severity==='critical'?'#E82AAE':'#4A6070'}`, borderRadius:4, fontWeight:700 }}>{entry.manipulation_type}</span>
                           <span style={{ marginLeft:'auto', fontSize:10, color:'var(--color-text-3)' }}>Gross: LKR {(entry.gross_entries_lkr/1e6).toFixed(0)}M across {entry.entry_count} entries · Net: 0</span>
                         </div>
                         <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.65, padding:'8px 12px', background:'var(--color-surface-2)', borderRadius:6 }}>

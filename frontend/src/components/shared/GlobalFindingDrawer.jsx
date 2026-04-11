@@ -47,17 +47,17 @@ const AGENT_META = {
 };
 
 const SEV_PALETTE = {
-  critical: { bg: '#FEF0F0', border: '#FECACA', badge: '#DC2626', text: '#991B1B' },
-  high:     { bg: '#FFFBEB', border: '#FDE68A', badge: '#D97706', text: '#92400E' },
-  medium:   { bg: '#EBF4FF', border: '#BFDBFE', badge: '#2563EB', text: '#1D4ED8' },
-  low:      { bg: '#F0FDF4', border: '#BBF7D0', badge: '#16A34A', text: '#166534' },
+  critical: { bg: '#FCE7F6', border: 'rgba(232,42,174,0.25)', badge: '#E82AAE', text: '#9B1070' },
+  high:     { bg: '#F5F5F3', border: '#D0CFC9', badge: '#4A6070', text: '#2D3748' },
+  medium:   { bg: '#E8FDF4', border: '#A7F3D0', badge: '#0BBF7A', text: '#065F46' },
+  low:      { bg: '#F3F3F1', border: '#D1D0CB', badge: '#6B7280', text: '#374151' },
 };
 
 // ─── SLA CONFIG ───────────────────────────────────────────────────────────────
 
 const SLA_CONFIG = {
   critical: { label: 'Immediate — within 4 hours', hours: 4, color: '#DC2626' },
-  high:     { label: 'Urgent — within 24 hours',   hours: 24, color: '#D97706' },
+  high:     { label: 'Urgent — within 24 hours',   hours: 24, color: '#4A6070' },
   medium:   { label: 'Within 5 business days',      hours: 120, color: '#185FA5' },
   low:      { label: 'Next scheduled audit cycle',  hours: 720, color: '#3B6D11' },
 };
@@ -154,7 +154,7 @@ export default function GlobalFindingDrawer() {
   });
 
   const relatedCorrelations = (orchData?.correlations || []).filter(c => {
-    const text = c.narrative + ' ' + c.shared_entity_id;
+    const text = (c.narrative || '') + ' ' + (c.shared_entity_id || '');
     return [...myEntities].some(e => text.includes(e)) || myEntities.has(c.shared_entity_id);
   });
 
@@ -333,7 +333,7 @@ export default function GlobalFindingDrawer() {
                           <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
                             <span style={{ fontSize: 12, fontWeight: 700, color: '#3D3C38', flex: 1 }}>{corr.fraud_type_suspected}</span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                              <span style={{ fontSize: 13, fontWeight: 900, color: corr.combined_severity >= 0.95 ? '#DC2626' : '#D97706' }}>{(corr.combined_severity * 100).toFixed(0)}%</span>
+                              <span style={{ fontSize: 13, fontWeight: 900, color: corr.combined_severity >= 0.95 ? '#DC2626' : '#4A6070' }}>{(corr.combined_severity * 100).toFixed(0)}%</span>
                               <span style={{ fontSize: 10, color: 'var(--color-text-3)' }}>combined severity</span>
                               <InfoTooltip text="Combined severity after multi-agent confirmation bonus is applied. Above 85% is case-worthy. Above 95% is emergency response level." position="left" width={250} />
                             </div>
@@ -390,7 +390,7 @@ export default function GlobalFindingDrawer() {
 
               {orchSignals.length > 0 ? orchSignals.map((sig, i) => {
                 const targetMeta = AGENT_META[sig.target_agent] || { color: '#3D3C38', name: sig.target_agent, icon: '◎' };
-                const sigColor = sig.severity === 'critical' ? '#DC2626' : sig.severity === 'high' ? '#D97706' : '#185FA5';
+                const sigColor = sig.severity === 'critical' ? '#DC2626' : sig.severity === 'high' ? '#4A6070' : '#185FA5';
                 return (
                   <div key={i} style={{ padding: '12px 14px', background: 'var(--color-surface-2)', border: '1px solid var(--color-border)', borderRadius: 8 }}>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
@@ -429,8 +429,8 @@ export default function GlobalFindingDrawer() {
 
               {/* Linked cases */}
               {linkedCases.length > 0 && (
-                <div style={{ padding:'12px 14px', background:'#F0F0EE', border:'1px solid rgba(83,74,183,0.2)', borderRadius:8 }}>
-                  <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#3D3C38', marginBottom:8 }}>Active Investigation Cases</div>
+                <div style={{ padding:'12px 14px', background:'var(--color-surface-2)', border:'1px solid var(--color-border)', borderRadius:8 }}>
+                  <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'var(--color-text-2)', marginBottom:8 }}>Active Investigation Cases</div>
                   {linkedCases.map(cas => (
                     <div key={cas.id} onClick={() => { navigate('/cases', { state:{ caseId:cas.id } }); close(); }}
                       style={{ padding:'8px 10px', background:'var(--color-surface)', borderRadius:7, border:`1px solid ${CASE_SEV_COLOR[cas.severity]}22`, cursor:'pointer', marginBottom:6, display:'flex', alignItems:'center', gap:8, transition:'background 0.12s' }}
@@ -439,7 +439,7 @@ export default function GlobalFindingDrawer() {
                       <span style={{ fontSize:9, fontWeight:800, textTransform:'uppercase', padding:'2px 5px', borderRadius:3, background:CASE_SEV_COLOR[cas.severity], color:'white', flexShrink:0 }}>{cas.severity}</span>
                       <code style={{ fontSize:10, color:'var(--color-text-3)', flexShrink:0 }}>{cas.id}</code>
                       <span style={{ fontSize:11, color:'var(--color-text)', flex:1 }}>{cas.title.slice(0,48)}{cas.title.length>48?'...':''}</span>
-                      <span style={{ fontSize:10, fontWeight:600, color:'#3D3C38', flexShrink:0 }}>Open →</span>
+                      <span style={{ fontSize:10, fontWeight:600, color:'var(--octave-turquoise-dark)', flexShrink:0 }}>Open →</span>
                     </div>
                   ))}
                 </div>
@@ -463,15 +463,15 @@ export default function GlobalFindingDrawer() {
                     agentId === 'insider' && { label: 'CBSL Direction No. 5/2024', body: 'Banks must ensure SoD on all credit and payment transactions. Material fraud must be reported to CBSL. Employee access logs must be preserved for forensic investigation. Insider fraud above regulatory thresholds triggers mandatory regulatory notification.' },
                     agentId === 'mje' && { label: 'CBSL Financial Reporting Requirements', body: 'Manual journal entries above the materiality threshold (LKR 10M) require Maker-Checker approval from different individuals. After-hours postings to sensitive GL accounts require documented emergency authorisation. All MJE supporting documents must be retained for 7 years.' },
                   ].filter(Boolean).map((item, i) => (
-                    <div key={i} style={{ padding: '12px 14px', background: '#FFFBEB', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8 }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#3A5A3A', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <div key={i} style={{ padding: '12px 14px', background: '#F3F3F1', border: '1px solid rgba(38,234,159,0.25)', borderRadius: 8 }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0BBF7A', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 5 }}>
                         <Shield size={11} /> {item.label}
                       </div>
-                      <div style={{ fontSize: 12, color: '#3A5A3A', lineHeight: 1.7 }}>{item.body}</div>
+                      <div style={{ fontSize: 12, color: 'var(--color-text)', lineHeight: 1.7 }}>{item.body}</div>
                     </div>
                   ))}
                   {!['credit','transaction','suspense','kyc','controls','digital','trade','insider','mje'].includes(agentId) && (
-                    <div style={{ padding: '12px 14px', background: '#FFFBEB', border: '1px solid rgba(133,79,11,0.2)', borderRadius: 8, fontSize: 12, color: '#3A5A3A', lineHeight: 1.7 }}>
+                    <div style={{ padding: '12px 14px', background: '#F3F3F1', border: '1px solid rgba(38,234,159,0.25)', borderRadius: 8, fontSize: 12, color: 'var(--color-text)', lineHeight: 1.7 }}>
                       This finding should be reviewed against applicable CBSL directions, FTRA requirements, and SLFRS 9 where relevant to the affected entity.
                     </div>
                   )}

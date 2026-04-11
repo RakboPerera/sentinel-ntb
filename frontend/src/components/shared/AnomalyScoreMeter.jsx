@@ -3,7 +3,7 @@ import InfoTooltip from './InfoTooltip.jsx';
 
 const ZONES = [
   { label: 'Normal', from: 0, to: 0.5, color: '#3B6D11' },
-  { label: 'Watch', from: 0.5, to: 0.65, color: '#EF9F27' },
+  { label: 'Watch', from: 0.5, to: 0.65, color: '#26EA9F' },
   { label: 'Flag', from: 0.65, to: 0.85, color: '#3A5A3A' },
   { label: 'Critical', from: 0.85, to: 1.0, color: '#A32D2D' },
 ];

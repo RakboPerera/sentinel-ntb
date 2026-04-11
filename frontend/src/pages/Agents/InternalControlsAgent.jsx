@@ -24,7 +24,7 @@ const DIM_TOOLTIPS = {
 };
 
 function BranchScoreCard({ branch, isHighlighted }) {
-  const scoreColor = branch.composite_score < 50 ? '#A32D2D' : branch.composite_score < 65 ? '#EF9F27' : '#3B6D11';
+  const scoreColor = branch.composite_score < 50 ? '#A32D2D' : branch.composite_score < 65 ? '#26EA9F' : '#3B6D11';
   const tier = branch.composite_score < 50 ? 'CRITICAL' : branch.composite_score < 65 ? 'AMBER' : branch.composite_score < 80 ? 'GREEN' : 'GOOD';
   return (
     <div style={{ padding:'14px 16px', borderBottom:'1px solid var(--color-border)', background: isHighlighted ? '#FEF8F8' : 'transparent' }}>
@@ -120,12 +120,12 @@ export default function InternalControlsAgent() {
                       <PolarGrid />
                       <PolarAngleAxis dataKey="dim" tick={{ fontSize:10 }} />
                       <Radar name="BR-14 (Critical)" dataKey="BR14" stroke="#A32D2D" fill="#A32D2D" fillOpacity={0.15} />
-                      <Radar name="BR-23 (Amber)" dataKey="BR23" stroke="#EF9F27" fill="#EF9F27" fillOpacity={0.12} />
+                      <Radar name="BR-23 (Amber)" dataKey="BR23" stroke="#26EA9F" fill="#26EA9F" fillOpacity={0.12} />
                       <Radar name="Network avg" dataKey="Network" stroke="#3B6D11" fill="#3B6D11" fillOpacity={0.08} />
                     </RadarChart>
                   </ResponsiveContainer>
                   <div style={{ display:'flex', gap:16, justifyContent:'center', fontSize:11, flexWrap:'wrap' }}>
-                    {[['#A32D2D','BR-14 Critical'],['#EF9F27','BR-23 Amber'],['#3B6D11','Network avg']].map(([c,l])=>(
+                    {[['#A32D2D','BR-14 Critical'],['#26EA9F','BR-23 Amber'],['#3B6D11','Network avg']].map(([c,l])=>(
                       <span key={l} style={{ display:'flex', alignItems:'center', gap:5 }}><div style={{ width:14,height:2,background:c }}/>{l}</span>
                     ))}
                   </div>
@@ -223,14 +223,14 @@ export default function InternalControlsAgent() {
                   const labels = { override_rate_branch:'BR-14 Override Rate (%)', sod_violation_rate:'SoD Violation Rate (%)', avg_approval_minutes:'Avg Approval Turnaround (min)' };
                   const lowerBetter = true;
                   const better = b.ntb <= b.peer_median;
-                  const col = better ? '#16A34A' : '#DC2626';
+                  const col = better ? '#16A34A' : '#E82AAE';
                   return (
                     <tr key={key} style={{ borderBottom:'1px solid var(--color-border)', background:i%2===0?'transparent':'var(--color-surface-2)' }}>
                       <td style={{ padding:'9px 12px', fontWeight:600 }}>{labels[key]||key}</td>
                       <td style={{ padding:'9px 12px', fontWeight:800, color:col }}>{b.ntb}</td>
                       <td style={{ padding:'9px 12px', color:'var(--color-text-2)' }}>{b.peer_median}</td>
                       <td style={{ padding:'9px 12px', color:'#16A34A', fontWeight:600 }}>{b.peer_best}</td>
-                      <td style={{ padding:'9px 12px', color:'#DC2626' }}>{b.peer_worst}</td>
+                      <td style={{ padding:'9px 12px', color:'#E82AAE' }}>{b.peer_worst}</td>
                       <td style={{ padding:'9px 12px' }}><span style={{ fontSize:11, fontWeight:700, padding:'2px 8px', borderRadius:4, background:`${col}14`, color:col }}>{better ? '✓ Better' : '✗ Weaker'}</span></td>
                     </tr>
                   );

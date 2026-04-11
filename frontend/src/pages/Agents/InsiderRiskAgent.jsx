@@ -17,7 +17,7 @@ const SCHEMA = {
 // ─── RISK SCORE GAUGE ─────────────────────────────────────────────────────────
 
 function RiskGauge({ score }) {
-  const color = score >= 85 ? '#DC2626' : score >= 70 ? '#D97706' : score >= 40 ? '#EF9F27' : '#16A34A';
+  const color = score >= 85 ? '#E82AAE' : score >= 70 ? '#4A6070' : score >= 40 ? '#26EA9F' : '#16A34A';
   const label = score >= 85 ? 'Critical' : score >= 70 ? 'High' : score >= 40 ? 'Watch' : 'Normal';
   const pct = score;
   return (
@@ -33,7 +33,7 @@ function RiskGauge({ score }) {
         </div>
       </div>
       <div style={{ position: 'relative', height: 12, borderRadius: 6, overflow: 'hidden', background: 'var(--color-surface-2)', border: '1px solid var(--color-border)' }}>
-        {[[0, 40, '#16A34A'], [40, 70, '#EF9F27'], [70, 85, '#D97706'], [85, 100, '#DC2626']].map(([from, to, c]) => (
+        {[[0, 40, '#16A34A'], [40, 70, '#26EA9F'], [70, 85, '#4A6070'], [85, 100, '#E82AAE']].map(([from, to, c]) => (
           <div key={from} style={{ position: 'absolute', left: `${from}%`, width: `${to - from}%`, top: 0, bottom: 0, background: c, opacity: 0.15 }} />
         ))}
         <div style={{ position: 'absolute', left: 0, width: `${pct}%`, top: 0, bottom: 0, background: color, opacity: 0.9, borderRadius: 6 }} />
@@ -54,7 +54,7 @@ function PeerBar({ label, actual, peer, unit = '', higherIsBad = true, tooltip }
   const actualPct = (actual / maxVal) * 100;
   const peerPct = (peer / maxVal) * 100;
   const isAnomaly = higherIsBad ? actual > peer * 1.5 : actual < peer * 0.7;
-  const color = isAnomaly ? '#DC2626' : '#185FA5';
+  const color = isAnomaly ? '#E82AAE' : '#185FA5';
 
   return (
     <div style={{ marginBottom: 12 }}>
@@ -66,7 +66,7 @@ function PeerBar({ label, actual, peer, unit = '', higherIsBad = true, tooltip }
         <div style={{ display: 'flex', gap: 8, fontSize: 11 }}>
           <span style={{ fontWeight: 700, color }}>{actual}{unit}</span>
           <span style={{ color: 'var(--color-text-3)' }}>vs {peer}{unit} peer avg</span>
-          {isAnomaly && <span style={{ fontSize: 10, fontWeight: 700, color: '#DC2626' }}>↑ {Math.round((actual / peer - 1) * 100)}% above avg</span>}
+          {isAnomaly && <span style={{ fontSize: 10, fontWeight: 700, color: '#E82AAE' }}>↑ {Math.round((actual / peer - 1) * 100)}% above avg</span>}
         </div>
       </div>
       <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
@@ -97,7 +97,7 @@ function StaffDetailPanel({ profile }) {
   );
 
   const isCritical = profile.risk_score >= 85;
-  const bgColor = isCritical ? '#FEF0F0' : profile.risk_score >= 70 ? '#FFFBEB' : 'var(--color-surface)';
+  const bgColor = isCritical ? '#FEF0F0' : profile.risk_score >= 70 ? '#F3F3F1' : 'var(--color-surface)';
   const tabs = ['profile', 'activity', 'compliance', 'actions'];
   const tabLabels = { profile: 'Risk Profile', activity: 'Linked Activity', compliance: 'HR & Compliance', actions: 'Required Actions' };
 
@@ -203,9 +203,9 @@ function StaffDetailPanel({ profile }) {
           <>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
               {[
-                { label: 'SoD Violations', value: profile.sod_violations, color: profile.sod_violations > 0 ? '#DC2626' : '#16A34A', tooltip: 'Transactions where this person was both initiator and approver. Any instance is a critical control failure under CBSL Direction No. 5/2024.' },
-                { label: 'Same-cluster Approvals', value: profile.same_cluster_approvals, color: profile.same_cluster_approvals > 0 ? '#D97706' : '#16A34A', tooltip: 'Loans approved to borrowers sharing guarantor addresses or phone numbers — indicates coordinated fraudulent onboarding.' },
-                { label: 'Off-hours Approvals', value: profile.off_hours_approvals, color: profile.off_hours_approvals > 5 ? '#D97706' : '#16A34A', tooltip: 'Approvals made outside business hours (before 08:00, after 18:00, or on weekends). High off-hours activity with no emergency justification is anomalous.' },
+                { label: 'SoD Violations', value: profile.sod_violations, color: profile.sod_violations > 0 ? '#E82AAE' : '#16A34A', tooltip: 'Transactions where this person was both initiator and approver. Any instance is a critical control failure under CBSL Direction No. 5/2024.' },
+                { label: 'Same-cluster Approvals', value: profile.same_cluster_approvals, color: profile.same_cluster_approvals > 0 ? '#4A6070' : '#16A34A', tooltip: 'Loans approved to borrowers sharing guarantor addresses or phone numbers — indicates coordinated fraudulent onboarding.' },
+                { label: 'Off-hours Approvals', value: profile.off_hours_approvals, color: profile.off_hours_approvals > 5 ? '#4A6070' : '#16A34A', tooltip: 'Approvals made outside business hours (before 08:00, after 18:00, or on weekends). High off-hours activity with no emergency justification is anomalous.' },
               ].map((m, i) => (
                 <div key={i} style={{ padding: '12px', background: 'var(--color-surface)', border: `1px solid var(--color-border)`, borderRadius: 8, borderTop: `3px solid ${m.color}` }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 4 }}>
@@ -285,10 +285,10 @@ function StaffDetailPanel({ profile }) {
             {/* Action buttons */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
               {[
-                { label: 'Restrict System Access', color: '#D97706', bg: '#FFFBEB' },
-                { label: 'Escalate to HR & Legal', color: '#DC2626', bg: '#FEF0F0' },
+                { label: 'Restrict System Access', color: '#4A6070', bg: '#F3F3F1' },
+                { label: 'Escalate to HR & Legal', color: '#E82AAE', bg: '#FEF0F0' },
                 { label: 'Launch Investigation', color: COLOR, bg: `${COLOR}10` },
-                { label: 'Schedule Interview', color: '#185FA5', bg: '#EBF4FF' },
+                { label: 'Schedule Interview', color: '#185FA5', bg: '#E8FDF4' },
               ].map(btn => (
                 <button key={btn.label}
                   style={{ padding: '10px 14px', background: btn.bg, border: `1px solid ${btn.color}33`, borderRadius: 8, color: btn.color, fontSize: 11, fontWeight: 600, cursor: 'pointer', textAlign: 'center', transition: 'all 0.12s' }}
@@ -310,7 +310,7 @@ function StaffDetailPanel({ profile }) {
 // ─── STAFF RISK CARD (list row) ───────────────────────────────────────────────
 
 function StaffRiskRow({ profile, isSelected, onClick }) {
-  const color = profile.risk_score >= 85 ? '#DC2626' : profile.risk_score >= 70 ? '#D97706' : profile.risk_score >= 40 ? '#EF9F27' : '#16A34A';
+  const color = profile.risk_score >= 85 ? '#E82AAE' : profile.risk_score >= 70 ? '#4A6070' : profile.risk_score >= 40 ? '#26EA9F' : '#16A34A';
   const TrendIcon = profile.risk_trend === 'Increasing' ? TrendingUp : profile.risk_trend === 'Decreasing' ? TrendingDown : Minus;
   return (
     <div onClick={onClick}
@@ -343,7 +343,7 @@ function StaffRiskRow({ profile, isSelected, onClick }) {
               <div key={dim.label}>
                 <div style={{ fontSize: 8, color: 'var(--color-text-3)', marginBottom: 2 }}>{dim.label}</div>
                 <div style={{ height: 4, borderRadius: 2, background: 'var(--color-surface-2)', overflow: 'hidden' }}>
-                  <div style={{ width: `${(dim.val / dim.max) * 100}%`, height: '100%', background: dim.bad ? '#DC2626' : '#3B6D11', borderRadius: 2 }} />
+                  <div style={{ width: `${(dim.val / dim.max) * 100}%`, height: '100%', background: dim.bad ? '#E82AAE' : '#3B6D11', borderRadius: 2 }} />
                 </div>
               </div>
             ))}
@@ -382,7 +382,7 @@ export default function InsiderRiskAgent() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
               <StatCard label="Staff Analysed" value={data.summary.total_staff_analysed.toLocaleString()} sub="Across 90 NTB branches" color={COLOR} tooltip="All NTB staff members with system access to credit approval, payment initiation, or account management functions are included in the analysis." />
-              <StatCard label="Flagged Staff" value={data.summary.flagged_staff} sub="Risk score > 40/100" color="#EF9F27" tooltip="Staff members whose combined 6-dimension score exceeds the 40/100 watch threshold. Score above 40 triggers enhanced monitoring; above 70 triggers investigation; above 85 triggers immediate action." />
+              <StatCard label="Flagged Staff" value={data.summary.flagged_staff} sub="Risk score > 40/100" color="#26EA9F" tooltip="Staff members whose combined 6-dimension score exceeds the 40/100 watch threshold. Score above 40 triggers enhanced monitoring; above 70 triggers investigation; above 85 triggers immediate action." />
               <StatCard label="Critical Risk" value={data.summary.critical_staff} sub="Score ≥ 85 — immediate action" color="#A32D2D" tooltip="Staff scoring above 85/100 — the critical band. These individuals match 5+ of the 6 insider fraud indicators simultaneously. Immediate suspension and forensic investigation required." alert="Immediate suspension required" />
               <StatCard label="Linked Exposure" value={`LKR ${(data.summary.suspicious_exposure_lkr / 1e6).toFixed(0)}M`} sub="Total value in flagged transactions" color="#A32D2D" tooltip="Total LKR value of transactions directly initiated, approved, or overridden by flagged staff members. This is not confirmed loss — it is the exposure envelope requiring forensic review." />
             </div>
@@ -469,17 +469,17 @@ export default function InsiderRiskAgent() {
                       ].map((m,j) => (
                         <div key={j}>
                           <div style={{ fontSize:10, color:'var(--color-text-3)', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:2 }}>{m.label}</div>
-                          <div style={{ fontSize:18, fontWeight:800, color:m.red?'#DC2626':m.hi?'#2D2D2B':'var(--color-text)' }}>{m.val}</div>
+                          <div style={{ fontSize:18, fontWeight:800, color:m.red?'#E82AAE':m.hi?'#2D2D2B':'var(--color-text)' }}>{m.val}</div>
                         </div>
                       ))}
                     </div>
                   </div>
-                  <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:6, background:pair.severity==='critical'?'#FEF0F0':'#FFFBEB', color:pair.severity==='critical'?'#DC2626':'#D97706', flexShrink:0 }}>{pair.severity}</span>
+                  <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:6, background:pair.severity==='critical'?'#FEF0F0':'#F3F3F1', color:pair.severity==='critical'?'#E82AAE':'#4A6070', flexShrink:0 }}>{pair.severity}</span>
                 </div>
                 <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.7, padding:'10px 14px', background:'var(--color-surface-2)', borderRadius:8, marginBottom:8 }}>
                   <strong style={{ color:'var(--color-text)' }}>Pattern: </strong>{pair.pattern}
                 </div>
-                <div style={{ padding:'10px 14px', background:pair.severity==='critical'?'#FEF8F8':'#FEFBF0', borderRadius:8, fontSize:12, lineHeight:1.65, color:pair.severity==='critical'?'#DC2626':'#3A5A3A', border:`1px solid ${pair.severity==='critical'?'rgba(220,38,38,0.2)':'rgba(133,79,11,0.2)'}` }}>
+                <div style={{ padding:'10px 14px', background:pair.severity==='critical'?'#FEF8F8':'#FEFBF0', borderRadius:8, fontSize:12, lineHeight:1.65, color:pair.severity==='critical'?'#E82AAE':'#3A5A3A', border:`1px solid ${pair.severity==='critical'?'rgba(220,38,38,0.2)':'rgba(133,79,11,0.2)'}` }}>
                   <strong>Statistical finding: </strong>{pair.finding}
                 </div>
               </div>
@@ -495,10 +495,10 @@ export default function InsiderRiskAgent() {
             {(data.approval_chain_anomalies||[]).map((anomaly, i) => (
               <div key={i} style={{ padding:'16px', borderBottom:'1px solid var(--color-border)' }}>
                 <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:10 }}>
-                  <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:6, background:anomaly.severity==='critical'?'#FEF0F0':'#FFFBEB', color:anomaly.severity==='critical'?'#DC2626':'#D97706' }}>{anomaly.severity}</span>
+                  <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:6, background:anomaly.severity==='critical'?'#FEF0F0':'#F3F3F1', color:anomaly.severity==='critical'?'#E82AAE':'#4A6070' }}>{anomaly.severity}</span>
                   <span style={{ fontSize:13, fontWeight:700 }}>{anomaly.anomaly_type}</span>
                   {anomaly.instances && <span style={{ marginLeft:'auto', fontSize:11, color:'var(--color-text-3)' }}>{anomaly.instances} instances</span>}
-                  {anomaly.p_value && <span style={{ fontSize:11, padding:'2px 7px', background:'#FEF0F0', color:'#DC2626', borderRadius:4, fontWeight:700 }}>p = {anomaly.p_value}</span>}
+                  {anomaly.p_value && <span style={{ fontSize:11, padding:'2px 7px', background:'#FEF0F0', color:'#E82AAE', borderRadius:4, fontWeight:700 }}>p = {anomaly.p_value}</span>}
                 </div>
                 <div style={{ fontSize:12, color:'var(--color-text-2)', lineHeight:1.7, padding:'10px 14px', background:'var(--color-surface-2)', borderRadius:8 }}>
                   {anomaly.description}
@@ -507,7 +507,7 @@ export default function InsiderRiskAgent() {
                   <div style={{ marginTop:8, fontSize:11, color:'var(--color-text-3)' }}>Consistently bypassed: <strong>{anomaly.affected_approver_bypassed}</strong></div>
                 )}
                 {anomaly.combined_exposure_lkr && (
-                  <div style={{ marginTop:6, fontSize:11, fontWeight:700, color:'#DC2626' }}>Combined exposure: LKR {(anomaly.combined_exposure_lkr/1e6).toFixed(0)}M</div>
+                  <div style={{ marginTop:6, fontSize:11, fontWeight:700, color:'#E82AAE' }}>Combined exposure: LKR {(anomaly.combined_exposure_lkr/1e6).toFixed(0)}M</div>
                 )}
               </div>
             ))}

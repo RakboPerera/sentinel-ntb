@@ -4,14 +4,14 @@ import InfoTooltip from './InfoTooltip.jsx';
 
 const SEV_STYLES = {
   critical: { bg: 'var(--color-red-light)', border: 'rgba(163,45,45,0.25)', color: 'var(--color-red)', label: 'Critical', dot: '#A32D2D' },
-  high:     { bg: '#FFF8F0', border: 'rgba(133,79,11,0.2)', color: '#3A5A3A', label: 'High', dot: '#EF9F27' },
+  high:     { bg: '#FFF8F0', border: 'rgba(133,79,11,0.2)', color: '#3A5A3A', label: 'High', dot: '#26EA9F' },
   medium:   { bg: 'var(--color-blue-light)', border: 'rgba(24,95,165,0.2)', color: 'var(--color-blue)', label: 'Medium', dot: '#185FA5' },
   low:      { bg: 'var(--color-gray-light)', border: 'rgba(95,94,90,0.15)', color: 'var(--color-gray)', label: 'Low', dot: '#6b6963' },
 };
 
 function SeverityBar({ score, color }) {
   const pct = Math.min(100, Math.max(0, score * 100));
-  const c = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#EF9F27' : '#3B6D11';
+  const c = score >= 0.85 ? '#A32D2D' : score >= 0.65 ? '#26EA9F' : '#3B6D11';
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'var(--color-border)' }}>
