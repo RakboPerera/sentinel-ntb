@@ -70,19 +70,23 @@ export default function InternalControlsAgent() {
               collapsible={true}
             />
             {/* Audit Opinion Banner */}
-            <div style={{ padding:'10px 16px', background:'#854F0B08', border:`1px solid #854F0B25`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#854F0B', color:'white', flexShrink:0, marginTop:1 }}>
-                ADVERSE
+            <div style={{ background:'#854F0B06', border:`1px solid #854F0B22`, borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#854F0B', color:'white', flexShrink:0, marginTop:2 }}>
+                  ADVERSE
+                </div>
+                <div style={{ fontSize:12, color:'#854F0B', lineHeight:1.7 }}>
+                  In our opinion, the internal controls environment at Branch BR-14 is ADVERSE — composite score 41/100. SoD violations are confirmed. STF-1847 override concentration of 87% is statistically impossible under legitimate operations.
+                </div>
               </div>
-              <div style={{ fontSize:12, color:'#854F0B', lineHeight:1.65 }}>
-                In our opinion, the internal control environment at Branch BR-14 is NOT EFFECTIVE. 4 SoD violations confirmed. STF-1847 matches all 6 insider fraud indicators simultaneously. Immediate suspension and field audit required.
-              
-                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>18,743 approval transactions across 90 branches</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>All SoD violations; branches with override rate >5% or composite &lt;65</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Manual overrides outside system not captured; delegated authority limits sourced from HR records Q3 2025</div>
-                </div></div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #854F0B18` }}>
+                {[['Population tested','18,743 approval transactions across 90 branches'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','All SoD violations; branches with override rate &gt;5% or composite &lt;65'],['Model limitations','Manual overrides outside system not captured; delegated authority limits from HR records Q3 2025']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #854F0B12`:'none', borderBottom:i<2?`1px solid #854F0B12`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#854F0B', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#854F0B', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>

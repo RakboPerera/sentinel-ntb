@@ -31,19 +31,23 @@ export default function KYCAgent() {
             />
 
             {/* Audit Opinion Banner */}
-            <div style={{ padding:'10px 16px', background:'#0F6E5608', border:`1px solid #0F6E5625`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#0F6E56', color:'white', flexShrink:0, marginTop:1 }}>
-                QUALIFIED
+            <div style={{ background:'#0F6E5606', border:`1px solid #0F6E5622`, borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#0F6E56', color:'white', flexShrink:0, marginTop:2 }}>
+                  QUALIFIED
+                </div>
+                <div style={{ fontSize:12, color:'#0F6E56', lineHeight:1.7 }}>
+                  In our opinion, the KYC / AML compliance framework is PARTIALLY EFFECTIVE. 39,290 accounts have material gaps. The 4.7% gap rate exceeds CBSL&#39;s 2% threshold. 34 PEP accounts require immediate EDD.
+                </div>
               </div>
-              <div style={{ fontSize:12, color:'#0F6E56', lineHeight:1.65 }}>
-                In our opinion, KYC compliance controls are PARTIALLY EFFECTIVE. Gap rate of 4.7% exceeds the CBSL 2% threshold. 34 PEP accounts have overdue Enhanced Due Diligence. A formal remediation programme is required.
-              
-                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>835,944 customer accounts (100%)</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>As at 31 December 2025</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>All PEP accounts; KYC gaps on accounts with transactions >LKR 1M in period</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Third-party PEP database updated quarterly; real-time sanctions screening not within scope</div>
-                </div></div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #0F6E5618` }}>
+                {[['Population tested','835,944 customer accounts (100%)'],['Period covered','As at 31 December 2025'],['Materiality threshold','All PEP accounts; gaps on accounts with transactions &gt;LKR 1M in period'],['Model limitations','Third-party PEP database updated quarterly; real-time sanctions screening not within scope']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #0F6E5612`:'none', borderBottom:i<2?`1px solid #0F6E5612`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#0F6E56', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#0F6E56', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>

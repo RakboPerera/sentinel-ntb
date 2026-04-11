@@ -165,19 +165,23 @@ function StaffDetailPanel({ profile }) {
                 {profile.historical_alerts.map((a, i) => (
                   <div key={i} style={{ padding: '10px 14px', background: 'var(--color-surface-2)', border: '1px solid var(--color-border)', borderRadius: 8, marginBottom: 6 }}>
                     {/* Audit Opinion Banner */}
-            <div style={{ padding:'10px 16px', background:'#7C3AED08', border:`1px solid #7C3AED25`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#7C3AED', color:'white', flexShrink:0, marginTop:1 }}>
-                ADVERSE
+            <div style={{ background:'#7C3AED06', border:`1px solid #7C3AED22`, borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#7C3AED', color:'white', flexShrink:0, marginTop:2 }}>
+                  ADVERSE
+                </div>
+                <div style={{ fontSize:12, color:'#7C3AED', lineHeight:1.7 }}>
+                  In our opinion, the insider risk control environment is ADVERSE at Branch BR-14. STF-1847 scores 94/100 — all 6 insider fraud dimensions are simultaneously breached, which is definitively not coincidental.
+                </div>
               </div>
-              <div style={{ fontSize:12, color:'#7C3AED', lineHeight:1.65 }}>
-                In our opinion, insider fraud prevention controls are NOT EFFECTIVE at Branch BR-14. STF-1847 scores 94/100 — the highest in the 2,462-staff network. All 6 insider fraud dimensions are confirmed simultaneously.
-              
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:10, marginTop:12, paddingTop:12, borderTop:'1px solid rgba(255,255,255,0.1)' }}>
-                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Population tested</div><div style={{ fontSize:11, lineHeight:1.5 }}>2,462 staff members across 90 branches + corporate office</div></div>
-                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Period covered</div><div style={{ fontSize:11, lineHeight:1.5 }}>FY 2025 (Jan–Dec)</div></div>
-                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Materiality threshold</div><div style={{ fontSize:11, lineHeight:1.5 }}>All staff with composite risk score >40/100; any SoD violation</div></div>
-                <div><div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.65, marginBottom:2 }}>Model limitations</div><div style={{ fontSize:11, lineHeight:1.5 }}>Collusion detection requires minimum 5 co-occurrences for statistical validity; staff active &lt;6 months have reduced baseline confidence</div></div>
-              </div></div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #7C3AED18` }}>
+                {[['Population tested','2,462 staff members across 90 branches + corporate office'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','All staff with composite score &gt;40/100; any SoD violation'],['Model limitations','Collusion detection requires minimum 5 co-occurrences; staff active &lt;6 months have reduced baseline confidence']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #7C3AED12`:'none', borderBottom:i<2?`1px solid #7C3AED12`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#7C3AED', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#7C3AED', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 }}>

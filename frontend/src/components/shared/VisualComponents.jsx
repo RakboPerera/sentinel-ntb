@@ -341,6 +341,12 @@ export function VisualFindingCard({ finding, agentColor = '#185FA5', index, feat
           </div>
         </div>
       )}
+      {hasOpenFinding && (
+        <div onClick={handleClick} style={{ padding:'10px 16px', borderTop:`1px solid ${p.border}22`, background:`${agentColor}06`, display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
+          <span style={{ fontSize:11, color:'var(--color-text-3)' }}>Click to open full analysis, evidence, and regulatory context</span>
+          <span style={{ fontSize:12, fontWeight:700, color:agentColor, display:'flex', alignItems:'center', gap:4 }}>Full analysis <ArrowRight size={13} /></span>
+        </div>
+      )}
       {showCreateCase && <CreateCaseModal finding={finding} agentId={agentId} agentColor={agentColor} onClose={() => setShowCreateCase(false)} />}
     </div>
   );

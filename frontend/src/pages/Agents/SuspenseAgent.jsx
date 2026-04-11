@@ -53,19 +53,23 @@ export default function SuspenseAgent() {
               collapsible={true}
             />
             {/* Audit Opinion Banner */}
-            <div style={{ padding:'10px 16px', background:'#993C1D08', border:`1px solid #993C1D25`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#993C1D', color:'white', flexShrink:0, marginTop:1 }}>
-                ADVERSE
+            <div style={{ background:'#993C1D06', border:`1px solid #993C1D22`, borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#993C1D', color:'white', flexShrink:0, marginTop:2 }}>
+                  ADVERSE
+                </div>
+                <div style={{ fontSize:12, color:'#993C1D', lineHeight:1.7 }}>
+                  In our opinion, the suspense account reconciliation control environment is ADVERSE. SUS-017 constitutes a confirmed CBSL regulatory breach. The phantom receivable pattern is corroborated by multi-agent analysis.
+                </div>
               </div>
-              <div style={{ fontSize:12, color:'#993C1D', lineHeight:1.65 }}>
-                In our opinion, suspense account reconciliation controls are NOT EFFECTIVE. SUS-017 has breached the CBSL 90-day aging guideline. LKR 1.24Bn is unreconciled with a phantom receivable pattern. Immediate escalation required.
-              
-                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>143 suspense and nostro accounts (100%)</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 + 90-day aging window</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>All balances aged >30 days; CBSL breach threshold >90 days</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Intraday clearing cycles not captured; weekend entries may show artificial aging</div>
-                </div></div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #993C1D18` }}>
+                {[['Population tested','143 suspense and nostro accounts (100%)'],['Period covered','FY 2025 + 90-day aging window'],['Materiality threshold','All balances aged &gt;30 days; CBSL breach threshold &gt;90 days'],['Model limitations','Intraday clearing cycles not captured; weekend entries may show artificial aging']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #993C1D12`:'none', borderBottom:i<2?`1px solid #993C1D12`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#993C1D', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#993C1D', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>

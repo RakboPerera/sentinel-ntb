@@ -59,12 +59,22 @@ function MJEExpandedRow({ entry }) {
           {/* Risk score mini gauge */}
           <div style={{ padding: '10px 12px', background: `${riskColor(entry.risk_score)}08`, border: `1px solid ${riskColor(entry.risk_score)}22`, borderRadius: 8 }}>
             {/* Audit Opinion Banner */}
-            <div style={{ padding:'10px 16px', background:'#0891B208', border:`1px solid #0891B225`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#0891B2', color:'white', flexShrink:0, marginTop:1 }}>
-                QUALIFIED
+            <div style={{ background:'#0891B206', border:`1px solid #0891B222`, borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#0891B2', color:'white', flexShrink:0, marginTop:2 }}>
+                  ADVERSE
+                </div>
+                <div style={{ fontSize:12, color:'#0891B2', lineHeight:1.7 }}>
+                  In our opinion, the manual journal entry control environment is ADVERSE. MJE-2026-4205 scores 97/100 — the highest risk entry in the full population. Benford first-digit analysis confirms deliberate sub-threshold GL structuring.
+                </div>
               </div>
-              <div style={{ fontSize:12, color:'#0891B2', lineHeight:1.65 }}>
-                In our opinion, manual journal entry controls are PARTIALLY EFFECTIVE. MJE-2026-4205 (risk score 97/100) represents a critical control failure — midnight round-number entry with SoD violation and no documentation. 8 Benford failures detected.
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #0891B218` }}>
+                {[['Population tested','847 manual journal entries (100% — full population)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','All entries &gt;LKR 1M; all SoD violations regardless of amount'],['Model limitations','Automated system journals excluded; Benford&#39;s Law less effective for accounts with &lt;50 entries in period']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #0891B212`:'none', borderBottom:i<2?`1px solid #0891B212`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#0891B2', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#0891B2', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
               </div>
             </div>
 

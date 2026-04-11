@@ -57,12 +57,22 @@ export default function DigitalFraudAgent() {
             />
 
             {/* Audit Opinion Banner */}
-            <div style={{ padding:'10px 16px', background:'#99355608', border:`1px solid #99355625`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#993556', color:'white', flexShrink:0, marginTop:1 }}>
-                QUALIFIED
+            <div style={{ background:'#99355606', border:`1px solid #99355622`, borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#993556', color:'white', flexShrink:0, marginTop:2 }}>
+                  QUALIFIED
+                </div>
+                <div style={{ fontSize:12, color:'#993556', lineHeight:1.7 }}>
+                  In our opinion, the digital fraud detection environment is PARTIALLY EFFECTIVE. Behavioral biometrics detected 4 high-risk sessions. Impossible travel confirmed in 2 cases. PSI 0.14 indicates model drift requiring recalibration ahead of HSBC migration.
+                </div>
               </div>
-              <div style={{ fontSize:12, color:'#993556', lineHeight:1.65 }}>
-                In our opinion, digital fraud controls are PARTIALLY EFFECTIVE. 4 accounts with impossible travel detected. Device DEV-A4F7-9921 shared across the SUS-017 fraud network. Staff account STF-1847 accessed loan files off-hours.
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #99355618` }}>
+                {[['Population tested','148,247 authenticated sessions (100%)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','Sessions with behavioral score &lt;50; impossible travel within same day'],['Model limitations','Behavioral baseline requires 90-day history; HSBC migrated accounts have reduced baseline confidence']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #99355612`:'none', borderBottom:i<2?`1px solid #99355612`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#993556', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#993556', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
               </div>
             </div>
 

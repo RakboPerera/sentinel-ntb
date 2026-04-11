@@ -109,23 +109,27 @@ export default function TransactionAgent() {
             <div className="agent-panel">
               <div className="agent-panel-header">
                 {/* Audit Opinion Banner */}
-            <div style={{ padding:'10px 16px', background:'#A32D2D08', border:`1px solid #A32D2D25`, borderRadius:10, display:'flex', gap:10, alignItems:'flex-start', marginBottom:0 }}>
-              <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#A32D2D', color:'white', flexShrink:0, marginTop:1 }}>
-                ADVERSE
+            <div style={{ background:'#A32D2D06', border:`1px solid #A32D2D22`, borderRadius:10, overflow:'hidden' }}>
+              <div style={{ padding:'12px 16px', display:'flex', gap:10, alignItems:'flex-start' }}>
+                <div style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.08em', padding:'3px 9px', borderRadius:5, background:'#A32D2D', color:'white', flexShrink:0, marginTop:2 }}>
+                  ADVERSE
+                </div>
+                <div style={{ fontSize:12, color:'#A32D2D', lineHeight:1.7 }}>
+                  In our opinion, the AML transaction monitoring control environment is NOT EFFECTIVE. Structuring activity is confirmed at 4 accounts. 4 STR-eligible cases must be filed within 5 working days under FTRA.
+                </div>
               </div>
-              <div style={{ fontSize:12, color:'#A32D2D', lineHeight:1.65 }}>
-                In our opinion, the AML transaction monitoring control environment is NOT EFFECTIVE. Structuring activity is confirmed at 4 accounts. 4 STR-eligible cases must be filed within 5 working days under FTRA.
-              
-                <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:8, marginTop:10, paddingTop:10, borderTop:'1px solid rgba(255,255,255,0.12)', fontSize:11 }}>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Population tested</div>284,719 transactions (100%)</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Period covered</div>FY 2025 (Jan–Dec)</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Materiality threshold</div>LKR 5M STR threshold; velocity anomalies ≥3× 90-day baseline</div>
-                  <div><div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', opacity:0.6, marginBottom:2 }}>Model limitations</div>Benford's Law requires sufficient volume per account; new accounts (&lt;90 days) excluded from velocity baseline</div>
-                </div></div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:`1px solid #A32D2D18` }}>
+                {[['Population tested','284,719 transactions (100%)'],['Period covered','FY 2025 (Jan–Dec)'],['Materiality threshold','LKR 5M STR threshold; velocity anomalies ≥3× 90-day baseline'],['Model limitations','Benford&#39;s Law requires sufficient volume per account; new accounts (&lt;90 days) excluded from velocity baseline']].map(([k,v],i)=>(
+                  <div key={i} style={{ padding:'7px 16px', borderRight:i%2===0?`1px solid #A32D2D12`:'none', borderBottom:i<2?`1px solid #A32D2D12`:'none' }}>
+                    <div style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#A32D2D', opacity:0.65, marginBottom:2 }}>{k}</div>
+                    <div style={{ fontSize:11, color:'#A32D2D', lineHeight:1.5 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span className="agent-panel-title">Benford's Law Analysis</span>
+                  <span className="agent-panel-title">Benford&#39;s Law Analysis</span>
                   <InfoTooltip text="Benford's Law states that in natural transaction data, first digits follow a predictable logarithmic distribution: '1' appears ~30%, '9' appears ~4.6%. When transactions are artificially constructed (e.g. structured below a threshold), this distribution breaks — creating detectable spikes." width={300} position="bottom" />
                 </div>
                 {data.benford_analysis.deviation_detected && (
